@@ -18,8 +18,14 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
+    "dvc>=3.59.1",
+    "matplotlib>=3.9.4",
     "numpy>=2.0.2",
     "pandas>=2.2.3",
+    "polars>=1.29.0",
+    "scikit-learn>=1.6.1",
+    "seaborn>=0.13.2",
+    "spacy>=3.8.5",
 ]
 
 [project.urls]
