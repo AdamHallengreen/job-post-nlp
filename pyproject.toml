@@ -15,7 +15,6 @@ classifiers = [
 ]
 dependencies = [
     "da-core-news-sm",
-    "da-core-news-trf",
     "dvc>=3.59.1",
     "fastexcel>=0.14.0",
     "matplotlib>=3.9.4",
@@ -44,6 +43,8 @@ dev = [
     "ipykernel>=6.29.5",
     "jupyterlab>=4.4.1",
     "notebook>=7.4.1",
+    "types-pyyaml>=6.0.12.20250402",
+    "types-tqdm>=4.67.0.20250417",
 ]
 
 [build-system]
@@ -118,4 +119,3 @@ preview = true
 
 [tool.uv.sources]
 da-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl" }
-da-core-news-trf = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_trf-3.8.0/da_core_news_trf-3.8.0-py3-none-any.whl" }

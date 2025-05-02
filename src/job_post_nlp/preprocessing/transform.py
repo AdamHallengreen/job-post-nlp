@@ -10,11 +10,11 @@ from job_post_nlp.utils.find_project_root import find_project_root
 
 
 class ColumnNotFoundError(Exception):
-    def __init__(self, column_name):
+    def __init__(self, column_name: str) -> None:
         super().__init__(f"Column '{column_name}' not found in the Excel file.")
 
 
-def load_data(file_path: Path, column_name: str = "Text"):
+def load_data(file_path: Path, column_name: str = "Text") -> list:
     """
     Load data from an Excel file and extract the specified column.
 
@@ -34,7 +34,7 @@ def load_data(file_path: Path, column_name: str = "Text"):
     return df[column_name].to_list()
 
 
-def tokenize_texts(texts: list):
+def tokenize_texts(texts: list) -> list:
     """
     Tokenize a list of texts using spaCy.
 
@@ -58,7 +58,7 @@ def tokenize_texts(texts: list):
     return tokenized_texts
 
 
-def export_tokens(tokens: list, output_file: Path):
+def export_tokens(tokens: list, output_file: Path) -> None:
     """
     Export tokenized texts to a file in JSON format.
 
@@ -70,7 +70,7 @@ def export_tokens(tokens: list, output_file: Path):
         json.dump(tokens, f, ensure_ascii=False, indent=4)
 
 
-def main():
+def main() -> None:
     # Define file paths
     project_root = find_project_root(__file__)
     params_path = Path(project_root) / "params.yaml"
