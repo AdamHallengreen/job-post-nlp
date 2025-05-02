@@ -1,5 +1,6 @@
 import json
 import os
+import pathlib
 from collections import Counter
 from pathlib import Path
 
@@ -9,28 +10,37 @@ import yaml
 from job_post_nlp.utils.find_project_root import find_project_root
 
 
-def load_tokens(input_file: str):
+class InvalidTokenFormatError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Input file must contain a list of lists of strings.")
+
+
+def load_tokens(input_file: str | pathlib.Path) -> list[list[str]]:
     """
     Load tokenized texts from a JSON file.
 
     Args:
-        input_file (str): Path to the JSON file containing tokenized texts.
+        input_file (str | pathlib.Path): Path to the JSON file containing tokenized texts.
 
     Returns:
-        list: A list of tokenized texts.
+        list[list[str]]: A list of tokenized texts, where each text is a list of strings (tokens).
     """
     with open(input_file, encoding="utf-8") as f:
         tokens = json.load(f)
+    if not isinstance(tokens, list) or not all(
+        isinstance(text, list) and all(isinstance(token, str) for token in text) for text in tokens
+    ):
+        raise InvalidTokenFormatError()
     return tokens
 
 
-def get_most_common_words(tokens: list, params):
+def get_most_common_words(tokens: list, params: dict) -> list:
     """
     Get the most common words from a list of tokenized texts.
 
     Args:
         tokens (list): A list of tokenized texts.
-        top_n (int): Number of most common words to return.
+        params (dict): A dictionary containing parameters, including 'top_n'.
 
     Returns:
         list: A list of tuples containing the most common words and their counts.
@@ -48,7 +58,7 @@ def get_most_common_words(tokens: list, params):
     return word_counts.most_common(top_n)
 
 
-def export_most_common_words(common_words: list, output_file: str):
+def export_most_common_words(common_words: list, output_file: str | pathlib.Path) -> None:
     """
     Export the most common words to a file in JSON format.
 
@@ -61,7 +71,7 @@ def export_most_common_words(common_words: list, output_file: str):
         json.dump(common_words, f, ensure_ascii=False, indent=4)
 
 
-def plot_most_common_words(common_words: list, output_image: str):
+def plot_most_common_words(common_words: list, output_image: str | pathlib.Path) -> None:
     """
     Create a bar plot of the most common words and save it as an image.
 

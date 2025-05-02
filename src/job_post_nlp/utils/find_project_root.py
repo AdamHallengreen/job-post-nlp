@@ -2,17 +2,17 @@ import pathlib
 
 
 class ProjectRootNotFoundError(FileNotFoundError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Project root not found. No markers found in any parent directories.")
 
 
 class InvalidStartPathTypeError(TypeError):
-    def __init__(self, start_path):
+    def __init__(self, start_path: str | pathlib.Path) -> None:
         super().__init__(f"start_path must be a string or Path object, not {type(start_path)}")
 
 
 class StartPathResolutionError(FileNotFoundError):
-    def __init__(self, start_path):
+    def __init__(self, start_path: str | pathlib.Path) -> None:
         super().__init__(f"The starting path '{start_path}' does not exist or could not be resolved.")
 
 
