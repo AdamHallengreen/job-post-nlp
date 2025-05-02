@@ -28,8 +28,8 @@ stages:
       size: 1858145
     - path: .\src\job_post_nlp\models\most_common.py
       hash: md5
-      md5: 6594d65153fda96e7bde0bec733abca2
-      size: 3858
+      md5: 3736fd63878b39f6bc17e28d3efd384c
+      size: 3875
     params:
       params.yaml:
         most_common.top_n: 10

@@ -16,14 +16,8 @@ classifiers = [
 dependencies = [
     "da-core-news-sm",
     "dvc>=3.59.1",
-    "fastexcel>=0.14.0",
     "matplotlib>=3.9.4",
-    "numpy>=2.0.2",
-    "pandas>=2.2.3",
-    "polars>=1.29.0",
-    "python-box[all]>=7.3.2",
-    "scikit-learn>=1.6.1",
-    "seaborn>=0.13.2",
+    "polars[calamine]>=1.29.0",
     "spacy>=3.8.5",
 ]
 
