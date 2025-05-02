@@ -1,0 +1,20 @@
+stages:
+  preprocessing:
+    cmd: python .\src\job_post_nlp\preprocessing\transform.py
+    deps:
+    - .\data\Jobnet.xlsx
+    - .\src\job_post_nlp\preprocessing\transform.py
+    params:
+    - preprocessing.nobs
+    outs:
+    - .\data\tokenized_texts.json
+  most_common:
+    cmd: python .\src\job_post_nlp\models\most_common.py
+    deps:
+    - .\data\tokenized_texts.json
+    - .\src\job_post_nlp\models\most_common.py
+    params:
+    - most_common.top_n
+    outs:
+    - .\outputs\most_common_words.json
+    - .\outputs\most_common_words_bar_plot.png

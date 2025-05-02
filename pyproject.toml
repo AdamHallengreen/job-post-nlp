@@ -2,10 +2,10 @@
 name = "job-post-nlp"
 version = "0.0.1"
 description = "This is a template repository for Python projects that use uv for their dependency management."
-authors = [{ name = "Adam Hallengreen Jørgensen", email = "adamhallengreen@econ.ku.dk" }]
+authors = [{ name = "Adam Hallengreen", email = "adamhallengreen@econ.ku.dk" }]
 readme = "README.md"
 keywords = ['python']
-requires-python = ">=3.9,<4.0"
+requires-python = ">=3.12,<3.13"
 classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
@@ -14,11 +14,15 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
+    "da-core-news-sm",
+    "da-core-news-trf",
     "dvc>=3.59.1",
+    "fastexcel>=0.14.0",
     "matplotlib>=3.9.4",
     "numpy>=2.0.2",
     "pandas>=2.2.3",
     "polars>=1.29.0",
+    "python-box[all]>=7.3.2",
     "scikit-learn>=1.6.1",
     "seaborn>=0.13.2",
     "spacy>=3.8.5",
@@ -36,9 +40,10 @@ dev = [
     "tox-uv>=1.11.3",
     "deptry>=0.23.0",
     "mypy>=0.991",
-
     "ruff>=0.11.5",
-
+    "ipykernel>=6.29.5",
+    "jupyterlab>=4.4.1",
+    "notebook>=7.4.1",
 ]
 
 [build-system]
@@ -110,3 +115,7 @@ ignore = [
 
 [tool.ruff.format]
 preview = true
+
+[tool.uv.sources]
+da-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl" }
+da-core-news-trf = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_trf-3.8.0/da_core_news_trf-3.8.0-py3-none-any.whl" }
