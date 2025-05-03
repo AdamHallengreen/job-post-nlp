@@ -1246,6 +1246,7 @@ dependencies = [
     { name = "dvc" },
     { name = "matplotlib" },
     { name = "polars", extra = ["calamine"] },
+    { name = "pyyaml" },
     { name = "spacy" },
     { name = "tqdm" },
 ]
@@ -1271,6 +1272,7 @@ requires-dist = [
     { name = "dvc", specifier = ">=3.59.1" },
     { name = "matplotlib", specifier = ">=3.9.4" },
     { name = "polars", extras = ["calamine"], specifier = ">=1.29.0" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "spacy", specifier = ">=3.8.5" },
     { name = "tqdm", specifier = ">=4.67.1" },
 ]
