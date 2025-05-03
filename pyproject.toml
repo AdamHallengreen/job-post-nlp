@@ -19,6 +19,7 @@ dependencies = [
     "matplotlib>=3.9.4",
     "polars[calamine]>=1.29.0",
     "spacy>=3.8.5",
+    "tqdm>=4.67.1",
 ]
 
 [project.urls]
