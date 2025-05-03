@@ -1247,6 +1247,7 @@ dependencies = [
     { name = "matplotlib" },
     { name = "polars", extra = ["calamine"] },
     { name = "spacy" },
+    { name = "tqdm" },
 ]
 
 [package.dev-dependencies]
@@ -1271,6 +1272,7 @@ requires-dist = [
     { name = "matplotlib", specifier = ">=3.9.4" },
     { name = "polars", extras = ["calamine"], specifier = ">=1.29.0" },
     { name = "spacy", specifier = ">=3.8.5" },
+    { name = "tqdm", specifier = ">=4.67.1" },
 ]
 
 [package.metadata.requires-dev]
