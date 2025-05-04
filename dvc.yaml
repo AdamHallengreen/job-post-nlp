@@ -23,12 +23,6 @@ stages:
     - .\data\most_common_words.json
     - .\src\job_post_nlp\evaluate.py
 plots:
-- dvclive/plots/images
-- dvclive/plots/custom/Most Common Words.json:
-    template: bar_horizontal
-    x: Frequency
-    y: Word
-    title: Most Common Words Bar Plot
 - output/plots/images
 - output/plots/custom/Most Common Words.json:
     template: bar_horizontal
@@ -36,5 +30,4 @@ plots:
     y: Word
     title: Most Common Words Bar Plot
 metrics:
-- dvclive/metrics.json
 - output/metrics.json
