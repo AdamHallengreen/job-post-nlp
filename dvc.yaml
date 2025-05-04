@@ -1,27 +1,27 @@
 stages:
   prepare:
-    cmd: python .\src\job_post_nlp\prepare.py
+    cmd: python src/job_post_nlp/prepare.py
     deps:
-    - .\data\Jobnet.xlsx
-    - .\src\job_post_nlp\prepare.py
+    - data/Jobnet.xlsx
+    - src/job_post_nlp/prepare.py
     params:
     - prepare.nobs
     outs:
-    - .\data\tokenized_texts.json
+    - data/tokenized_texts.json
   train:
-    cmd: python .\src\job_post_nlp\train.py
+    cmd: python src/job_post_nlp/train.py
     deps:
-    - .\data\tokenized_texts.json
-    - .\src\job_post_nlp\train.py
+    - data/tokenized_texts.json
+    - src/job_post_nlp/train.py
     params:
     - train.top_n
     outs:
-    - .\data\most_common_words.json
+    - data/most_common_words.json
   evaluate:
-    cmd: python src\job_post_nlp\evaluate.py
+    cmd: python src/job_post_nlp/evaluate.py
     deps:
-    - .\data\most_common_words.json
-    - .\src\job_post_nlp\evaluate.py
+    - data/most_common_words.json
+    - src/job_post_nlp/evaluate.py
 plots:
 - output/plots/images
 - output/plots/custom/Most Common Words.json:
