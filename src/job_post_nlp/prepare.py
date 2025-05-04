@@ -79,7 +79,7 @@ def main() -> None:
 
     # Load parameters
     with open(params_path) as file:
-        params = yaml.safe_load(file)["preprocessing"]
+        params = yaml.safe_load(file)["prepare"]
     nobs = params["nobs"]
 
     # Process the data

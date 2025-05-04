@@ -16,7 +16,9 @@ classifiers = [
 dependencies = [
     "da-core-news-sm",
     "dvc>=3.59.1",
+    "dvclive>=3.48.2",
     "matplotlib>=3.9.4",
+    "pandas>=2.2.3",
     "polars[calamine]>=1.29.0",
     "pyyaml>=6.0.2",
     "spacy>=3.8.5",
@@ -41,6 +43,7 @@ dev = [
     "notebook>=7.4.1",
     "types-pyyaml>=6.0.12.20250402",
     "types-tqdm>=4.67.0.20250417",
+    "pandas-stubs>=2.2.3.250308",
 ]
 
 [build-system]

@@ -1,19 +1,19 @@
 schema: '2.0'
 stages:
   preprocessing:
-    cmd: python .\src\job_post_nlp\preprocessing\transform.py
+    cmd: python .\src\job_post_nlp\preprocess.py
     deps:
     - path: .\data\Jobnet.xlsx
       hash: md5
       md5: 26964e5ea3bf422d0f744b6fab9af448
       size: 13307578
-    - path: .\src\job_post_nlp\preprocessing\transform.py
+    - path: .\src\job_post_nlp\preprocess.py
       hash: md5
-      md5: 06a69e6465433793a0cc6031a0355fc5
-      size: 2646
+      md5: 4eb6c9d8c1f422fe7eeb41ed97b9b03e
+      size: 2643
     params:
       params.yaml:
-        preprocessing.nobs: 200
+        preprocess.nobs: 200
     outs:
     - path: .\data\tokenized_texts.json
       hash: md5
@@ -42,3 +42,52 @@ stages:
       hash: md5
       md5: d3f6cb49e97b488b43f4caa755f2ca9f
       size: 17044
+  prepare:
+    cmd: python .\src\job_post_nlp\prepare.py
+    deps:
+    - path: .\data\Jobnet.xlsx
+      hash: md5
+      md5: 26964e5ea3bf422d0f744b6fab9af448
+      size: 13307578
+    - path: .\src\job_post_nlp\prepare.py
+      hash: md5
+      md5: 7eae84b122efc3f49bd8c465f1b305f2
+      size: 2640
+    params:
+      params.yaml:
+        prepare.nobs: 200
+    outs:
+    - path: .\data\tokenized_texts.json
+      hash: md5
+      md5: 0a9d5afdc2f26252952fa9f8e9e8e333
+      size: 1858145
+  train:
+    cmd: python .\src\job_post_nlp\train.py
+    deps:
+    - path: .\data\tokenized_texts.json
+      hash: md5
+      md5: 0a9d5afdc2f26252952fa9f8e9e8e333
+      size: 1858145
+    - path: .\src\job_post_nlp\train.py
+      hash: md5
+      md5: 582af3411f0f4b29bafbd7259d08012a
+      size: 2867
+    params:
+      params.yaml:
+        train.top_n: 10
+    outs:
+    - path: .\data\most_common_words.json
+      hash: md5
+      md5: 89d9bd93722fbdfaeddd476bc754cb03
+      size: 442
+  evaluate:
+    cmd: python src\job_post_nlp\evaluate.py
+    deps:
+    - path: .\data\most_common_words.json
+      hash: md5
+      md5: 89d9bd93722fbdfaeddd476bc754cb03
+      size: 442
+    - path: .\src\job_post_nlp\evaluate.py
+      hash: md5
+      md5: a13806c8fb48184416b699bf0308ddca
+      size: 2692
