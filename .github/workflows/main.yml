@@ -25,7 +25,10 @@ jobs:
       - name: Run checks
         run: make check
 
-  tests-and-type-check:
+      - name: Check typing
+        run: uv run mypy
+
+  tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -46,5 +49,37 @@ jobs:
       - name: Run tests
         run: uv run python -m pytest tests
 
-      - name: Check typing
-        run: uv run mypy
+  report:
+    name: Generate report
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12",]
+      fail-fast: false
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      discussions: write
+      checks: write
+      statuses: write
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up the environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up CML
+        uses: iterative/setup-cml@v1
+
+      - name: Run pipeline
+        run: uv run dvc repro
+
+      - name: Create report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create output/report.md
