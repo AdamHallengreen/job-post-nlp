@@ -4,7 +4,6 @@ import pathlib
 from collections import Counter
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import yaml
 
 from job_post_nlp.utils.find_project_root import find_project_root
@@ -71,44 +70,20 @@ def export_most_common_words(common_words: list, output_file: str | pathlib.Path
         json.dump(common_words, f, ensure_ascii=False, indent=4)
 
 
-def plot_most_common_words(common_words: list, output_image: str | pathlib.Path) -> None:
-    """
-    Create a bar plot of the most common words and save it as an image.
-
-    Args:
-        common_words (list): A list of tuples containing words and their counts.
-        output_image (str): Path to the output image file.
-    """
-    words, counts = zip(*common_words)  # Unpack words and counts
-    plt.figure(figsize=(10, 6))
-    plt.bar(words, counts, color="skyblue")
-    plt.xlabel("Words")
-    plt.ylabel("Frequency")
-    plt.title("Most Common Words")
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-    os.makedirs(os.path.dirname(output_image), exist_ok=True)
-    plt.savefig(output_image)
-    plt.close()
-
-
 if __name__ == "__main__":
     # Define file paths
     project_root = find_project_root(__file__)
     params_path = Path(project_root) / "params.yaml"
     input_file = Path(project_root) / "data" / "tokenized_texts.json"
-    output_file = Path(project_root) / "outputs" / "most_common_words.json"
-    output_image = Path(project_root) / "outputs" / "most_common_words_bar_plot.png"
+    output_file = Path(project_root) / "data" / "most_common_words.json"
 
     # Load parameters
     with open(params_path) as file:
-        params = yaml.safe_load(file)["most_common"]
+        params = yaml.safe_load(file)["train"]
 
     # Process
     tokens = load_tokens(input_file)
     common_words = get_most_common_words(tokens, params)
     export_most_common_words(common_words, output_file)
-    plot_most_common_words(common_words, output_image)
 
     print(f"Most common words exported to {output_file}")
-    print(f"Bar plot of most common words exported to {output_image}")
