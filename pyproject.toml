@@ -2,7 +2,10 @@
 name = "job-post-nlp"
 version = "0.0.1"
 description = "This is a template repository for Python projects that use uv for their dependency management."
-authors = [{ name = "Adam Hallengreen", email = "adamhallengreen@econ.ku.dk" }]
+authors = [
+    { name = "Adam Hallengreen", email = "adamhallengreen@econ.ku.dk", website = "https://sites.google.com/view/adamhallengreen" },
+    { name = "Asker Christensen", email = "anc@econ.ku.dk" }
+]
 readme = "README.md"
 keywords = ['python']
 requires-python = ">=3.12,<3.13"
@@ -20,15 +23,14 @@ dependencies = [
     "matplotlib>=3.9.4",
     "pandas>=2.2.3",
     "polars[calamine]>=1.29.0",
+    "polars-lts-cpu[calamine]>=1.26.0 ; sys_platform == 'darwin'",
     "pyyaml>=6.0.2",
     "spacy>=3.8.5",
     "tqdm>=4.67.1",
 ]
 
 [project.urls]
-Homepage = "https://AdamHallengreen.github.io/job-post-nlp/"
 Repository = "https://github.com/AdamHallengreen/job-post-nlp"
-Documentation = "https://AdamHallengreen.github.io/job-post-nlp/"
 
 [dependency-groups]
 dev = [

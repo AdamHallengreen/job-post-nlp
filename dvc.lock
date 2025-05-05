@@ -43,51 +43,51 @@ stages:
       md5: d3f6cb49e97b488b43f4caa755f2ca9f
       size: 17044
   prepare:
-    cmd: python .\src\job_post_nlp\prepare.py
+    cmd: python src/job_post_nlp/prepare.py
     deps:
-    - path: .\data\Jobnet.xlsx
+    - path: data/Jobnet.xlsx
       hash: md5
       md5: 26964e5ea3bf422d0f744b6fab9af448
       size: 13307578
-    - path: .\src\job_post_nlp\prepare.py
+    - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 7eae84b122efc3f49bd8c465f1b305f2
-      size: 2640
+      md5: 219d3c4b7df6fe681b4a76a06a48caf1
+      size: 2546
     params:
       params.yaml:
         prepare.nobs: 200
     outs:
-    - path: .\data\tokenized_texts.json
+    - path: data/tokenized_texts.json
       hash: md5
-      md5: 0a9d5afdc2f26252952fa9f8e9e8e333
-      size: 1858145
+      md5: 4808daee75010562446dcb75f6e09707
+      size: 1755571
   train:
-    cmd: python .\src\job_post_nlp\train.py
+    cmd: python src/job_post_nlp/train.py
     deps:
-    - path: .\data\tokenized_texts.json
+    - path: data/tokenized_texts.json
       hash: md5
-      md5: 0a9d5afdc2f26252952fa9f8e9e8e333
-      size: 1858145
-    - path: .\src\job_post_nlp\train.py
+      md5: 4808daee75010562446dcb75f6e09707
+      size: 1755571
+    - path: src/job_post_nlp/train.py
       hash: md5
-      md5: 582af3411f0f4b29bafbd7259d08012a
-      size: 2867
+      md5: c15670c80d250222ecd6374f4049a7f5
+      size: 2778
     params:
       params.yaml:
         train.top_n: 10
     outs:
-    - path: .\data\most_common_words.json
+    - path: data/most_common_words.json
       hash: md5
-      md5: 89d9bd93722fbdfaeddd476bc754cb03
-      size: 442
+      md5: 25e795cce64afb8280f01737eb1c7cad
+      size: 401
   evaluate:
-    cmd: python src\job_post_nlp\evaluate.py
+    cmd: python src/job_post_nlp/evaluate.py
     deps:
-    - path: .\data\most_common_words.json
+    - path: data/most_common_words.json
       hash: md5
-      md5: 89d9bd93722fbdfaeddd476bc754cb03
-      size: 442
-    - path: .\src\job_post_nlp\evaluate.py
+      md5: 25e795cce64afb8280f01737eb1c7cad
+      size: 401
+    - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: 1509592a14cf3d41189c7cd66b8d823c
-      size: 2722
+      md5: 6375cde92b904fb11a1f38d887554240
+      size: 2633
