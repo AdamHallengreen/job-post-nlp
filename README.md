@@ -30,7 +30,7 @@ If you don't already have Python installed, you can do this using UV by running:
 uv install python 3.12
 ```
 
-For alternative installation methods, see the [UV documentation](https://astral.sh/uv/installation/). 
+For alternative installation methods, see the [UV documentation](https://astral.sh/uv/installation/).
 
 > **Note**: UV is a Python package management tool that simplifies the process of creating and managing virtual environments, installing dependencies, and running Python projects. It is designed to be fast, lightweight, and easy to use. To read more about UV, see the [UV documentation](https://astral.sh/uv/).
 
@@ -77,17 +77,17 @@ uv run pre-commit install
 
 This command will set up the pre-commit hooks defined in the `.pre-commit-config.yaml` file. These hooks will automatically run checks on your code before you commit any changes.
 
-In addition to some native pre-commit hooks, this project also uses custom [Ruff pre-commit hooks](https://docs.astral.sh/ruff/integrations/#gitlab-cicd) for linting and formatting. 
+In addition to some native pre-commit hooks, this project also uses custom [Ruff pre-commit hooks](https://docs.astral.sh/ruff/integrations/#gitlab-cicd) for linting and formatting.
 
 > **Note**: Ruff is a fast Python linter and formatter that can help you maintain code quality. Read more about Ruff in the [Ruff documentation](https://docs.astral.sh/ruff/).
 
-To run the pre-commit hooks manually on all files in the repository, you can use the following command:
+Run the pre-commit hooks manually on all files in the repository to finalize the installation and ensure that your code is formatted correctly. To do this, run the following command:
 
 ```bash
 uv run pre-commit run -a
 ```
 
-### 3. Commit the changes 
+### 3. Commit the changes
 
 When you are done making changes to the code, commit your changes using your preferred Git management tool. I suggest using the command line as it is the most straightforward way to ensure that the pre-commit hooks are run before committing. Using the command line, you can commit your changes with the following commands:
 
@@ -96,13 +96,13 @@ git add .
 git commit -m "Your commit message here"
 ```
 
-Pre-commit hooks will automatically run when you commit your changes. If any of the hooks fail, you will need to address the issues before the commit can be completed. Some hooks automatically fix issues, while others will require you to manually address the problems. 
+Pre-commit hooks will automatically run when you commit your changes. If any of the hooks fail, you will need to address the issues before the commit can be completed. Some hooks automatically fix issues, while others will require you to manually address the problems.
 
 > **Note**: If you are using VS Code I suggest installing the [ruff extension](https://marketplace.visualstudio.com/items?itemName=astral.rust) to help you identify and fix issues in your code as you work. The extension will automatically run Ruff on your code and provide suggestions for fixes.
 
 When you pass the pre-commit hooks, you will see a message indicating that the commit was successful.
 
-### 4. Push your changes 
+### 4. Push your changes
 Once you have commited your code and passed the pre-commit hooks, you can push your changes to the remote repository. The remote main branch is protected, so you will need to create a development branch and open a pull request to merge your changes.
 
 If you have been working on the main branch so far, save your work to a development branch first, and then push to the remote. Use your preferred Git management tool or the command line. Using the command line, this can be done with the following commands:
