@@ -115,9 +115,11 @@ git push origin my-feature-branch
 ### 5. Merge into the main branch
 To merge your changes into the main branch, you will need to create a pull request. Open [the remote repository on Github](https://github.com/AdamHallengreen/job-post-nlp) and create a pull request from your feature branch to the main branch. Navigate to the "Pull requests" tab and click on the "New pull request" button. Select your feature branch as the source branch and the main branch as the target branch.
 
-When you create the pull request, GitHub will automatically run the CI/CD pipeline defined in the `.github/workflows/main.yml` file. This pipeline will run the pre-commit hooks, tests, type checks (using [mypy](https://mypy.readthedocs.io/en/stable/)), and create a report of the results.
+When you create the pull request, GitHub will automatically run the CI/CD pipeline defined in the `.github/workflows/main.yml` file. This pipeline will run the pre-commit hooks, tests, type checks (using [mypy](https://mypy.readthedocs.io/en/stable/)), dependency checks (using [deptry](https://deptry.com/)), and create a report of the results.
 
 > **Note**: Mypy is a static type checker for Python. It helps identify type errors in your code by verifying variable types, function arguments, and return values against expected types. For more details, refer to the [mypy documentation](https://mypy.readthedocs.io/en/stable/).
+
+> **Note**: Deptry is a tool that checks for unused dependencies in your Python project. It helps ensure that your `pyproject.toml` file only contains the dependencies that are actually used in your code. For more details, refer to the [deptry documentation](https://deptry.com/).
 
 If any of these checks fail, you will need to address the issues before merging your changes.
 
