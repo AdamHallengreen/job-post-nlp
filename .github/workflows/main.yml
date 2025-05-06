@@ -75,10 +75,19 @@ jobs:
       - name: Set up CML
         uses: iterative/setup-cml@v1
 
+      - name: Delete output/.gitignore
+        run: rm -f output/.gitignore
+        # delete the .gitignore file in the output directory
+        # that adds report.md to the gitignore list.
+        # This is necessary to find the report file.
+
       - name: Run pipeline
         run: uv run dvc repro
 
       - name: Create report
+        run: uv run src/job_post_nlp/report.py
+
+      - name: Post report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
