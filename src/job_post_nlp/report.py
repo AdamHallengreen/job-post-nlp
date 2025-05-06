@@ -16,7 +16,7 @@ if __name__ == "__main__":
     common_words = load_most_common_words(input_file)
 
     # Log metrics using DVCLive
-    with Live(dir=str(output_path), cache_images=True, report="md") as live:
+    with Live(dir=str(output_path), cache_images=True, report="md", save_dvc_exp=False) as live:
         for i, (word, _) in enumerate(common_words):
             live.log_metric(f"Top {i + 1}", word, plot=False)
 
