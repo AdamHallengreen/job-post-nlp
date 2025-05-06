@@ -85,6 +85,9 @@ jobs:
         run: uv run dvc repro
 
       - name: Create report
+        run: uv run src/job_post_nlp/report.py
+
+      - name: Post report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
