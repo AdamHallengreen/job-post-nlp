@@ -27,7 +27,6 @@ dependencies = [
     "pyyaml>=6.0.2",
     "spacy>=3.8.5",
     "tqdm>=4.67.1",
-    "seaborn>=0.13.2",
 ]
 
 [project.urls]
