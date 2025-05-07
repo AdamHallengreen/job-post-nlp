@@ -51,42 +51,42 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 219d3c4b7df6fe681b4a76a06a48caf1
-      size: 2546
+      md5: 0499f4479aa5eceffd8ba23aab5d02cd
+      size: 2789
     params:
       params.yaml:
         prepare.nobs: 200
     outs:
-    - path: data/tokenized_texts.json
+    - path: data/corpus.json
       hash: md5
-      md5: 4808daee75010562446dcb75f6e09707
-      size: 1755571
+      md5: 21a7f1e793d238652c9c9855aa4181b9
+      size: 885247
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
-    - path: data/tokenized_texts.json
+    - path: data/corpus.json
       hash: md5
-      md5: 4808daee75010562446dcb75f6e09707
-      size: 1755571
+      md5: 21a7f1e793d238652c9c9855aa4181b9
+      size: 885247
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: c15670c80d250222ecd6374f4049a7f5
-      size: 2778
+      md5: 728167ad13048ed130e25475d05e9a61
+      size: 2989
     params:
       params.yaml:
         train.top_n: 10
     outs:
     - path: data/most_common_words.json
       hash: md5
-      md5: 25e795cce64afb8280f01737eb1c7cad
-      size: 401
+      md5: a9eff1e6ee5249b5b89f44ff3ea09db6
+      size: 430
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: data/most_common_words.json
       hash: md5
-      md5: 25e795cce64afb8280f01737eb1c7cad
-      size: 401
+      md5: a9eff1e6ee5249b5b89f44ff3ea09db6
+      size: 430
     - path: src/job_post_nlp/evaluate.py
       hash: md5
       md5: 50f4a81ebb334f6bfba18c3567c43e91
