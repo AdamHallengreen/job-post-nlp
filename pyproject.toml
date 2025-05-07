@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "This is a template repository for Python projects that use uv for their dependency management."
 authors = [
     { name = "Adam Hallengreen", email = "adamhallengreen@econ.ku.dk", website = "https://sites.google.com/view/adamhallengreen" },
-    { name = "Asker Christensen", email = "anc@econ.ku.dk" }
+    { name = "Asker Nygaard Christensen", email = "anc@econ.ku.dk", website =  "https://sites.google.com/view/askernygaardchristensen"}
 ]
 readme = "README.md"
 keywords = ['python']
