@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "This is a template repository for Python projects that use uv for their dependency management."
 authors = [
     { name = "Adam Hallengreen", email = "adamhallengreen@econ.ku.dk", website = "https://sites.google.com/view/adamhallengreen" },
-    { name = "Asker Christensen", email = "anc@econ.ku.dk" }
+    { name = "Asker Nygaard Christensen", email = "anc@econ.ku.dk", website =  "https://sites.google.com/view/askernygaardchristensen"}
 ]
 readme = "README.md"
 keywords = ['python']
@@ -27,6 +27,7 @@ dependencies = [
     "pyyaml>=6.0.2",
     "spacy>=3.8.5",
     "tqdm>=4.67.1",
+    "seaborn>=0.13.2",
 ]
 
 [project.urls]
