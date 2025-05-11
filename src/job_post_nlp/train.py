@@ -3,42 +3,45 @@ import os
 import pathlib
 from collections import Counter
 from pathlib import Path
+from typing import cast
 
 import yaml
 
 from job_post_nlp.utils.find_project_root import find_project_root
 
 
-class InvalidTokenFormatError(Exception):
+class InvalidCorpusError(Exception):
     def __init__(self) -> None:
-        super().__init__("Input file must contain a list of lists of strings.")
+        super().__init__("The corpus must be a list of lists of strings.")
 
 
-def load_tokens(input_file: str | pathlib.Path) -> list[list[str]]:
+def load_corpus(input_file: str | pathlib.Path) -> list[list[str]]:
     """
-    Load tokenized texts from a JSON file.
+    Load the preprocessed corpus from a JSON file.
 
     Args:
-        input_file (str | pathlib.Path): Path to the JSON file containing tokenized texts.
+        input_file (str | pathlib.Path): Path to the JSON file containing the corpus.
 
     Returns:
         list[list[str]]: A list of tokenized texts, where each text is a list of strings (tokens).
     """
     with open(input_file, encoding="utf-8") as f:
-        tokens = json.load(f)
-    if not isinstance(tokens, list) or not all(
-        isinstance(text, list) and all(isinstance(token, str) for token in text) for text in tokens
+        data = json.load(f)
+    # Ensure the data is a list of lists of strings
+    if not isinstance(data, list) or not all(
+        isinstance(text, list) and all(isinstance(token, str) for token in text) for text in data
     ):
-        raise InvalidTokenFormatError()
-    return tokens
+        raise InvalidCorpusError()
+    corpus: list[list[str]] = cast(list[list[str]], data)  # Explicitly cast to the expected type
+    return corpus
 
 
-def get_most_common_words(tokens: list, params: dict) -> list:
+def get_most_common_words(corpus: list[list[str]], params: dict) -> list:
     """
-    Get the most common words from a list of tokenized texts.
+    Get the most common words from a corpus of tokenized texts.
 
     Args:
-        tokens (list): A list of tokenized texts.
+        corpus (list[list[str]]): A list of tokenized texts.
         params (dict): A dictionary containing parameters, including 'top_n'.
 
     Returns:
@@ -48,7 +51,7 @@ def get_most_common_words(tokens: list, params: dict) -> list:
     top_n = params["top_n"]
 
     # Flatten the list of tokenized texts
-    all_tokens = [token for text in tokens for token in text]
+    all_tokens = [token for text in corpus for token in text]
 
     # Count the occurrences of each word
     word_counts = Counter(all_tokens)
@@ -74,7 +77,7 @@ if __name__ == "__main__":
     # Define file paths
     project_root = find_project_root(__file__)
     params_path = Path(project_root) / "params.yaml"
-    input_file = Path(project_root) / "data" / "tokenized_texts.json"
+    corpus_file = Path(project_root) / "data" / "corpus.json"  # Use corpus file
     output_file = Path(project_root) / "data" / "most_common_words.json"
 
     # Load parameters
@@ -82,8 +85,8 @@ if __name__ == "__main__":
         params = yaml.safe_load(file)["train"]
 
     # Process
-    tokens = load_tokens(input_file)
-    common_words = get_most_common_words(tokens, params)
+    corpus = load_corpus(corpus_file)  # Load corpus instead of tokens
+    common_words = get_most_common_words(corpus, params)
     export_most_common_words(common_words, output_file)
 
     print(f"Most common words exported to {output_file}")

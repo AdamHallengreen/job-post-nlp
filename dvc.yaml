@@ -7,11 +7,11 @@ stages:
     params:
     - prepare.nobs
     outs:
-    - data/tokenized_texts.json
+    - data/corpus.json
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
-    - data/tokenized_texts.json
+    - data/corpus.json
     - src/job_post_nlp/train.py
     params:
     - train.top_n
