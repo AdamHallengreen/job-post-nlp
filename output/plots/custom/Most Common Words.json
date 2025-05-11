@@ -1,42 +1,42 @@
 [
     {
         "Word": "arbejde",
-        "Frequency": 561
-    },
-    {
-        "Word": "s\u00f8ge",
-        "Frequency": 349
+        "Frequency": 3120
     },
     {
         "Word": "stilling",
-        "Frequency": 337
+        "Frequency": 1891
+    },
+    {
+        "Word": "s\u00f8ge",
+        "Frequency": 1735
     },
     {
         "Word": "god",
-        "Frequency": 300
-    },
-    {
-        "Word": "erfaring",
-        "Frequency": 270
-    },
-    {
-        "Word": "samarbejde",
-        "Frequency": 268
+        "Frequency": 1683
     },
     {
         "Word": "and",
-        "Frequency": 253
+        "Frequency": 1523
     },
     {
-        "Word": "b\u00e5de",
-        "Frequency": 239
+        "Word": "the",
+        "Frequency": 1448
+    },
+    {
+        "Word": "samarbejde",
+        "Frequency": 1387
     },
     {
         "Word": "opgave",
-        "Frequency": 232
+        "Frequency": 1305
     },
     {
         "Word": "del",
-        "Frequency": 216
+        "Frequency": 1282
+    },
+    {
+        "Word": "ans\u00f8gning",
+        "Frequency": 1196
     }
 ]

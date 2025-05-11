@@ -33,7 +33,7 @@ def load_data(file_path: Path, column_name: str = "Text") -> list:
     return df[column_name].to_list()
 
 
-def preprocess_texts(texts: list) -> list:
+def preprocess_texts(texts: list, params: dict) -> list:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
     stopword removal, and lowercasing.
@@ -47,13 +47,22 @@ def preprocess_texts(texts: list) -> list:
     # Load the spaCy language model
     nlp = spacy.load("da_core_news_sm")
 
-    # Preprocess the texts
+    # Disable unnecessary pipeline components for efficiency
+    # nlp.disable_pipes("ner", "parser", "morphologizer", "attribute_ruler")
+    # Process the texts in batches for efficiency
     preprocessed_texts = []
-    for text in tqdm(texts, desc="Preprocessing texts"):
-        if text is not None:  # Handle potential None values
-            doc = nlp(text)
-            tokens = [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
-            preprocessed_texts.append(tokens)
+    for doc in tqdm(
+        nlp.pipe(
+            texts,
+            batch_size=params["batch_size"],
+            n_process=params["threads"],
+            disable=["ner", "attribute_ruler", "parser", "morphologizer"],
+        ),
+        total=len(texts),
+        desc="Preprocessing texts",
+    ):
+        tokens = [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
+        preprocessed_texts.append(tokens)
 
     return preprocessed_texts
 
@@ -84,7 +93,7 @@ def main() -> None:
 
     # Process the data
     texts = load_data(file_path)
-    preprocessed_corpus = preprocess_texts(texts[:nobs])
+    preprocessed_corpus = preprocess_texts(texts[:nobs], params)
     export_corpus(preprocessed_corpus, output_file)
 
     print(f"Preprocessed corpus exported to {output_file}")
