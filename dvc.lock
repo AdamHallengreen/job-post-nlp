@@ -51,30 +51,38 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 96d7538e5dde9f1def47eff0c544fcca
-      size: 3631
+      md5: 8b26fd0e53da6360bed4822f028e1625
+      size: 3826
     params:
       params.yaml:
-        prepare.nobs: 1000
+        prepare:
+          nobs: 1000
+          batch_size: 50
+          threads: 4
+          model: da_core_news_sm
+          pipeline:
+          - tok2vec
+          - lemmatizer
     outs:
-    - path: data/corpus.json
+    - path: data/corpus.spacy
       hash: md5
-      md5: ff46f1245a87c646c39fca7a17e5673e
-      size: 2809626
+      md5: 9e7e3891d58e662187a609601106cac9
+      size: 4705716
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
-    - path: data/corpus.json
+    - path: data/corpus.spacy
       hash: md5
-      md5: ff46f1245a87c646c39fca7a17e5673e
-      size: 2809626
+      md5: 9e7e3891d58e662187a609601106cac9
+      size: 4705716
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: dd64c899c1bc5ea2c3a2be6a435fbb6f
-      size: 3003
+      md5: 1bc434bc0a7d17c61e936817475b1389
+      size: 3444
     params:
       params.yaml:
-        train.top_n: 10
+        train:
+          top_n: 10
     outs:
     - path: data/most_common_words.json
       hash: md5

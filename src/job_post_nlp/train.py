@@ -3,40 +3,61 @@ import os
 import pathlib
 from collections import Counter
 from pathlib import Path
-from typing import cast
 
+import spacy
 import yaml
+from spacy.tokens import Doc, DocBin
+from tqdm import tqdm
 
 from job_post_nlp.utils.find_project_root import find_project_root
 
 
-class InvalidCorpusError(Exception):
-    def __init__(self) -> None:
-        super().__init__("The corpus must be a list of lists of strings.")
-
-
-def load_corpus(input_file: str | pathlib.Path) -> list[list[str]]:
+def load_corpus(file_path: Path) -> DocBin:
     """
-    Load the preprocessed corpus from a JSON file.
-
+    Load a preprocessed corpus from a .spacy binary file.
     Args:
-        input_file (str | pathlib.Path): Path to the JSON file containing the corpus.
-
+        file_path (Path): Path to the .spacy file.
     Returns:
-        list[list[str]]: A list of tokenized texts, where each text is a list of strings (tokens).
+        DocBin: The loaded corpus.
     """
-    with open(input_file, encoding="utf-8") as f:
-        data = json.load(f)
-    # Ensure the data is a list of lists of strings
-    if not isinstance(data, list) or not all(
-        isinstance(text, list) and all(isinstance(token, str) for token in text) for text in data
-    ):
-        raise InvalidCorpusError()
-    corpus: list[list[str]] = cast(list[list[str]], data)  # Explicitly cast to the expected type
-    return corpus
+    doc_bin = DocBin().from_disk(file_path)
+    return doc_bin
 
 
-def get_most_common_words(corpus: list[list[str]], params: dict) -> list:
+def unpack_corpus(corpus: DocBin) -> list[tuple[str, list[str]]]:
+    """
+    Unpack the corpus and return a list of tuples containing text IDs and their corresponding lemmas.
+    Args:
+        corpus (DocBin): The preprocessed corpus.
+    Returns:
+        list: A list of tuples containing text IDs and their corresponding lemmas.
+    """
+    nlp = spacy.blank("da")
+    if not Doc.has_extension("text_id"):
+        Doc.set_extension("text_id", default=None)
+
+    return [
+        (doc._.text_id, list(get_clean_tokens(doc)))
+        for doc in tqdm(
+            corpus.get_docs(nlp.vocab),
+            total=corpus.__len__(),
+            desc="Unpacking texts",
+        )
+    ]
+
+
+def get_clean_tokens(doc: Doc) -> list[str]:
+    """
+    Clean the tokens by removing non-alphabetic characters and stop words.
+    Args:
+        doc (Doc): A spaCy Doc object.
+    Returns:
+        list: A list of cleaned tokens.
+    """
+    return [token.lemma_.lower() for token in doc if not token.is_stop and token.is_alpha]
+
+
+def get_most_common_words(corpus: DocBin, params: dict) -> list:
     """
     Get the most common words from a corpus of tokenized texts.
 
@@ -51,7 +72,7 @@ def get_most_common_words(corpus: list[list[str]], params: dict) -> list:
     top_n = params["top_n"]
 
     # Flatten the list of tokenized texts
-    all_tokens = [token for text in corpus for token in text]
+    all_tokens = [token for _, tokens in unpack_corpus(corpus) for token in tokens]
 
     # Count the occurrences of each word
     word_counts = Counter(all_tokens)
@@ -75,10 +96,11 @@ def export_most_common_words(common_words: list, output_file: str | pathlib.Path
 
 if __name__ == "__main__":
     # Define file paths
-    project_root = find_project_root(__file__)
-    params_path = Path(project_root) / "params.yaml"
-    corpus_file = Path(project_root) / "data" / "corpus.json"  # Use corpus file
-    output_file = Path(project_root) / "data" / "most_common_words.json"
+    project_root = Path(find_project_root(__file__))
+    data_dir = project_root / "data"
+    params_path = project_root / "params.yaml"
+    corpus_file = data_dir / "corpus.spacy"  # Use corpus file
+    output_file = data_dir / "most_common_words.json"
 
     # Load parameters
     with open(params_path) as file:

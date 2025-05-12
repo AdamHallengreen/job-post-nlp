@@ -2,6 +2,7 @@ prepare:
   nobs: 1000
   batch_size: 50
   threads: 4
+  model: da_core_news_sm
   pipeline:
   - tok2vec
   - lemmatizer
