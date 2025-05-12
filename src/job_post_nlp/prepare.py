@@ -2,6 +2,7 @@ import json
 from collections.abc import Generator
 from pathlib import Path
 
+import polars as pl
 import spacy
 import yaml
 from tqdm import tqdm
@@ -9,34 +10,68 @@ from tqdm import tqdm
 from job_post_nlp.utils.find_project_root import find_project_root
 
 
-class ColumnNotFoundError(Exception):
-    def __init__(self, column_name: str) -> None:
-        super().__init__(f"Column '{column_name}' not found in the Excel file.")
+class FileNotFoundErrorMessage:
+    def __init__(self, file_path: Path) -> None:
+        self.message = f"File {file_path} does not exist."
+
+    def __str__(self) -> str:
+        return self.message
 
 
-def load_data(file_path: Path, column_name: str = "Text") -> list:
+class UnsupportedFileTypeError(Exception):
+    def __init__(self, file_suffix: str) -> None:
+        self.message = f"Unsupported file type: {file_suffix}"
+        super().__init__(self.message)
+
+
+def load_data(file_path: Path) -> list[tuple[str, str]]:
     """
     Load data from an Excel file and extract the specified column.
 
     Args:
         file_path (Path): Path to the Excel file.
         column_name (str): Name of the column to extract.
-
+        raise FileNotFoundError(FileNotFoundErrorMessage(file_path))
     Returns:
         list: A list of texts from the specified column.
     """
-    import polars as pl  # Import here to avoid dependency issues if unused
 
-    df = pl.read_excel(file_path, sheet_name="Sheet1")
+    # check if the file exists
+    if not file_path.exists():
+        raise FileNotFoundError(FileNotFoundErrorMessage(file_path))
+    # check if the file is an Excel file
+    if file_path.suffix in [".xlsx", ".xls"]:
+        df = load_excel(file_path)
+    else:
+        raise UnsupportedFileTypeError(file_path.suffix)
 
-    if column_name not in df.columns:
-        raise ColumnNotFoundError(column_name)
-    return df[column_name].to_list()
+    text_col = df.select(pl.col("text")).to_series().to_list()
+    id_col = df.select(pl.col("id")).to_series().to_list()
+    texts = [(t, i) for t, i in zip(text_col, id_col)]
+
+    return texts
+
+
+def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
+    """
+    Load data from an Excel file and return it as a list of dictionaries.
+
+    Args:
+        file_path (Path): Path to the Excel file.
+
+    Returns:
+        list: A list of dictionaries representing the rows in the Excel file.
+    """
+
+    df = pl.read_excel(
+        file_path, sheet_name=sheet_name, columns=["ID", "Text"], schema_overrides={"ID": pl.String, "Text": pl.String}
+    ).rename({"ID": "id", "Text": "text"})
+    return df
 
 
 def process_texts_generator(
-    texts: list[str], nlp: spacy.language.Language, batch_size: int = 1000, threads: int = 1
-) -> Generator[list[str], None, None]:
+    texts: list[tuple[str, str]], nlp: spacy.language.Language, batch_size: int = 1000, threads: int = 1
+) -> Generator[tuple[str, list[str]], None, None]:
     """
     Processes texts using spaCy and yields a list of lemmatized and filtered tokens for each document.
 
@@ -49,15 +84,15 @@ def process_texts_generator(
     Yields:
         list: A list of lowercase lemmas of alphabetic and non-stop tokens for each document.
     """
-    for doc in tqdm(
-        nlp.pipe(texts, batch_size=batch_size, n_process=threads),
+    for doc, context in tqdm(
+        nlp.pipe(texts, as_tuples=True, batch_size=batch_size, n_process=threads),
         total=len(texts),
         desc="Preprocessing texts",
     ):
-        yield [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
+        yield (context, [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop])
 
 
-def preprocess_texts(texts: list, params: dict) -> list:
+def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> list:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
     stopword removal, and lowercasing.

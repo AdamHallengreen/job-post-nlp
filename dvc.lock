@@ -51,16 +51,16 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 96d7538e5dde9f1def47eff0c544fcca
-      size: 3631
+      md5: 1a8eeb9082cdfdffc82402b4cb792876
+      size: 4819
     params:
       params.yaml:
         prepare.nobs: 1000
     outs:
     - path: data/corpus.json
       hash: md5
-      md5: ff46f1245a87c646c39fca7a17e5673e
-      size: 2809626
+      md5: b6029079391041538502c351c7a86e6a
+      size: 2851590
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
