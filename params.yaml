@@ -1,5 +1,11 @@
 prepare:
-  nobs: 200
+  nobs: 1000
+  batch_size: 50
+  threads: 4
+  pipeline:
+  - tok2vec
+  - lemmatizer
+
 
 train:
     top_n: 10
