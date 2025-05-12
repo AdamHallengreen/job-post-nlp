@@ -1,10 +1,9 @@
-import json
-from collections.abc import Generator
 from pathlib import Path
 
 import polars as pl
 import spacy
 import yaml
+from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
 
 from job_post_nlp.utils.find_project_root import find_project_root
@@ -69,30 +68,7 @@ def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
     return df
 
 
-def process_texts_generator(
-    texts: list[tuple[str, str]], nlp: spacy.language.Language, batch_size: int = 1000, threads: int = 1
-) -> Generator[tuple[str, list[str]], None, None]:
-    """
-    Processes texts using spaCy and yields a list of lemmatized and filtered tokens for each document.
-
-    Args:
-        texts (list): A list of input text strings.
-        nlp (spacy.language.Language): The loaded spaCy language model.
-        batch_size (int): The batch size for spaCy's nlp.pipe().
-        threads (int): The number of parallel processes for spaCy's nlp.pipe().
-
-    Yields:
-        list: A list of lowercase lemmas of alphabetic and non-stop tokens for each document.
-    """
-    for doc, context in tqdm(
-        nlp.pipe(texts, as_tuples=True, batch_size=batch_size, n_process=threads),
-        total=len(texts),
-        desc="Preprocessing texts",
-    ):
-        yield (context, [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop])
-
-
-def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> list:
+def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
     stopword removal, and lowercasing.
@@ -103,49 +79,50 @@ def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> list:
     Returns:
         list: A list of preprocessed texts as lists of tokens.
     """
+    if not Doc.has_extension("text_id"):
+        Doc.set_extension("text_id", default=None)
+
+    doc_bin = DocBin(store_user_data=True)
+
     # Load the spaCy language model
-    nlp = spacy.load("da_core_news_sm", enable=params["pipeline"])
+    nlp = spacy.load(params["model"], enable=params["pipeline"])
 
-    # Process the texts in batches and collect the results
-    processed_texts = list(
-        process_texts_generator(
-            texts,
-            nlp,
-            batch_size=params["batch_size"],
-            threads=params["threads"],
-        )
-    )
+    for doc, text_id in tqdm(
+        nlp.pipe(texts, as_tuples=True, batch_size=params["batch_size"], n_process=params["threads"]),
+        total=len(texts),
+        desc="Preprocessing texts",
+    ):
+        doc._.text_id = text_id
+        doc_bin.add(doc)
 
-    return processed_texts
+    return doc_bin
 
 
-def export_corpus(corpus: list, output_file: Path) -> None:
+def export_corpus(corpus: DocBin, output_file: Path) -> None:
     """
-    Export the preprocessed corpus to a file in JSON format.
-
+    Export the preprocessed corpus to a .spacy binary file.
     Args:
-        corpus (list): A list of preprocessed texts.
+        corpus (DocBin): The preprocessed corpus.
         output_file (Path): Path to the output file.
     """
-    with output_file.open("w", encoding="utf-8") as f:
-        json.dump(corpus, f, ensure_ascii=False)
+    corpus.to_disk(output_file)
 
 
 if __name__ == "__main__":
     # Define file paths
-    project_root = find_project_root(__file__)
-    params_path = Path(project_root) / "params.yaml"
-    file_path = project_root / "data" / "Jobnet.xlsx"
-    output_file = project_root / "data" / "corpus.json"
+    project_root = Path(find_project_root(__file__))
+    params_path = project_root / "params.yaml"
+    data_dir = project_root / "data"
+    file_path = data_dir / "Jobnet.xlsx"
+    output_file = data_dir / "corpus.spacy"
 
     # Load parameters
     with open(params_path) as file:
         params = yaml.safe_load(file)["prepare"]
-    nobs = params["nobs"]
 
     # Process the data
-    texts = load_data(file_path)
-    preprocessed_corpus = preprocess_texts(texts[:nobs], params)
+    texts = load_data(file_path)[: params["nobs"]]
+    preprocessed_corpus = preprocess_texts(texts, params)
     export_corpus(preprocessed_corpus, output_file)
 
     print(f"Preprocessed corpus exported to {output_file}")

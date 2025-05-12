@@ -5,16 +5,16 @@ stages:
     - data/Jobnet.xlsx
     - src/job_post_nlp/prepare.py
     params:
-    - prepare.nobs
+    - prepare
     outs:
-    - data/corpus.json
+    - data/corpus.spacy
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
-    - data/corpus.json
+    - data/corpus.spacy
     - src/job_post_nlp/train.py
     params:
-    - train.top_n
+    - train
     outs:
     - data/most_common_words.json
   evaluate:
