@@ -1,5 +1,6 @@
 from collections.abc import Generator
 from pathlib import Path
+from typing import Optional
 
 import polars as pl
 import spacy
@@ -74,20 +75,22 @@ def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
     stopword removal, and lowercasing.
-
-    Args:
-        texts (list): A list of texts to preprocess.
-
-    Returns:
-        list: A list of preprocessed texts as lists of tokens.
     """
-    if not Doc.has_extension("text_id"):
-        Doc.set_extension("text_id", default=None)
-
     doc_bin = DocBin(store_user_data=True)
 
     # Load the spaCy language model
     nlp = spacy.load(params["model"], enable=params["pipeline"])
+
+    # Set stop words
+    if params["keep_negations"] is not None:
+        negation_words = set(params.get("negation", ["ikke", "nej", "ingen", "intet", "aldrig"]))
+        nlp.Defaults.stop_words -= negation_words
+
+    # Register the extension for text_id if not already set
+    if not Doc.has_extension("text_id"):
+        Doc.set_extension("text_id", default=None)
+    if not Doc.has_extension("clean_tokens"):
+        Doc.set_extension("clean_tokens", default=None)
 
     for doc, text_id in tqdm(
         nlp.pipe(texts, as_tuples=True, batch_size=params["batch_size"], n_process=params["threads"]),
@@ -95,6 +98,7 @@ def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
         desc="Preprocessing texts",
     ):
         doc._.text_id = text_id
+        doc._.clean_tokens = get_clean_tokens(doc)
         doc_bin.add(doc)
 
     return doc_bin
@@ -111,6 +115,8 @@ def corpus_unpack(corpus: DocBin) -> Generator[Doc, None, None]:
     nlp = spacy.blank("da")
     if not Doc.has_extension("text_id"):
         Doc.set_extension("text_id", default=None)
+    if not Doc.has_extension("clean_tokens"):
+        Doc.set_extension("clean_tokens", default=None)
 
     yield from corpus.get_docs(nlp.vocab)
 
@@ -123,10 +129,12 @@ def get_clean_tokens(doc: Doc) -> list[str]:
     Returns:
         list: A list of cleaned tokens.
     """
-    return [token.lemma_.lower() for token in doc if not token.is_stop and token.is_alpha]
+    return [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
 
 
-def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
+def _build_tdm(
+    corpus: DocBin, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
+) -> pl.DataFrame:
     """
     Build a Term-Document Matrix (TDM) using sklearn's CountVectorizer and return a dense polars DataFrame.
     Rows: document IDs
@@ -143,16 +151,16 @@ def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
         desc="Building Term-Document Matrix",
     ):
         text_ids.append(doc._.text_id)
-        tokens = get_clean_tokens(doc)
+        tokens = doc._.clean_tokens
         texts.append(";".join(tokens))
 
     # Build the Term-Document
-    if params["tdm_cell"] == "binary":
-        vectorizer = CountVectorizer(token_pattern="[^;]+", binary=True)  # noqa: S106
-    elif params["tdm_cell"] == "tf":
-        vectorizer = CountVectorizer(token_pattern="[^;]+")  # noqa: S106
-    elif params["tdm_cell"] == "tfidf":
-        vectorizer = TfidfVectorizer(token_pattern="[^;]+")  # noqa: S106
+    if tdm_cell == "binary":
+        vectorizer = CountVectorizer(token_pattern="[^;]+", binary=True, ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
+    elif tdm_cell == "tf":
+        vectorizer = CountVectorizer(token_pattern="[^;]+", ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
+    elif tdm_cell == "tfidf":
+        vectorizer = TfidfVectorizer(token_pattern="[^;]+", ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
     else:
         raise ValueError()  # f"Unsupported TDM cell type: {params['tdm_cell']}"
 
@@ -165,6 +173,27 @@ def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
     for idx, term in enumerate(vocab):
         data[term] = X_dense[:, idx]
     return pl.DataFrame(data)
+
+
+def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
+    """
+    Build a Term-Document Matrix (TDM) using sklearn's CountVectorizer and return a dense polars DataFrame.
+    Rows: document IDs
+    Columns: unique terms (lemmas)
+    Values: term frequency in each document
+    """
+
+    dfs = []
+    for i, n in enumerate(range(1, params["ngram_n"] + 1)):
+        # Build the Term-Document Matrix
+        tdm = _build_tdm(corpus, tdm_cell=params["tdm_cell"], ngram=n, min_df=params["min_df"][i])
+        # concat the dataframes
+        dfs.append(tdm)
+    # append the dataframes together (but only use first column from the first dataframe)
+    tdm = dfs[0]
+    for i in range(1, len(dfs)):
+        tdm = tdm.hstack(dfs[i].select(pl.exclude("doc_id")))
+    return tdm
 
 
 def export_tdm(tdm: pl.DataFrame, output_file: Path) -> None:
@@ -204,7 +233,7 @@ if __name__ == "__main__":
     texts = load_data(file_path)[: params["nobs"]]
     preprocessed_corpus = preprocess_texts(texts, params)
     tdm = build_tdm(preprocessed_corpus, params)
-    print(f"Preprocessed corpus exported to {corpus_file}")
     export_corpus(preprocessed_corpus, corpus_file)
-    print(f"Term-Document Matrix exported to {tdm_file}")
+    print(f"Preprocessed corpus exported to {corpus_file}")
     export_tdm(tdm, tdm_file)
+    print(f"Term-Document Matrix exported to {tdm_file}")
