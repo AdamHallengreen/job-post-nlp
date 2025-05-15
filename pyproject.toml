@@ -27,6 +27,8 @@ dependencies = [
     "pyyaml>=6.0.2",
     "spacy>=3.8.5",
     "tqdm>=4.67.1",
+    "scipy>=1.15.3",
+    "scikit-learn>=1.6.1",
 ]
 
 [project.urls]
@@ -55,6 +57,7 @@ build-backend = "hatchling.build"
 
 
 [tool.mypy]
+mypy_path= ["stubs"]
 files = ["src"]
 disallow_untyped_defs = true
 disallow_any_unimported = true
@@ -71,6 +74,7 @@ testpaths = ["tests"]
 target-version = "py39"
 line-length = 120
 fix = true
+exclude = ["stubs"]
 
 [tool.ruff.lint]
 select = [
