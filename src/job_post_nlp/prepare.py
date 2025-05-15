@@ -82,8 +82,9 @@ def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
     nlp = spacy.load(params["model"], enable=params["pipeline"])
 
     # Set stop words
-    negation_words = set(params.get("negation", ["ikke", "nej", "ingen", "intet", "aldrig"]))
-    nlp.Defaults.stop_words -= negation_words
+    if params["keep_negations"] is not None:
+        negation_words = set(params.get("negation", ["ikke", "nej", "ingen", "intet", "aldrig"]))
+        nlp.Defaults.stop_words -= negation_words
 
     # Register the extension for text_id if not already set
     if not Doc.has_extension("text_id"):
