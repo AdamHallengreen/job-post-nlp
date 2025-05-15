@@ -51,11 +51,12 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 8b26fd0e53da6360bed4822f028e1625
-      size: 3826
+      md5: 88d1a3a9715876da6b15f535805d739f
+      size: 6638
     params:
       params.yaml:
         prepare:
+          tdm_cell: binary
           nobs: 1000
           batch_size: 50
           threads: 4
@@ -68,17 +69,21 @@ stages:
       hash: md5
       md5: 9e7e3891d58e662187a609601106cac9
       size: 4705716
+    - path: data/tdm.parquet
+      hash: md5
+      md5: 0840249f4d3c302d22dab69e7bb0805e
+      size: 9440271
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
-    - path: data/corpus.spacy
+    - path: data/tdm.parquet
       hash: md5
-      md5: 9e7e3891d58e662187a609601106cac9
-      size: 4705716
+      md5: 0840249f4d3c302d22dab69e7bb0805e
+      size: 9440271
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: 1bc434bc0a7d17c61e936817475b1389
-      size: 3444
+      md5: dd75816e3d816e5247e4775dae8f4db3
+      size: 3193
     params:
       params.yaml:
         train:
@@ -86,16 +91,16 @@ stages:
     outs:
     - path: data/most_common_words.json
       hash: md5
-      md5: 3ca50dae3ff5ad3db721c6cc3da5946d
-      size: 440
+      md5: bbdf72fc56d086c193478821eb7e17c7
+      size: 198
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: data/most_common_words.json
       hash: md5
-      md5: 3ca50dae3ff5ad3db721c6cc3da5946d
-      size: 440
+      md5: bbdf72fc56d086c193478821eb7e17c7
+      size: 198
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: 50f4a81ebb334f6bfba18c3567c43e91
-      size: 2592
+      md5: a45ec8420adbceaf55fe40f40cc2457e
+      size: 2447

@@ -1,13 +1,11 @@
 import json
 import os
 import pathlib
-from collections import Counter
 from pathlib import Path
 
-import spacy
+import polars as pl
 import yaml
-from spacy.tokens import Doc, DocBin
-from tqdm import tqdm
+from spacy.tokens import DocBin
 
 from job_post_nlp.utils.find_project_root import find_project_root
 
@@ -24,64 +22,49 @@ def load_corpus(file_path: Path) -> DocBin:
     return doc_bin
 
 
-def unpack_corpus(corpus: DocBin) -> list[tuple[str, list[str]]]:
+def load_tdm(file_path: Path) -> pl.DataFrame:
     """
-    Unpack the corpus and return a list of tuples containing text IDs and their corresponding lemmas.
+    Load a Term Document Matrix (TDM) from a CSV file.
     Args:
-        corpus (DocBin): The preprocessed corpus.
+        file_path (Path): Path to the TDM CSV file.
     Returns:
-        list: A list of tuples containing text IDs and their corresponding lemmas.
+        pl.DataFrame: The loaded TDM.
     """
-    nlp = spacy.blank("da")
-    if not Doc.has_extension("text_id"):
-        Doc.set_extension("text_id", default=None)
-
-    return [
-        (doc._.text_id, list(get_clean_tokens(doc)))
-        for doc in tqdm(
-            corpus.get_docs(nlp.vocab),
-            total=corpus.__len__(),
-            desc="Unpacking texts",
-        )
-    ]
+    if not file_path.exists():
+        raise FileNotFoundError()
+    return pl.read_parquet(file_path)
 
 
-def get_clean_tokens(doc: Doc) -> list[str]:
+def get_most_common_words(tdm: pl.DataFrame, params: dict) -> dict:
     """
-    Clean the tokens by removing non-alphabetic characters and stop words.
-    Args:
-        doc (Doc): A spaCy Doc object.
-    Returns:
-        list: A list of cleaned tokens.
-    """
-    return [token.lemma_.lower() for token in doc if not token.is_stop and token.is_alpha]
-
-
-def get_most_common_words(corpus: DocBin, params: dict) -> list:
-    """
-    Get the most common words from a corpus of tokenized texts.
+    Get the most common words from a term-document matrix (TDM).
 
     Args:
-        corpus (list[list[str]]): A list of tokenized texts.
+        tdm (pl.DataFrame): The term-document matrix with columns as terms and rows as documents.
         params (dict): A dictionary containing parameters, including 'top_n'.
 
     Returns:
-        list: A list of tuples containing the most common words and their counts.
+        dict: A dict mapping words to their counts for the most common words.
     """
-    # Unpack parameters
     top_n = params["top_n"]
 
-    # Flatten the list of tokenized texts
-    all_tokens = [token for _, tokens in unpack_corpus(corpus) for token in tokens]
+    # Exclude the 'doc_id' column if present
+    term_columns = [col for col in tdm.columns if col != "doc_id"]
+    # Sum each term column to get total frequency across all documents
+    sums = tdm.select(term_columns).sum()
+    # Use unpivot instead of melt (melt is deprecated)
+    df_long = sums.unpivot(
+        on=term_columns,
+        variable_name="word",
+        value_name="count",
+    )
+    # Sort the DataFrame by count in descending order and select the top_n rows
+    df_sorted = df_long.sort("count", descending=True).head(top_n)
+    # Convert to dict for JSON export
+    return dict(zip(df_sorted["word"].to_list(), [int(x) for x in df_sorted["count"].to_list()]))
 
-    # Count the occurrences of each word
-    word_counts = Counter(all_tokens)
 
-    # Get the most common words
-    return word_counts.most_common(top_n)
-
-
-def export_most_common_words(common_words: list, output_file: str | pathlib.Path) -> None:
+def export_most_common_words(common_words: dict, output_file: str | pathlib.Path) -> None:
     """
     Export the most common words to a file in JSON format.
 
@@ -101,14 +84,15 @@ if __name__ == "__main__":
     params_path = project_root / "params.yaml"
     corpus_file = data_dir / "corpus.spacy"  # Use corpus file
     output_file = data_dir / "most_common_words.json"
+    tdm_file = data_dir / "tdm.parquet"
 
     # Load parameters
     with open(params_path) as file:
         params = yaml.safe_load(file)["train"]
 
     # Process
-    corpus = load_corpus(corpus_file)  # Load corpus instead of tokens
-    common_words = get_most_common_words(corpus, params)
+    tdm = load_tdm(tdm_file)
+    common_words = get_most_common_words(tdm, params)
     export_most_common_words(common_words, output_file)
 
     print(f"Most common words exported to {output_file}")

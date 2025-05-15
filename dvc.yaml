@@ -8,10 +8,11 @@ stages:
     - prepare
     outs:
     - data/corpus.spacy
+    - data/tdm.parquet
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
-    - data/corpus.spacy
+    - data/tdm.parquet
     - src/job_post_nlp/train.py
     params:
     - train
