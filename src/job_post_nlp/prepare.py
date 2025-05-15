@@ -160,7 +160,7 @@ def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
     vocab = vectorizer.get_feature_names_out().tolist()
 
     # Convert to dense and build polars DataFrame
-    X_dense = X.toarray()  # type: ignore  # noqa: PGH003
+    X_dense = X.toarray()
     data = {"doc_id": text_ids}
     for idx, term in enumerate(vocab):
         data[term] = X_dense[:, idx]
