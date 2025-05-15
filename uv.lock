@@ -1271,7 +1271,6 @@ dependencies = [
     { name = "polars-lts-cpu", extra = ["calamine"], marker = "sys_platform == 'darwin'" },
     { name = "pyyaml" },
     { name = "scikit-learn" },
-    { name = "scipy" },
     { name = "spacy" },
     { name = "tqdm" },
 ]
@@ -1303,7 +1302,6 @@ requires-dist = [
     { name = "polars-lts-cpu", extras = ["calamine"], marker = "sys_platform == 'darwin'", specifier = ">=1.26.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "scikit-learn", specifier = ">=1.6.1" },
-    { name = "scipy", specifier = ">=1.15.3" },
     { name = "spacy", specifier = ">=3.8.5" },
     { name = "tqdm", specifier = ">=4.67.1" },
 ]
