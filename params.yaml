@@ -1,5 +1,13 @@
 prepare:
   tdm_cell: binary
+  ngram_n: 2
+  min_df: # int values are min count frequency, float values are min percent
+    - 1    # n=1
+    - 0.01 # n=2
+    - 0.01 # n=3
+    - 0.01 # n=4
+    - 0.01 # n=5
+  keep_negations: true
   nobs: 1000
   batch_size: 50
   threads: 4
