@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     # Log metrics using DVCLive
     with Live(dir=str(output_path), cache_images=True, report="md", save_dvc_exp=False) as live:
-        for i, (word, _) in enumerate(common_words):
+        for i, word in enumerate(common_words.keys()):
             live.log_metric(f"Top {i + 1}", word, plot=False)
 
         fig = plot_most_common_words(common_words)
