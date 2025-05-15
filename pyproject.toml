@@ -27,6 +27,7 @@ dependencies = [
     "pyyaml>=6.0.2",
     "spacy>=3.8.5",
     "tqdm>=4.67.1",
+    "scikit-learn>=1.6.1",
 ]
 
 [project.urls]
@@ -63,6 +64,11 @@ check_untyped_defs = true
 warn_return_any = true
 warn_unused_ignores = true
 show_error_codes = true
+plugins = []
+
+[[tool.mypy.overrides]]
+module = "sklearn.*"
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -71,6 +77,7 @@ testpaths = ["tests"]
 target-version = "py39"
 line-length = 120
 fix = true
+exclude = ["stubs"]
 
 [tool.ruff.lint]
 select = [

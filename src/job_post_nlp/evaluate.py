@@ -4,6 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 from dvclive import Live
+from matplotlib.figure import Figure
 
 from job_post_nlp.utils.find_project_root import find_project_root
 
@@ -13,7 +14,7 @@ class InvalidInputFileError(Exception):
         super().__init__("Input file must contain a list of lists.")
 
 
-def load_most_common_words(input_file: str | Path) -> list:
+def load_most_common_words(input_file: str | Path) -> dict:
     """
     Load the most common words from a JSON file.
 
@@ -25,22 +26,22 @@ def load_most_common_words(input_file: str | Path) -> list:
     """
     with open(input_file, encoding="utf-8") as f:
         words = json.load(f)
-    if not isinstance(words, list) or not all(isinstance(word, list) and len(word) == 2 for word in words):
+    if not isinstance(words, dict):
         raise InvalidInputFileError()
     return words
 
 
-def plot_most_common_words(common_words: list) -> plt.Figure:
+def plot_most_common_words(common_words: dict) -> Figure:
     """
-    Create a bar plot of the most common words and save it as an image.
+    Create a bar plot of the most common words.
 
     Args:
-        common_words (list): A list of tuples containing words and their counts.
-        output_image (str): Path to the output image file.
+        common_words (dict): A dictionary with words as keys and their counts as values.
     """
-    fig, ax = plt.subplots(figsize=(10, 6))  # Create figure and axes
-    words, counts = zip(*common_words)  # Unpack words and counts
-    ax.bar(words, counts, color="skyblue")  # Create bar plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    words = list(common_words.keys())
+    counts = list(common_words.values())
+    ax.bar(words, counts, color="skyblue")
     ax.set_xlabel("Words")
     ax.set_ylabel("Frequency")
     ax.set_title("Most Common Words")
@@ -61,7 +62,7 @@ if __name__ == "__main__":
 
     # Log metrics using DVCLive
     with Live(dir=str(output_path), cache_images=True) as live:
-        for i, (word, _) in enumerate(common_words):
+        for i, word in enumerate(common_words.keys()):
             live.log_metric(f"Top {i + 1}", word, plot=False)
 
         # transform list of tuples to pd.DataFrame

@@ -1,4 +1,5 @@
 prepare:
+  tdm_cell: binary
   nobs: 1000
   batch_size: 50
   threads: 4

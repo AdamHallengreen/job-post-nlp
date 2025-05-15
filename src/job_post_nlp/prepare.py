@@ -1,8 +1,10 @@
+from collections.abc import Generator
 from pathlib import Path
 
 import polars as pl
 import spacy
 import yaml
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
 
@@ -98,6 +100,83 @@ def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
     return doc_bin
 
 
+def corpus_unpack(corpus: DocBin) -> Generator[Doc, None, None]:
+    """
+    Unpack the corpus and return a list of tuples containing text IDs and their corresponding lemmas.
+    Args:
+        corpus (DocBin): The preprocessed corpus.
+    Returns:
+        list: A list of tuples containing text IDs and their corresponding lemmas.
+    """
+    nlp = spacy.blank("da")
+    if not Doc.has_extension("text_id"):
+        Doc.set_extension("text_id", default=None)
+
+    yield from corpus.get_docs(nlp.vocab)
+
+
+def get_clean_tokens(doc: Doc) -> list[str]:
+    """
+    Clean the tokens by removing non-alphabetic characters and stop words.
+    Args:
+        doc (Doc): A spaCy Doc object.
+    Returns:
+        list: A list of cleaned tokens.
+    """
+    return [token.lemma_.lower() for token in doc if not token.is_stop and token.is_alpha]
+
+
+def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
+    """
+    Build a Term-Document Matrix (TDM) using sklearn's CountVectorizer and return a dense polars DataFrame.
+    Rows: document IDs
+    Columns: unique terms (lemmas)
+    Values: term frequency in each document
+    """
+
+    # Prepare documents and IDs
+    texts = []
+    text_ids = []
+    for doc in tqdm(
+        corpus_unpack(corpus),
+        total=corpus.__len__(),
+        desc="Building Term-Document Matrix",
+    ):
+        text_ids.append(doc._.text_id)
+        tokens = get_clean_tokens(doc)
+        texts.append(";".join(tokens))
+
+    # Build the Term-Document
+    if params["tdm_cell"] == "binary":
+        vectorizer = CountVectorizer(token_pattern="[^;]+", binary=True)  # noqa: S106
+    elif params["tdm_cell"] == "tf":
+        vectorizer = CountVectorizer(token_pattern="[^;]+")  # noqa: S106
+    elif params["tdm_cell"] == "tfidf":
+        vectorizer = TfidfVectorizer(token_pattern="[^;]+")  # noqa: S106
+    else:
+        raise ValueError()  # f"Unsupported TDM cell type: {params['tdm_cell']}"
+
+    X = vectorizer.fit_transform(texts)
+    vocab = vectorizer.get_feature_names_out().tolist()
+
+    # Convert to dense and build polars DataFrame
+    X_dense = X.toarray()
+    data = {"doc_id": text_ids}
+    for idx, term in enumerate(vocab):
+        data[term] = X_dense[:, idx]
+    return pl.DataFrame(data)
+
+
+def export_tdm(tdm: pl.DataFrame, output_file: Path) -> None:
+    """
+    Export the Term-Document Matrix (TDM) to a CSV file.
+    Args:
+        tdm (pl.DataFrame): The Term-Document Matrix.
+        output_file (Path): Path to the output CSV file.
+    """
+    tdm.write_parquet(output_file)
+
+
 def export_corpus(corpus: DocBin, output_file: Path) -> None:
     """
     Export the preprocessed corpus to a .spacy binary file.
@@ -114,7 +193,8 @@ if __name__ == "__main__":
     params_path = project_root / "params.yaml"
     data_dir = project_root / "data"
     file_path = data_dir / "Jobnet.xlsx"
-    output_file = data_dir / "corpus.spacy"
+    corpus_file = data_dir / "corpus.spacy"
+    tdm_file = data_dir / "tdm.parquet"
 
     # Load parameters
     with open(params_path) as file:
@@ -123,6 +203,8 @@ if __name__ == "__main__":
     # Process the data
     texts = load_data(file_path)[: params["nobs"]]
     preprocessed_corpus = preprocess_texts(texts, params)
-    export_corpus(preprocessed_corpus, output_file)
-
-    print(f"Preprocessed corpus exported to {output_file}")
+    tdm = build_tdm(preprocessed_corpus, params)
+    print(f"Preprocessed corpus exported to {corpus_file}")
+    export_corpus(preprocessed_corpus, corpus_file)
+    print(f"Term-Document Matrix exported to {tdm_file}")
+    export_tdm(tdm, tdm_file)
