@@ -90,8 +90,8 @@ stages:
       size: 10467511
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: 256bb5f21bab2f3d3d83c495e18ec0a9
-      size: 2211
+      md5: 394985679e14e41d316b91f06c916eee
+      size: 2225
     params:
       params.yaml:
         train:
