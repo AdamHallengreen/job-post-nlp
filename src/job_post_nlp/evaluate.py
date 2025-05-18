@@ -119,7 +119,7 @@ if __name__ == "__main__":
         # TC plot
         TC_df = pd.DataFrame(model.tcs, columns=["TC"])  # type: ignore  # noqa: PGH003
         live.log_plot(
-            "Total Correlation",
+            "TC",
             TC_df,
             x="TC",
             y="Topic",
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         n_docs_per_topic = model.labels.sum(axis=0)  # type: ignore  # noqa: PGH003
         n_docs_per_topic_df = pd.DataFrame(n_docs_per_topic, columns=["Number of Job Posts"])
         live.log_plot(
-            "Number of Job Posts per Topic",
+            "n_docs_per_topic",
             n_docs_per_topic_df,
             x="Number of Job Posts",
             y="Topic",

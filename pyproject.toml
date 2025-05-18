@@ -28,6 +28,7 @@ dependencies = [
     "spacy>=3.8.5",
     "tqdm>=4.67.1",
     "scikit-learn>=1.6.1",
+    "corextopic>=1.1",
 ]
 
 [project.urls]

@@ -41,7 +41,9 @@ def train_corex(tdm: pl.DataFrame, params: dict) -> object:
     X = tdm.select(pl.exclude("doc_id")).to_numpy()
     X = ss.csr_matrix(X)
 
-    model = ct.Corex(n_hidden=params["n_topics"])
+    model = ct.Corex(
+        n_hidden=params["n_topics"], max_iter=params["max_iter"], verbose=params["verbose"], seed=params["seed"]
+    )
     model.fit(X, words=words, docs=docs, anchors=params["anchors"], anchor_strength=params["anchor_strength"])
     return model
 

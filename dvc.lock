@@ -51,8 +51,8 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: b77ba5cf210c2f1b71a1d54b36f583c5
-      size: 8240
+      md5: 13fab827223d42bca7a647f5ef41139c
+      size: 8001
     params:
       params.yaml:
         prepare:
@@ -90,28 +90,30 @@ stages:
       size: 10467511
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: 1f8306050655b712b975c25d1f2160c1
-      size: 2204
+      md5: 256bb5f21bab2f3d3d83c495e18ec0a9
+      size: 2211
     params:
       params.yaml:
         train:
-          top_n: 10
+          max_iter: 200
+          verbose: false
+          seed: 17
           n_topics: 50
           anchors:
           anchor_strength:
     outs:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 6228c113e20a9af29c38f6be565184e4
+      md5: 248fa003e20c44de925b3c184f80cfc1
       size: 60549279
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 6228c113e20a9af29c38f6be565184e4
+      md5: 248fa003e20c44de925b3c184f80cfc1
       size: 60549279
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: b7f8da4f641d0ee58b8971880efd07be
-      size: 5103
+      md5: 5f6a248cf74633f33e454223bff92ca4
+      size: 4941

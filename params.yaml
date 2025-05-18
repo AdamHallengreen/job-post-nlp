@@ -18,7 +18,9 @@ prepare:
 
 
 train:
-    top_n: 10
+    max_iter: 200
+    verbose: False
+    seed: 17
     n_topics: 50
     anchors:
     anchor_strength:
