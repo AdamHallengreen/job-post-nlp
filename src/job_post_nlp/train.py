@@ -1,10 +1,10 @@
-import json
-import os
 import pathlib
 from pathlib import Path
 
 import polars as pl
+import scipy.sparse as ss  # type: ignore  # noqa: PGH003
 import yaml
+from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
 from spacy.tokens import DocBin
 
 from job_post_nlp.utils.find_project_root import find_project_root
@@ -35,52 +35,28 @@ def load_tdm(file_path: Path) -> pl.DataFrame:
     return pl.read_parquet(file_path)
 
 
-def get_most_common_words(tdm: pl.DataFrame, params: dict) -> dict:
-    """
-    Get the most common words from a term-document matrix (TDM).
+def train_corex(tdm: pl.DataFrame, params: dict) -> object:
+    words = tdm.columns[1:]
+    docs = tdm.select(pl.col("doc_id")).to_series().to_list()
+    X = tdm.select(pl.exclude("doc_id")).to_numpy()
+    X = ss.csr_matrix(X)
 
-    Args:
-        tdm (pl.DataFrame): The term-document matrix with columns as terms and rows as documents.
-        params (dict): A dictionary containing parameters, including 'top_n'.
-
-    Returns:
-        dict: A dict mapping words to their counts for the most common words.
-    """
-    top_n = params["top_n"]
-
-    # Exclude the 'doc_id' column if present
-    term_columns = [col for col in tdm.columns if col != "doc_id"]
-    # Sum each term column to get total frequency across all documents
-    sums = tdm.select(term_columns).sum()
-    # Use unpivot instead of melt (melt is deprecated)
-    df_long = sums.unpivot(
-        on=term_columns,
-        variable_name="word",
-        value_name="count",
+    model = ct.Corex(
+        n_hidden=params["n_topics"], max_iter=params["max_iter"], verbose=params["verbose"], seed=params["seed"]
     )
-    # Sort the DataFrame by count in descending order and select the top_n rows
-    df_sorted = df_long.sort("count", descending=True).head(top_n)
-    # Convert to dict for JSON export
-    return dict(zip(df_sorted["word"].to_list(), [int(x) for x in df_sorted["count"].to_list()]))
+    model.fit(X, words=words, docs=docs, anchors=params["anchors"], anchor_strength=params["anchor_strength"])
+    return model
 
 
-def export_most_common_words(common_words: dict, output_file: str | pathlib.Path) -> None:
-    """
-    Export the most common words to a file in JSON format.
-
-    Args:
-        common_words (list): A list of tuples containing words and their counts.
-        output_file (str): Path to the output file.
-    """
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(common_words, f, ensure_ascii=False, indent=4)
+def export_model(model: object, output_file: str | pathlib.Path) -> None:
+    model.save(output_file, ensure_compatibility=False)  # type: ignore  # noqa: PGH003
 
 
 if __name__ == "__main__":
     # Define file paths
     project_root = Path(find_project_root(__file__))
     data_dir = project_root / "data"
+    models_dir = project_root / "models"
     params_path = project_root / "params.yaml"
     corpus_file = data_dir / "corpus.spacy"  # Use corpus file
     output_file = data_dir / "most_common_words.json"
@@ -92,7 +68,5 @@ if __name__ == "__main__":
 
     # Process
     tdm = load_tdm(tdm_file)
-    common_words = get_most_common_words(tdm, params)
-    export_most_common_words(common_words, output_file)
-
-    print(f"Most common words exported to {output_file}")
+    model = train_corex(tdm, params)
+    export_model(model, models_dir / "corex_model.pkl")

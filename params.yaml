@@ -8,7 +8,7 @@ prepare:
     - 0.01 # n=4
     - 0.01 # n=5
   keep_negations: true
-  nobs: 1000
+  nobs: -1
   batch_size: 50
   threads: 4
   model: da_core_news_sm
@@ -18,4 +18,9 @@ prepare:
 
 
 train:
-    top_n: 10
+    max_iter: 200
+    verbose: False
+    seed: 17
+    n_topics: 50
+    anchors:
+    anchor_strength:

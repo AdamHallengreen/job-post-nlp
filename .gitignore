@@ -141,3 +141,6 @@ cython_debug/
 
 # Other
 *.DS_Store
+
+# Models folder
+models/

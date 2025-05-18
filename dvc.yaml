@@ -17,18 +17,24 @@ stages:
     params:
     - train
     outs:
-    - data/most_common_words.json
+    - models/corex_model.pkl
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
-    - data/most_common_words.json
+    - models/corex_model.pkl
     - src/job_post_nlp/evaluate.py
-plots:
-- output/plots/images
-- output/plots/custom/Most Common Words.json:
-    template: bar_horizontal
-    x: Frequency
-    y: Word
-    title: Most Common Words Bar Plot
+
 metrics:
 - output/metrics.json
+plots:
+- output/plots/images
+- output/plots/custom/TC.json:
+    template: bar_horizontal_sorted
+    x: TC
+    y: Topic
+    title: Total Correlation of Topics
+- output/plots/custom/n_docs_per_topic.json:
+    template: bar_horizontal_sorted
+    x: Number of Job Posts
+    y: Topic
+    title: Number of Job Posts per Topic
