@@ -17,42 +17,6 @@ class InvalidInputFileError(Exception):
         super().__init__("Input file must contain a list of lists.")
 
 
-def load_most_common_words(input_file: str | Path) -> dict:
-    """
-    Load the most common words from a JSON file.
-
-    Args:
-        input_file (str | Path): Path to the JSON file containing the most common words.
-
-    Returns:
-        list: A list of tuples containing words and their counts.
-    """
-    with open(input_file, encoding="utf-8") as f:
-        words = json.load(f)
-    if not isinstance(words, dict):
-        raise InvalidInputFileError()
-    return words
-
-
-def plot_most_common_words(common_words: dict) -> Figure:
-    """
-    Create a bar plot of the most common words.
-
-    Args:
-        common_words (dict): A dictionary with words as keys and their counts as values.
-    """
-    fig, ax = plt.subplots(figsize=(10, 6))
-    words = list(common_words.keys())
-    counts = list(common_words.values())
-    ax.bar(words, counts, color="skyblue")
-    ax.set_xlabel("Words")
-    ax.set_ylabel("Frequency")
-    ax.set_title("Most Common Words")
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-    return fig
-
-
 def load_model(model_path: str | Path) -> object:
     """
     Load a model from a file.
@@ -75,7 +39,6 @@ def plot_TC(model: object) -> Figure:
     return fig
 
 
-# Plot number of job posts per topic
 def plot_num_job_posts_per_topic(model: object) -> Figure:
     n_docs_per_topic = model.labels.sum(axis=0)  # type: ignore  # noqa: PGH003
     fig, ax = plt.subplots(1, 1, figsize=(10, 6))
@@ -86,6 +49,25 @@ def plot_num_job_posts_per_topic(model: object) -> Figure:
     return fig
 
 
+def get_top_words(model: object, n_words: int = 10) -> dict:
+    """
+    Get the top words for each topic.
+
+    Args:
+        model (object): The trained model.
+        n_words (int): Number of top words to retrieve.
+
+    Returns:
+        dict: A dictionary with topic numbers as keys and lists of top words as values.
+    """
+    topics = model.get_topics(n_words)  # type: ignore  # noqa: PGH003
+    top_words = {}
+    for n, topic in enumerate(topics):
+        topic_words, _, _ = zip(*topic)
+        top_words[n] = list(topic_words)
+    return top_words
+
+
 def save_top_words(model: object, output_file: Path) -> None:
     """
     Save the top words for each topic to a YAML file, with each key on a new line.
@@ -94,11 +76,7 @@ def save_top_words(model: object, output_file: Path) -> None:
         model (object): The trained model.
         output_file (Path): Path to the output file.
     """
-    topics = model.get_topics()  # type: ignore  # noqa: PGH003
-    top_words = {}
-    for n, topic in enumerate(topics):
-        topic_words, _, _ = zip(*topic)
-        top_words[n] = list(topic_words)
+    top_words = get_top_words(model)
     if output_file.suffix == ".yaml":
         with open(output_file, "w", encoding="utf-8") as f:
             yaml.dump(top_words, f, allow_unicode=True, default_flow_style=False)
@@ -111,23 +89,6 @@ def save_top_words(model: object, output_file: Path) -> None:
             json.dump(top_words, f, ensure_ascii=False, indent=4)
     else:
         raise ValueError()
-
-
-def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
-    """
-    Load data from an Excel file and return it as a list of dictionaries.
-
-    Args:
-        file_path (Path): Path to the Excel file.
-
-    Returns:
-        list: A list of dictionaries representing the rows in the Excel file.
-    """
-
-    df = pl.read_excel(
-        file_path, sheet_name=sheet_name, columns=["ID", "Text"], schema_overrides={"ID": pl.String, "Text": pl.String}
-    ).rename({"ID": "id", "Text": "text"})
-    return df
 
 
 def get_best_match(model: object, texts: pl.DataFrame, j: int, x: int) -> str:

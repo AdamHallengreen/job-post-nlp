@@ -113,5 +113,5 @@ stages:
       size: 60549279
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: 51394c8f1f4d5cfc19c0122f7e90500a
-      size: 6360
+      md5: b7f8da4f641d0ee58b8971880efd07be
+      size: 5103
