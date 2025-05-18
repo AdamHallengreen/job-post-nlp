@@ -65,7 +65,7 @@ stages:
           - 0.01
           - 0.01
           keep_negations: true
-          nobs: 1000
+          nobs: -1
           batch_size: 50
           threads: 4
           model: da_core_news_sm
@@ -75,19 +75,19 @@ stages:
     outs:
     - path: data/corpus.spacy
       hash: md5
-      md5: b9dcd3e5e3f19ed0f76bab35b48162c9
-      size: 5379956
+      md5: 3c96016e226c9d42356d9fbcd9c855a4
+      size: 50308468
     - path: data/tdm.parquet
       hash: md5
-      md5: a7f21edd92161cf1f37558bdc3edf93d
-      size: 10467511
+      md5: a2cdc8652d432bdca5662e87bceb5bee
+      size: 37725600
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
     - path: data/tdm.parquet
       hash: md5
-      md5: a7f21edd92161cf1f37558bdc3edf93d
-      size: 10467511
+      md5: a2cdc8652d432bdca5662e87bceb5bee
+      size: 37725600
     - path: src/job_post_nlp/train.py
       hash: md5
       md5: 394985679e14e41d316b91f06c916eee
@@ -104,15 +104,15 @@ stages:
     outs:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 248fa003e20c44de925b3c184f80cfc1
-      size: 60549279
+      md5: 045df41ea168195f195178ff71c415cf
+      size: 212266767
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 248fa003e20c44de925b3c184f80cfc1
-      size: 60549279
+      md5: 045df41ea168195f195178ff71c415cf
+      size: 212266767
     - path: src/job_post_nlp/evaluate.py
       hash: md5
       md5: 5f6a248cf74633f33e454223bff92ca4
