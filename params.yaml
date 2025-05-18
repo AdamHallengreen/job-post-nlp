@@ -19,3 +19,6 @@ prepare:
 
 train:
     top_n: 10
+    n_topics: 50
+    anchors:
+    anchor_strength:

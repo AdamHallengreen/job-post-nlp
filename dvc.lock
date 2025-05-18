@@ -51,8 +51,8 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: b9040c6e7327ce1b21b4c33164a77f24
-      size: 7932
+      md5: b77ba5cf210c2f1b71a1d54b36f583c5
+      size: 8240
     params:
       params.yaml:
         prepare:
@@ -90,25 +90,28 @@ stages:
       size: 10467511
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: bbbc211166ec73f124e9e69f89335e76
-      size: 3122
+      md5: 1f8306050655b712b975c25d1f2160c1
+      size: 2204
     params:
       params.yaml:
         train:
           top_n: 10
+          n_topics: 50
+          anchors:
+          anchor_strength:
     outs:
-    - path: data/most_common_words.json
+    - path: models/corex_model.pkl
       hash: md5
-      md5: bbdf72fc56d086c193478821eb7e17c7
-      size: 198
+      md5: 6228c113e20a9af29c38f6be565184e4
+      size: 60549279
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
-    - path: data/most_common_words.json
+    - path: models/corex_model.pkl
       hash: md5
-      md5: bbdf72fc56d086c193478821eb7e17c7
-      size: 198
+      md5: 6228c113e20a9af29c38f6be565184e4
+      size: 60549279
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: a966d621c8020625f91cb6eef46daf22
-      size: 2448
+      md5: 51394c8f1f4d5cfc19c0122f7e90500a
+      size: 6360
