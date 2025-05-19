@@ -80,7 +80,7 @@ def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
     return df
 
 
-def detect_language(texts: list[tuple[str, str]]) -> list[str]:
+def detect_language(texts: list[tuple[str, str]]) -> dict:
     """
     Detect the language of the texts using Lingua.
     Args:
