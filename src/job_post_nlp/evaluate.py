@@ -103,7 +103,7 @@ def get_best_match(model: object, texts: pl.DataFrame, j: int, x: int) -> str:
     return str(text)
 
 
-def most_common_languages(corpus: DocBin) -> dict:
+def most_common_languages(corpus: DocBin) -> str:
     """
     Get the most common languages in the corpus
     and document how frequent they are
