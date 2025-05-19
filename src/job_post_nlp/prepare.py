@@ -27,6 +27,12 @@ class UnsupportedFileTypeError(Exception):
         super().__init__(self.message)
 
 
+class UnsupportedLinguaOutput(Exception):
+    def __init__(self, output: str) -> None:
+        self.message = f"Unsupported Lingua output: {output}"
+        super().__init__(self.message)
+
+
 def load_data(file_path: Path) -> list[tuple[str, str]]:
     """
     Load data from an Excel file and extract the specified column.
@@ -96,8 +102,10 @@ def detect_language(texts: list[tuple[str, str]]) -> dict:
     for i in range(len(outputs)):
         if outputs[i] is None:
             languages[texts[i][1]] = "unknown"
-        else:
+        elif hasattr(outputs[i], "iso_code_639_3"):
             languages[texts[i][1]] = outputs[i].iso_code_639_3.name
+        else:
+            raise UnsupportedLinguaOutput(outputs[i])
 
     if False:
         # For interactive checking
