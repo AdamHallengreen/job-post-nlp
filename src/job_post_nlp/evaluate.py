@@ -8,7 +8,9 @@ import yaml
 from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
 from dvclive import Live
 from matplotlib.figure import Figure
+from spacy.tokens import DocBin
 
+from job_post_nlp.prepare import corpus_unpack, register_extensions
 from job_post_nlp.utils.find_project_root import find_project_root
 
 
@@ -99,6 +101,30 @@ def get_best_match(model: object, texts: pl.DataFrame, j: int, x: int) -> str:
     # return value where text_id is doc_id
     text = texts.filter(pl.col("id") == doc_id).select(pl.col("text")).to_series().to_list()[0]
     return str(text)
+
+
+def most_common_languages(corpus: DocBin) -> dict:
+    """
+    Get the most common languages in the corpus
+    and document how frequent they are
+    """
+    languages = {}
+    register_extensions()
+    for doc in corpus_unpack(corpus):
+        language = doc._.language
+
+        if language not in languages:
+            languages[language] = 1
+        else:
+            languages[language] += 1
+
+    # make string that can be printed  (showing most common to least common)
+    languages = dict(sorted(languages.items(), key=lambda item: item[1], reverse=True))
+    languages_str = ""
+    for lang, count in languages.items():
+        # We could add a limit for the number of languages to show
+        languages_str += f"{lang}: {count}\n"
+    return languages_str
 
 
 if __name__ == "__main__":

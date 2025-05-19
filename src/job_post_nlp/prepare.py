@@ -120,6 +120,12 @@ def detect_language(texts: list[tuple[str, str]]) -> dict:
     return languages
 
 
+def register_extensions(extensions: tuple = ("text_id", "clean_tokens", "language")) -> None:
+    for extension in extensions:
+        if not Doc.has_extension(extension):
+            Doc.set_extension(extension, default=None)
+
+
 def preprocess_texts(texts: list[tuple[str, str]], languages: dict, params: dict) -> DocBin:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
@@ -136,9 +142,7 @@ def preprocess_texts(texts: list[tuple[str, str]], languages: dict, params: dict
         nlp.Defaults.stop_words -= negation_words
 
     # Register the extension for text_id if not already set
-    for extension in ["text_id", "clean_tokens", "language"]:
-        if not Doc.has_extension(extension):
-            Doc.set_extension(extension, default=None)
+    register_extensions()
 
     for doc, text_id in tqdm(
         nlp.pipe(texts, as_tuples=True, batch_size=params["batch_size"], n_process=params["threads"]),
@@ -163,10 +167,7 @@ def corpus_unpack(corpus: DocBin) -> Generator[Doc, None, None]:
         list: A list of tuples containing text IDs and their corresponding lemmas.
     """
     nlp = spacy.blank("da")
-    if not Doc.has_extension("text_id"):
-        Doc.set_extension("text_id", default=None)
-    if not Doc.has_extension("clean_tokens"):
-        Doc.set_extension("clean_tokens", default=None)
+    register_extensions()
 
     yield from corpus.get_docs(nlp.vocab)
 
