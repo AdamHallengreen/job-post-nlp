@@ -5,6 +5,7 @@ from typing import Optional
 import polars as pl
 import spacy
 import yaml
+from lingua import LanguageDetectorBuilder
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
@@ -23,6 +24,12 @@ class FileNotFoundErrorMessage:
 class UnsupportedFileTypeError(Exception):
     def __init__(self, file_suffix: str) -> None:
         self.message = f"Unsupported file type: {file_suffix}"
+        super().__init__(self.message)
+
+
+class UnsupportedLinguaOutput(Exception):
+    def __init__(self, output: str) -> None:
+        self.message = f"Unsupported Lingua output: {output}"
         super().__init__(self.message)
 
 
@@ -49,6 +56,14 @@ def load_data(file_path: Path) -> list[tuple[str, str]]:
 
     text_col = df.select(pl.col("text")).to_series().to_list()
     id_col = df.select(pl.col("id")).to_series().to_list()
+
+    # for 3 obs there is a duplciate id called: Virksomheden har valgt at rekruttere via jobcentret
+    count = 1
+    for i in range(len(id_col)):
+        if id_col[i] == "Virksomheden har valgt at rekruttere via jobcentret":
+            id_col[i] = f"jobcentret_{count}"
+            count += 1
+
     texts = [(t, i) for t, i in zip(text_col, id_col)]
 
     return texts
@@ -71,7 +86,47 @@ def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
     return df
 
 
-def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
+def detect_language(texts: list[tuple[str, str]]) -> dict:
+    """
+    Detect the language of the texts using Lingua.
+    Args:
+        texts : A list of tuples containing text IDs and their corresponding texts.
+    Returns:
+        list: A dictionary of detected languages for each text linked to id.
+    """
+    detector = LanguageDetectorBuilder.from_all_languages().build()
+    languages = {}
+
+    # We could possibly speed this up by setting the languages to detect
+    outputs = detector.detect_languages_in_parallel_of([text[0] for text in texts])
+    for i, output in enumerate(outputs):
+        if output is not None:
+            if hasattr(output, "iso_code_639_3"):
+                languages[texts[i][1]] = output.iso_code_639_3.name
+            else:
+                raise UnsupportedLinguaOutput(str(output))
+        else:
+            languages[texts[i][1]] = "unknown"
+
+    if False:
+        # For interactive checking
+        for i, language in enumerate(languages):
+            if language == "unknown":
+                print(f"Text {i} is detected as unknown language.")
+            elif (language != "DAN") and (language != "ENG"):
+                print(f"Text {i} is detected as {language}.")
+                print(texts[i][0])
+
+    return languages
+
+
+def register_extensions(extensions: tuple = ("text_id", "clean_tokens", "language")) -> None:
+    for extension in extensions:
+        if not Doc.has_extension(extension):
+            Doc.set_extension(extension, default=None)
+
+
+def preprocess_texts(texts: list[tuple[str, str]], languages: dict, params: dict) -> DocBin:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
     stopword removal, and lowercasing.
@@ -87,10 +142,7 @@ def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
         nlp.Defaults.stop_words -= negation_words
 
     # Register the extension for text_id if not already set
-    if not Doc.has_extension("text_id"):
-        Doc.set_extension("text_id", default=None)
-    if not Doc.has_extension("clean_tokens"):
-        Doc.set_extension("clean_tokens", default=None)
+    register_extensions()
 
     for doc, text_id in tqdm(
         nlp.pipe(texts, as_tuples=True, batch_size=params["batch_size"], n_process=params["threads"]),
@@ -99,6 +151,8 @@ def preprocess_texts(texts: list[tuple[str, str]], params: dict) -> DocBin:
     ):
         doc._.text_id = text_id
         doc._.clean_tokens = get_clean_tokens(doc)
+        doc._.language = languages[text_id]
+
         doc_bin.add(doc)
 
     return doc_bin
@@ -113,10 +167,7 @@ def corpus_unpack(corpus: DocBin) -> Generator[Doc, None, None]:
         list: A list of tuples containing text IDs and their corresponding lemmas.
     """
     nlp = spacy.blank("da")
-    if not Doc.has_extension("text_id"):
-        Doc.set_extension("text_id", default=None)
-    if not Doc.has_extension("clean_tokens"):
-        Doc.set_extension("clean_tokens", default=None)
+    register_extensions()
 
     yield from corpus.get_docs(nlp.vocab)
 
@@ -231,7 +282,9 @@ if __name__ == "__main__":
 
     # Process the data
     texts = load_data(file_path)[: params["nobs"]]
-    preprocessed_corpus = preprocess_texts(texts, params)
+    languages = detect_language(texts)
+
+    preprocessed_corpus = preprocess_texts(texts, languages, params)
     tdm = build_tdm(preprocessed_corpus, params)
     export_corpus(preprocessed_corpus, corpus_file)
     print(f"Preprocessed corpus exported to {corpus_file}")

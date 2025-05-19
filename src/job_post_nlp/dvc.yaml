@@ -7,6 +7,10 @@ metrics:
 - ../../output/metrics.json
 - ../../output/metrics.json
 - ../../output/metrics.json
+- ../../output/metrics.json
+- ../../output/metrics.json
+- ../../output/metrics.json
+- ../../output/metrics.json
 plots:
 - ../../output/plots/images
 - ../../output/plots/custom/Total Correlation.json:
@@ -14,6 +18,10 @@ plots:
     x: TC
     y: Topic
     title: Total Correlation of Topics
+- ../../output/plots/images
+- ../../output/plots/images
+- ../../output/plots/images
+- ../../output/plots/images
 - ../../output/plots/images
 - ../../output/plots/images
 - ../../output/plots/images
