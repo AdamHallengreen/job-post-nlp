@@ -51,69 +51,104 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 13fab827223d42bca7a647f5ef41139c
-      size: 8001
+      md5: 1e7b5a49cfc428bcdc5dc87baa4ea222
+      size: 7990
     params:
       params.yaml:
         prepare:
-          tdm_cell: binary
-          ngram_n: 2
-          min_df:
-          - 1
-          - 0.01
-          - 0.01
-          - 0.01
-          - 0.01
-          keep_negations: true
-          nobs: -1
-          batch_size: 50
-          threads: 4
-          model: da_core_news_sm
-          pipeline:
-          - tok2vec
-          - lemmatizer
+          settings:
+            nobs: 1000
+            batch_size: 50
+            threads: 4
+          preprocessing:
+            model: da_core_news_sm
+            pipeline:
+            - tok2vec
+            - lemmatizer
+            keep_negations: true
+          tdm:
+            tdm_cell: binary
+            ngram_n: 2
+            min_df:
+            - 1
+            - 0.01
+            - 0.01
+            - 0.01
+            - 0.01
     outs:
     - path: data/corpus.spacy
       hash: md5
-      md5: 3c96016e226c9d42356d9fbcd9c855a4
-      size: 50308468
+      md5: b9dcd3e5e3f19ed0f76bab35b48162c9
+      size: 5379956
     - path: data/tdm.parquet
       hash: md5
-      md5: a2cdc8652d432bdca5662e87bceb5bee
-      size: 37725600
+      md5: a7f21edd92161cf1f37558bdc3edf93d
+      size: 10467511
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
     - path: data/tdm.parquet
       hash: md5
-      md5: a2cdc8652d432bdca5662e87bceb5bee
-      size: 37725600
+      md5: a7f21edd92161cf1f37558bdc3edf93d
+      size: 10467511
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: 394985679e14e41d316b91f06c916eee
-      size: 2225
+      md5: 17e6400f52ac43f0b2632fc28eeedfe1
+      size: 3083
     params:
       params.yaml:
         train:
-          max_iter: 200
-          verbose: false
-          seed: 17
-          n_topics: 50
-          anchors:
-          anchor_strength:
+          settings:
+            verbose: false
+            max_iter: 200
+            seed: 17
+          corex:
+            n_topics: 50
+            anchors:
+            - - fleksibel
+              - fleksibilitet
+              - hjemme
+            - - fleksibel
+              - fleksibilitet
+              - hjemme
+            - - fleksibel
+              - fleksibilitet
+              - hjemme
+            - - fleksibel
+              - fleksibilitet
+              - hjemme
+            - - fleksibel
+              - fleksibilitet
+              - hjemme
+            - - karriere
+              - udvikling
+              - ambition
+            - - karriere
+              - udvikling
+              - ambition
+            - - karriere
+              - udvikling
+              - ambition
+            - - karriere
+              - udvikling
+              - ambition
+            - - karriere
+              - udvikling
+              - ambition
+            anchor_strength: 4
     outs:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 045df41ea168195f195178ff71c415cf
-      size: 212266767
+      md5: d85f9ddb15ef367504ac8c0c1483553d
+      size: 60549242
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 045df41ea168195f195178ff71c415cf
-      size: 212266767
+      md5: d85f9ddb15ef367504ac8c0c1483553d
+      size: 60549242
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: 5f6a248cf74633f33e454223bff92ca4
-      size: 4941
+      md5: 691ee573487ed29be6a56e86f4a9c273
+      size: 5033

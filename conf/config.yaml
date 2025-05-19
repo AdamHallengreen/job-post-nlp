@@ -1,0 +1,6 @@
+defaults:
+  - prepare/settings: small
+  - prepare/preprocessing: simple
+  - prepare/tdm: n2_binary
+  - train/settings: base
+  - train/corex: plain
