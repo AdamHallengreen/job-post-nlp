@@ -99,12 +99,12 @@ def detect_language(texts: list[tuple[str, str]]) -> dict:
 
     # We could possibly speed this up by setting the languages to detect
     outputs = detector.detect_languages_in_parallel_of([text[0] for text in texts])
-    for i in range(len(outputs)):
+    for i, output in enumerate(outputs):
         if outputs[i] is not None:
-            if hasattr(outputs[i], "iso_code_639_3"):
-                languages[texts[i][1]] = outputs[i].iso_code_639_3.name
+            if hasattr(output, "iso_code_639_3"):
+                languages[texts[i][1]] = output.iso_code_639_3.name
             else:
-                raise UnsupportedLinguaOutput(str(outputs[i]))
+                raise UnsupportedLinguaOutput(str(output))
         else:
             languages[texts[i][1]] = "unknown"
 
