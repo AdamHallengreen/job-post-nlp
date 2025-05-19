@@ -82,7 +82,7 @@ jobs:
         # This is necessary to find the report file.
 
       - name: Run pipeline
-        run: uv run dvc exp run --set-param 'prepare/settings/GHA.yaml'
+        run: uv run dvc exp run --set-param 'prepare/settings=GHA'
 
       - name: Create report
         run: uv run src/job_post_nlp/report.py
