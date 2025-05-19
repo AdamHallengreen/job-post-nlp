@@ -105,7 +105,7 @@ def detect_language(texts: list[tuple[str, str]]) -> dict:
         elif hasattr(outputs[i], "iso_code_639_3"):
             languages[texts[i][1]] = outputs[i].iso_code_639_3.name
         else:
-            raise UnsupportedLinguaOutput(outputs[i])
+            raise UnsupportedLinguaOutput(str(outputs[i]))
 
     if False:
         # For interactive checking
