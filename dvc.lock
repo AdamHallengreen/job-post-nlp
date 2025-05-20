@@ -96,14 +96,6 @@ stages:
       md5: 2b2deb37b0d8fec18d25c2cac05c30f9
       size: 3211
     params:
-      params.yaml:
-        train:
-          settings:
-            verbose: false
-            max_iter: 200
-            seed: 17
-          corex:
-            n_topics: 50
             anchors:
             anchor_strength:
     outs:
