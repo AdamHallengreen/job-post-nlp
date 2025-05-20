@@ -2,7 +2,7 @@ from pathlib import Path
 
 from dvclive import Live
 
-from job_post_nlp.evaluate import get_best_match, get_top_words, load_model, plot_num_job_posts_per_topic, plot_TC
+from job_post_nlp.evaluate import get_top_words, load_model, plot_num_job_posts_per_topic, plot_TC
 from job_post_nlp.prepare import load_excel
 from job_post_nlp.utils.find_project_root import find_project_root
 
@@ -36,10 +36,5 @@ if __name__ == "__main__":
         report_file.write("# Topic words\n")
         top_words = get_top_words(model, 10)
         text = "\n".join([f"Topic {i}: {', '.join(words)}\n" for i, words in top_words.items()])
-        report_file.write(text)
-        report_file.write("\n")
-
-        report_file.write("# Topic 1 - Best Match\n")
-        text = get_best_match(model, texts, 1, 0)
         report_file.write(text)
         report_file.write("\n")
