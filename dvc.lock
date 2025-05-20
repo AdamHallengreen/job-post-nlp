@@ -1,47 +1,5 @@
 schema: '2.0'
 stages:
-  preprocessing:
-    cmd: python .\src\job_post_nlp\preprocess.py
-    deps:
-    - path: .\data\Jobnet.xlsx
-      hash: md5
-      md5: 26964e5ea3bf422d0f744b6fab9af448
-      size: 13307578
-    - path: .\src\job_post_nlp\preprocess.py
-      hash: md5
-      md5: 4eb6c9d8c1f422fe7eeb41ed97b9b03e
-      size: 2643
-    params:
-      params.yaml:
-        preprocess.nobs: 200
-    outs:
-    - path: .\data\tokenized_texts.json
-      hash: md5
-      md5: 0a9d5afdc2f26252952fa9f8e9e8e333
-      size: 1858145
-  most_common:
-    cmd: python .\src\job_post_nlp\models\most_common.py
-    deps:
-    - path: .\data\tokenized_texts.json
-      hash: md5
-      md5: 0a9d5afdc2f26252952fa9f8e9e8e333
-      size: 1858145
-    - path: .\src\job_post_nlp\models\most_common.py
-      hash: md5
-      md5: 3736fd63878b39f6bc17e28d3efd384c
-      size: 3875
-    params:
-      params.yaml:
-        most_common.top_n: 10
-    outs:
-    - path: .\outputs\most_common_words.json
-      hash: md5
-      md5: 89d9bd93722fbdfaeddd476bc754cb03
-      size: 442
-    - path: .\outputs\most_common_words_bar_plot.png
-      hash: md5
-      md5: d3f6cb49e97b488b43f4caa755f2ca9f
-      size: 17044
   prepare:
     cmd: python src/job_post_nlp/prepare.py
     deps:
@@ -51,8 +9,8 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 18351c7d357fd7c64d53777dd5130f31
-      size: 8228
+      md5: 79b717e41e9998aab76d9bbde9117428
+      size: 10088
     params:
       params.yaml:
         prepare:
@@ -78,8 +36,8 @@ stages:
     outs:
     - path: data/corpus.spacy
       hash: md5
-      md5: b9dcd3e5e3f19ed0f76bab35b48162c9
-      size: 5379956
+      md5: 55a7d52725b6f9713c5f49fec3491d5d
+      size: 5381652
     - path: data/tdm.parquet
       hash: md5
       md5: a7f21edd92161cf1f37558bdc3edf93d
@@ -96,6 +54,14 @@ stages:
       md5: 2b2deb37b0d8fec18d25c2cac05c30f9
       size: 3211
     params:
+      params.yaml:
+        train:
+          settings:
+            verbose: false
+            max_iter: 200
+            seed: 17
+          corex:
+            n_topics: 50
             anchors:
             anchor_strength:
     outs:
@@ -112,5 +78,5 @@ stages:
       size: 60548823
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: daecdc5df51cd9623db44f1c70dfdf76
-      size: 5147
+      md5: ede9f150c152c70aa40de714a0b36625
+      size: 6040
