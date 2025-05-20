@@ -51,8 +51,8 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 1e7b5a49cfc428bcdc5dc87baa4ea222
-      size: 7990
+      md5: 18351c7d357fd7c64d53777dd5130f31
+      size: 8228
     params:
       params.yaml:
         prepare:
@@ -93,8 +93,8 @@ stages:
       size: 10467511
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: 17e6400f52ac43f0b2632fc28eeedfe1
-      size: 3083
+      md5: 2b2deb37b0d8fec18d25c2cac05c30f9
+      size: 3211
     params:
       params.yaml:
         train:
@@ -105,50 +105,20 @@ stages:
           corex:
             n_topics: 50
             anchors:
-            - - fleksibel
-              - fleksibilitet
-              - hjemme
-            - - fleksibel
-              - fleksibilitet
-              - hjemme
-            - - fleksibel
-              - fleksibilitet
-              - hjemme
-            - - fleksibel
-              - fleksibilitet
-              - hjemme
-            - - fleksibel
-              - fleksibilitet
-              - hjemme
-            - - karriere
-              - udvikling
-              - ambition
-            - - karriere
-              - udvikling
-              - ambition
-            - - karriere
-              - udvikling
-              - ambition
-            - - karriere
-              - udvikling
-              - ambition
-            - - karriere
-              - udvikling
-              - ambition
-            anchor_strength: 4
+            anchor_strength:
     outs:
     - path: models/corex_model.pkl
       hash: md5
-      md5: d85f9ddb15ef367504ac8c0c1483553d
-      size: 60549242
+      md5: cb8c97d9dd787d834bfb33aad39b2d22
+      size: 60548823
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: models/corex_model.pkl
       hash: md5
-      md5: d85f9ddb15ef367504ac8c0c1483553d
-      size: 60549242
+      md5: cb8c97d9dd787d834bfb33aad39b2d22
+      size: 60548823
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: 691ee573487ed29be6a56e86f4a9c273
-      size: 5033
+      md5: daecdc5df51cd9623db44f1c70dfdf76
+      size: 5147

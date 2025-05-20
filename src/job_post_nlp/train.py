@@ -69,7 +69,7 @@ def train_corex(tdm: pl.DataFrame, par: DictConfig) -> object:
         verbose=par.settings.verbose,
         seed=par.settings.seed,
     )
-    anchors = convert_anchors(par.corex.anchors)
+    anchors = convert_anchors(par.corex.anchors) if par.corex.anchors is not None else None
     model.fit(X, words=words, docs=docs, anchors=anchors, anchor_strength=par.corex.anchor_strength)
     return model
 

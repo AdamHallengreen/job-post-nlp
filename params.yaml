@@ -25,35 +25,5 @@ train:
     seed: 17
   corex:
     n_topics: 50
-    anchors:
-    - - fleksibel
-      - fleksibilitet
-      - hjemme
-    - - fleksibel
-      - fleksibilitet
-      - hjemme
-    - - fleksibel
-      - fleksibilitet
-      - hjemme
-    - - fleksibel
-      - fleksibilitet
-      - hjemme
-    - - fleksibel
-      - fleksibilitet
-      - hjemme
-    - - karriere
-      - udvikling
-      - ambition
-    - - karriere
-      - udvikling
-      - ambition
-    - - karriere
-      - udvikling
-      - ambition
-    - - karriere
-      - udvikling
-      - ambition
-    - - karriere
-      - udvikling
-      - ambition
-    anchor_strength: 4
+    anchors: null
+    anchor_strength: null
