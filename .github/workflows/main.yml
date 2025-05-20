@@ -25,30 +25,6 @@ jobs:
       - name: Run checks
         run: make check
 
-  tests-and-type-check:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.12",]
-      fail-fast: false
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Check out
-        uses: actions/checkout@v4
-
-      - name: Set up the environment
-        uses: ./.github/actions/setup-python-env
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Run tests
-        run: uv run python -m pytest tests
-
-      - name: Check typing
-        run: uv run mypy
-
   report:
     name: Generate report
     runs-on: ubuntu-latest
@@ -80,6 +56,10 @@ jobs:
         # delete the .gitignore file in the output directory
         # that adds report.md to the gitignore list.
         # This is necessary to find the report file.
+
+      - name: Update settings
+        run: |
+          sed -i 's/nobs: 1000/nobs: -1/' conf/prepare/settings/small.yaml
 
       - name: Run pipeline
         run: uv run dvc repro

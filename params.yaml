@@ -1,26 +1,29 @@
 prepare:
-  tdm_cell: binary
-  ngram_n: 2
-  min_df: # int values are min count frequency, float values are min percent
-    - 1    # n=1
-    - 0.01 # n=2
-    - 0.01 # n=3
-    - 0.01 # n=4
-    - 0.01 # n=5
-  keep_negations: true
-  nobs: -1
-  batch_size: 50
-  threads: 4
-  model: da_core_news_sm
-  pipeline:
-  - tok2vec
-  - lemmatizer
-
-
+  settings:
+    nobs: 1000
+    batch_size: 50
+    threads: 4
+  preprocessing:
+    model: da_core_news_sm
+    pipeline:
+    - tok2vec
+    - lemmatizer
+    keep_negations: true
+  tdm:
+    tdm_cell: binary
+    ngram_n: 2
+    min_df:
+    - 1
+    - 0.01
+    - 0.01
+    - 0.01
+    - 0.01
 train:
+  settings:
+    verbose: false
     max_iter: 200
-    verbose: False
     seed: 17
+  corex:
     n_topics: 50
-    anchors:
-    anchor_strength:
+    anchors: null
+    anchor_strength: null

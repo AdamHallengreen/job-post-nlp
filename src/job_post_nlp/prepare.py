@@ -4,8 +4,8 @@ from typing import Optional
 
 import polars as pl
 import spacy
-import yaml
 from lingua import LanguageDetectorBuilder
+from omegaconf import DictConfig, OmegaConf
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
@@ -126,7 +126,7 @@ def register_extensions(extensions: tuple = ("text_id", "clean_tokens", "languag
             Doc.set_extension(extension, default=None)
 
 
-def preprocess_texts(texts: list[tuple[str, str]], languages: dict, params: dict) -> DocBin:
+def preprocess_texts(texts: list[tuple[str, str]], languages: dict, par: DictConfig) -> DocBin:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
     stopword removal, and lowercasing.
@@ -134,18 +134,18 @@ def preprocess_texts(texts: list[tuple[str, str]], languages: dict, params: dict
     doc_bin = DocBin(store_user_data=True)
 
     # Load the spaCy language model
-    nlp = spacy.load(params["model"], enable=params["pipeline"])
+    nlp = spacy.load(par.preprocessing.model, enable=par.preprocessing.pipeline)
 
     # Set stop words
-    if params["keep_negations"] is not None:
-        negation_words = set(params.get("negation", ["ikke", "nej", "ingen", "intet", "aldrig"]))
+    if par.preprocessing.keep_negations is not None:
+        negation_words = {"ikke", "nej", "ingen", "intet", "aldrig"}
         nlp.Defaults.stop_words -= negation_words
 
     # Register the extension for text_id if not already set
     register_extensions()
 
     for doc, text_id in tqdm(
-        nlp.pipe(texts, as_tuples=True, batch_size=params["batch_size"], n_process=params["threads"]),
+        nlp.pipe(texts, as_tuples=True, batch_size=par.settings.batch_size, n_process=par.settings.threads),
         total=len(texts),
         desc="Preprocessing texts",
     ):
@@ -213,7 +213,7 @@ def _build_tdm(
     elif tdm_cell == "tfidf":
         vectorizer = TfidfVectorizer(token_pattern="[^;]+", ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
     else:
-        raise ValueError()  # f"Unsupported TDM cell type: {params['tdm_cell']}"
+        raise ValueError()  # f"Unsupported TDM cell type: {par.tdm.tdm_cell}"
 
     X = vectorizer.fit_transform(texts)
     vocab = vectorizer.get_feature_names_out().tolist()
@@ -226,7 +226,7 @@ def _build_tdm(
     return pl.DataFrame(data)
 
 
-def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
+def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
     """
     Build a Term-Document Matrix (TDM) using sklearn's CountVectorizer and return a dense polars DataFrame.
     Rows: document IDs
@@ -235,9 +235,9 @@ def build_tdm(corpus: DocBin, params: dict) -> pl.DataFrame:
     """
 
     dfs = []
-    for i, n in enumerate(range(1, params["ngram_n"] + 1)):
+    for i, n in enumerate(range(1, par.tdm.ngram_n + 1)):
         # Build the Term-Document Matrix
-        tdm = _build_tdm(corpus, tdm_cell=params["tdm_cell"], ngram=n, min_df=params["min_df"][i])
+        tdm = _build_tdm(corpus, tdm_cell=par.tdm.tdm_cell, ngram=n, min_df=par.tdm.min_df[i])
         # concat the dataframes
         dfs.append(tdm)
     # append the dataframes together (but only use first column from the first dataframe)
@@ -277,15 +277,14 @@ if __name__ == "__main__":
     tdm_file = data_dir / "tdm.parquet"
 
     # Load parameters
-    with open(params_path) as file:
-        params = yaml.safe_load(file)["prepare"]
+    par = OmegaConf.load(params_path).prepare
 
     # Process the data
-    texts = load_data(file_path)[: params["nobs"]]
+    texts = load_data(file_path)[: par.settings.nobs]
     languages = detect_language(texts)
 
-    preprocessed_corpus = preprocess_texts(texts, languages, params)
-    tdm = build_tdm(preprocessed_corpus, params)
+    preprocessed_corpus = preprocess_texts(texts, languages, par)
+    tdm = build_tdm(preprocessed_corpus, par)
     export_corpus(preprocessed_corpus, corpus_file)
     print(f"Preprocessed corpus exported to {corpus_file}")
     export_tdm(tdm, tdm_file)

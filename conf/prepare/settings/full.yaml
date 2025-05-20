@@ -1,0 +1,3 @@
+nobs: -1
+batch_size: 50
+threads: 4

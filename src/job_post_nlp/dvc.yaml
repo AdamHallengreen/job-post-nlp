@@ -1,31 +1,14 @@
 metrics:
 - ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
-- ../../output/metrics.json
 plots:
 - ../../output/plots/images
-- ../../output/plots/custom/Total Correlation.json:
+- ../../output/plots/custom/TC.json:
     template: bar_horizontal_sorted
     x: TC
     y: Topic
     title: Total Correlation of Topics
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
-- ../../output/plots/images
+- ../../output/plots/custom/n_docs_per_topic.json:
+    template: bar_horizontal_sorted
+    x: Number of Job Posts
+    y: Topic
+    title: Number of Job Posts per Topic

@@ -143,7 +143,10 @@ if __name__ == "__main__":
         live.log_metric("Overall TC", model.tc, plot=False)  # type: ignore  # noqa: PGH003
 
         # TC plot
-        TC_df = pd.DataFrame(model.tcs, columns=["TC"])  # type: ignore  # noqa: PGH003
+        TC_df = pd.DataFrame({
+            "Topic": range(50),
+            "TC": model.tcs,  # type: ignore  # noqa: PGH003
+        })
         live.log_plot(
             "TC",
             TC_df,
@@ -157,7 +160,7 @@ if __name__ == "__main__":
 
         # Number of job posts per topic
         n_docs_per_topic = model.labels.sum(axis=0)  # type: ignore  # noqa: PGH003
-        n_docs_per_topic_df = pd.DataFrame(n_docs_per_topic, columns=["Number of Job Posts"])
+        n_docs_per_topic_df = pd.DataFrame({"Topic": range(50), "Number of Job Posts": n_docs_per_topic})
         live.log_plot(
             "n_docs_per_topic",
             n_docs_per_topic_df,
