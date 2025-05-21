@@ -9,8 +9,8 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 9a48a96e0875d82f61013bcf2aaae241
-      size: 10289
+      md5: af4825afa396bc6a4d226e9c31fd1425
+      size: 10337
     params:
       params.yaml:
         prepare:
