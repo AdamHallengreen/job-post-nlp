@@ -35,16 +35,18 @@ class UnsupportedLinguaOutput(Exception):
 
 def load_data(file_path: Path) -> pl.DataFrame:
     """
-    Load data from an Excel file and extract the specified column.
+    Load data from an Excel file.
 
     Args:
         file_path (Path): Path to the Excel file.
-        column_name (str): Name of the column to extract.
-        raise FileNotFoundError(FileNotFoundErrorMessage(file_path))
-    Returns:
-        list: A list of texts from the specified column.
-    """
 
+    Returns:
+        pl.DataFrame: DataFrame containing the loaded data.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        UnsupportedFileTypeError: If the file is not an Excel file.
+    """
     # check if the file exists
     if not file_path.exists():
         raise FileNotFoundError(FileNotFoundErrorMessage(file_path))
@@ -58,38 +60,52 @@ def load_data(file_path: Path) -> pl.DataFrame:
 
 
 def df_to_tuple(df: pl.DataFrame) -> list[tuple[str, dict]]:
+    """
+    Convert a DataFrame to a list of (text, context) tuples.
+
+    Args:
+        df (pl.DataFrame): DataFrame with at least a 'text' column.
+
+    Returns:
+        list[tuple[str, dict]]: List of tuples with text and associated context (other columns).
+    """
     text_col = df.select(pl.col("text")).to_series().to_list()
-
-    df_dict = df.select(pl.all().exclude('text')).to_dicts()
-
+    df_dict = df.select(pl.all().exclude("text")).to_dicts()
     texts_tuple = [(text, context) for text, context in zip(text_col, df_dict)]
-
     return texts_tuple
 
+
 def rename_jobcenter_obs(df: pl.DataFrame) -> pl.DataFrame:
+    """
+    Rename rows with id 'Virksomheden har valgt at rekruttere via jobcentret' to unique IDs.
+
+    Args:
+        df (pl.DataFrame): Input DataFrame with an 'id' column.
+
+    Returns:
+        pl.DataFrame: DataFrame with unique IDs for jobcenter posts.
+    """
     # Add a unique suffix to each duplicate "jobcenter" id using cumcount
     df = df.with_columns(
         pl.when(pl.col("id") == "Virksomheden har valgt at rekruttere via jobcentret")
-        .then(
-            "jobcenter_" + (pl.cum_count("id").over("id") + 1).cast(pl.String)
-        )
+        .then("jobcenter_" + (pl.cum_count("id").over("id") + 1).cast(pl.String))
         .otherwise(pl.col("id"))
         .alias("id")
     )
-
     return df
+
 
 def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
     """
-    Load data from an Excel file and return it as a list of dictionaries.
+    Load data from an Excel file and return it as a DataFrame.
 
     Args:
         file_path (Path): Path to the Excel file.
+        sheet_name (str, optional): Name of the sheet to load. Defaults to "Sheet1".
 
     Returns:
-        list: A list of dictionaries representing the rows in the Excel file.
+        pl.DataFrame: DataFrame representing the rows in the Excel file.
     """
-
     df = pl.read_excel(
         file_path, sheet_name=sheet_name, columns=["ID", "Text"], schema_overrides={"ID": pl.String, "Text": pl.String}
     ).rename({"ID": "id", "Text": "text"})
@@ -98,11 +114,13 @@ def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
 
 def detect_language(df: pl.DataFrame) -> pl.DataFrame:
     """
-    Detect the language of the texts using Lingua.
+    Detect the language of the texts using Lingua and add a 'language' column.
+
     Args:
-        texts : A list of tuples containing text IDs and their corresponding texts.
+        df (pl.DataFrame): DataFrame with a 'text' column.
+
     Returns:
-        list: A dictionary of detected languages for each text linked to id.
+        pl.DataFrame: DataFrame with an added 'language' column.
     """
     detector = LanguageDetectorBuilder.from_all_languages().build()
     languages = []
@@ -122,7 +140,17 @@ def detect_language(df: pl.DataFrame) -> pl.DataFrame:
     df = df.with_columns(pl.Series("language", languages))
     return df
 
+
 def clean_data(df: pl.DataFrame) -> pl.DataFrame:
+    """
+    Clean the DataFrame by renaming jobcenter posts and filtering for Danish language.
+
+    Args:
+        df (pl.DataFrame): Input DataFrame.
+
+    Returns:
+        pl.DataFrame: Cleaned DataFrame.
+    """
     # rename job center posts
     df = rename_jobcenter_obs(df)
 
@@ -133,6 +161,12 @@ def clean_data(df: pl.DataFrame) -> pl.DataFrame:
 
 
 def register_extensions(extensions: tuple = ("id", "language", "clean_tokens")) -> None:
+    """
+    Register custom spaCy Doc extensions if not already set.
+
+    Args:
+        extensions (tuple): Tuple of extension names to register.
+    """
     for extension in extensions:
         if not Doc.has_extension(extension):
             Doc.set_extension(extension, default=None)
@@ -140,8 +174,14 @@ def register_extensions(extensions: tuple = ("id", "language", "clean_tokens")) 
 
 def preprocess_texts(df: pl.DataFrame, par: DictConfig) -> DocBin:
     """
-    Preprocess a list of texts using spaCy, including tokenization, lemmatization,
-    stopword removal, and lowercasing.
+    Preprocess texts using spaCy: tokenization, lemmatization, stopword removal, and lowercasing.
+
+    Args:
+        df (pl.DataFrame): DataFrame with texts and context.
+        par (DictConfig): Configuration parameters.
+
+    Returns:
+        DocBin: spaCy DocBin containing processed documents.
     """
     doc_bin = DocBin(store_user_data=True)
 
@@ -164,8 +204,8 @@ def preprocess_texts(df: pl.DataFrame, par: DictConfig) -> DocBin:
         total=len(texts_tuple),
         desc="Preprocessing texts",
     ):
-        doc._.id = context['id']
-        doc._.language = context['language']
+        doc._.id = context["id"]
+        doc._.language = context["language"]
         doc._.clean_tokens = get_clean_tokens(doc)
 
         doc_bin.add(doc)
@@ -175,11 +215,13 @@ def preprocess_texts(df: pl.DataFrame, par: DictConfig) -> DocBin:
 
 def corpus_unpack(corpus: DocBin) -> Generator[Doc, None, None]:
     """
-    Unpack the corpus and return a list of tuples containing text IDs and their corresponding lemmas.
+    Unpack a spaCy DocBin corpus and yield Doc objects.
+
     Args:
         corpus (DocBin): The preprocessed corpus.
-    Returns:
-        list: A list of tuples containing text IDs and their corresponding lemmas.
+
+    Yields:
+        Doc: spaCy Doc object.
     """
     nlp = spacy.blank("da")
     register_extensions()
@@ -189,11 +231,13 @@ def corpus_unpack(corpus: DocBin) -> Generator[Doc, None, None]:
 
 def get_clean_tokens(doc: Doc) -> list[str]:
     """
-    Clean the tokens by removing non-alphabetic characters and stop words.
+    Extract cleaned tokens from a spaCy Doc (alphabetic, non-stopword, lemmatized, lowercased).
+
     Args:
         doc (Doc): A spaCy Doc object.
+
     Returns:
-        list: A list of cleaned tokens.
+        list[str]: List of cleaned tokens.
     """
     return [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
 
@@ -202,12 +246,18 @@ def _build_tdm(
     texts: list, ids: list, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
 ) -> pl.DataFrame:
     """
-    Build a Term-Document Matrix (TDM) using sklearn's CountVectorizer and return a dense polars DataFrame.
-    Rows: document IDs
-    Columns: unique terms (lemmas)
-    Values: term frequency in each document
-    """
+    Build a Term-Document Matrix (TDM) using sklearn and return a dense polars DataFrame.
 
+    Args:
+        texts (list): List of tokenized texts (as strings).
+        ids (list): List of document IDs.
+        tdm_cell (str): Type of cell value ('binary', 'tf', or 'tfidf').
+        ngram (int): N-gram size.
+        min_df (int | float, optional): Minimum document frequency for terms.
+
+    Returns:
+        pl.DataFrame: Term-Document Matrix with document IDs and term columns.
+    """
     # Build the Term-Document
     if tdm_cell == "binary":
         vectorizer = CountVectorizer(token_pattern="[^;]+", binary=True, ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
@@ -231,10 +281,15 @@ def _build_tdm(
 
 def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
     """
-    Build a Term-Document Matrix (TDM) using sklearn's CountVectorizer and return a dense polars DataFrame.
-    Rows: document IDs
-    Columns: unique terms (lemmas)
-    Values: term frequency in each document
+    Build a Term-Document Matrix (TDM) from a spaCy DocBin corpus.
+    It combines n-grams and handles multiple TDMs.
+
+    Args:
+        corpus (DocBin): Preprocessed spaCy DocBin.
+        par (DictConfig): Configuration parameters.
+
+    Returns:
+        pl.DataFrame: Term-Document Matrix.
     """
     # Prepare documents and IDs
     texts = []
@@ -242,7 +297,7 @@ def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
     for doc in tqdm(
         corpus_unpack(corpus),
         total=corpus.__len__(),
-        desc="Building Term-Document Matrix",
+        desc="Unpacking corpus for TDM",
     ):
         ids.append(doc._.id)
         tokens = doc._.clean_tokens
@@ -264,10 +319,11 @@ def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
 
 def export_tdm(tdm: pl.DataFrame, output_file: Path) -> None:
     """
-    Export the Term-Document Matrix (TDM) to a CSV file.
+    Export the Term-Document Matrix (TDM) to a Parquet file.
+
     Args:
         tdm (pl.DataFrame): The Term-Document Matrix.
-        output_file (Path): Path to the output CSV file.
+        output_file (Path): Path to the output Parquet file.
     """
     tdm.write_parquet(output_file)
 
@@ -275,6 +331,7 @@ def export_tdm(tdm: pl.DataFrame, output_file: Path) -> None:
 def export_corpus(corpus: DocBin, output_file: Path) -> None:
     """
     Export the preprocessed corpus to a .spacy binary file.
+
     Args:
         corpus (DocBin): The preprocessed corpus.
         output_file (Path): Path to the output file.
