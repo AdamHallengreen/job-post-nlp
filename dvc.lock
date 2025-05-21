@@ -61,48 +61,233 @@ stages:
             max_iter: 200
             seed: 17
           corex:
-            n_topics: 20
+            n_topics: 50
             anchors:
-            - - fleksibel
-              - fleksibilitet
-              - hjemme
-            - - fleksibel
-              - fleksibilitet
-              - skiftende
+            - - løn
+              - betaling
+              - penge
+            - - lønforhøjelse
+              - stigning
+              - forhøjelse
+            - - bonus
+              - performance
+              - penge
+              - aktie
+            - - salg
+              - komision
+              - kvote
+            - - ferie
+              - sygedage
+              - orlov
+              - betalt
+              - fri
+              - fridage
+            - - forsikring
+              - sundhedsforsikring
+              - tandlæge
+              - syn
+            - - pension
+              - tilbagetrækning
+            - - tilbud
+              - fordele
+              - medarbejderfordele
+            - - frokost
+              - betalt frokost
+              - kantine
+              - mad
+              - gratis
+            - - work life
+              - balance
+              - life balance
+            - - timer
+              - fuld tid
+              - fuldtid
+              - deltid
+            - - timer
               - vagt
-            - - fleksibel
-              - fleksibilitet
-              - familie
-            - - fleksibel
-              - fleksibilitet
-            - - familie
-              - børn
-              - familievenlig
-            - - udvikling
-              - udvikle
-              - karriere
-            - - udvikling
-              - udvikle
-              - travl
-            - - udvikling
-              - udvikle
+              - skema
+              - flextid
+              - flex tid
+            - - pause
+              - hvile
+              - toilet
+              - frokost
+              - frokostpause
+            - - kontor
+              - skrivebord
+              - bygning
+              - kontorbygning
+            - - pendle
+              - pendling
+              - transport
+              - parkering
+              - bus
+              - tog
+              - køre
+            - - arbejde hjemme
+              - hjemmearbejde
+              - hjemme
+              - hjem
+              - remote
+              - hjemmefra
+              - hjemmekontor
+            - - by
+              - metro
+              - tog
+              - lokation
+            - - autonomi
+              - selv
+              - ansvar
+              - uafhængig
+            - - respekt
+              - chikane
+              - sexchikane
+              - behandle
+              - fjendtlig
+              - chikanere
+              - mobning
+              - mobbe
+            - - kommunikation
+              - problem
+              - bekymring
+              - møde
+              - snakke
+            - - hjælp
+              - hjælpe
+              - støtte
+            - - udfordring
+              - svær
+              - smerte
+              - nemt
+            - - kræve
+              - krævende
+              - krav
+              - obligatorisk
+              - valgfri
+            - - stress
+              - pres
+              - krævende
+            - - tempo
+              - hurtig
+              - fart
+            - - skade
+              - farlig
+              - sikkerhed
+              - forhold
+              - arbejdsplads
+            - - hård
+              - indsats
+              - belønning
+            - - moral
+              - atmosfære
+            - - sjov
+              - kedelig
+              - spændende
+              - repetitiv
+              - gentagelse
+            - - kultur
+              - værdier
+              - miljø
+              - mission
+              - arbejdsmiljø
+            - - diversitet
+              - mangfoldighed
+              - etnicitet
+              - etnisk
+              - multikulturel
+              - inklusiv
+              - lgbt
+              - lgbtq
+              - inklusion
+              - ligestilling
+            - - lederskab
+              - lederevne
+              - leder
+              - ledelse
+            - - politik
+              - politisk
+              - bureaukrati
+              - regler
+            - - forandring
+              - forskel
+            - - fyre
+              - fyring
+              - afsked
+              - afskedigelse
+              - fyringsrunde
+              - udskiftning
+              - udskifte
+            - - karriere
               - vækst
+              - udvikling
+              - vokse
+            - - forfremmelse
+              - forfremme
+              - jobtitel
+              - titel
+            - - erfaring
+              - joberfaring
             - - udvikling
               - udvikle
+              - evne
+            - - træne
+              - træning
+            - - internship
+              - intern
+              - mentor
+              - praktik
+              - praktikforløb
+              - praktikant
+            - - hyre
+              - rekruttere
+              - interview
+              - samtale
+              - lære
+            - - kontrakt
+              - tilbud
+              - underskrive
+              - underskrift
+            - - industri
+              - marked
+              - startup
+              - nyopstartet
+              - organisation
+              - projekt
+              - produkt
+              - teknolgi
+              - strategi
+              - design
+            - - boss
+              - chef
+              - leder
+              - ejer
+            - - kollega
+              - folk
+              - menneske
+              - ven
+              - familie
+              - medarbejder
+            - - team
+              - teamwork
+              - samarbejde
+            - - kunde
+              - klient
+            - []
+            - []
             anchor_strength: 9
     outs:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 2d8153343b2dd66729429b1595dc85df
-      size: 79106155
+      md5: 81fef596b593a3e91803ed2e605e7a95
+      size: 188647944
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 2d8153343b2dd66729429b1595dc85df
-      size: 79106155
+      md5: 81fef596b593a3e91803ed2e605e7a95
+      size: 188647944
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: b69a313f8f95d2461914e4c1b3ca344f
-      size: 6064
+      md5: 2cf11c28441eabf622f1e729ecccb455
+      size: 6204
