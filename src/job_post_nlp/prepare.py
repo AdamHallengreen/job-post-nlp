@@ -199,7 +199,7 @@ def get_clean_tokens(doc: Doc) -> list[str]:
 
 
 def _build_tdm(
-    corpus: DocBin, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
+    texts: list, ids: list, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
 ) -> pl.DataFrame:
     """
     Build a Term-Document Matrix (TDM) using sklearn's CountVectorizer and return a dense polars DataFrame.
@@ -207,18 +207,6 @@ def _build_tdm(
     Columns: unique terms (lemmas)
     Values: term frequency in each document
     """
-
-    # Prepare documents and IDs
-    texts = []
-    ids = []
-    for doc in tqdm(
-        corpus_unpack(corpus),
-        total=corpus.__len__(),
-        desc="Building Term-Document Matrix",
-    ):
-        ids.append(doc._.id)
-        tokens = doc._.clean_tokens
-        texts.append(";".join(tokens))
 
     # Build the Term-Document
     if tdm_cell == "binary":
@@ -248,11 +236,23 @@ def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
     Columns: unique terms (lemmas)
     Values: term frequency in each document
     """
+    # Prepare documents and IDs
+    texts = []
+    ids = []
+    for doc in tqdm(
+        corpus_unpack(corpus),
+        total=corpus.__len__(),
+        desc="Building Term-Document Matrix",
+    ):
+        ids.append(doc._.id)
+        tokens = doc._.clean_tokens
+        texts.append(";".join(tokens))
 
+    # Create and combine n-gram tdms
     dfs = []
     for i, n in enumerate(range(1, par.tdm.ngram_n + 1)):
         # Build the Term-Document Matrix
-        tdm = _build_tdm(corpus, tdm_cell=par.tdm.tdm_cell, ngram=n, min_df=par.tdm.min_df[i])
+        tdm = _build_tdm(texts, ids, tdm_cell=par.tdm.tdm_cell, ngram=n, min_df=par.tdm.min_df[i])
         # concat the dataframes
         dfs.append(tdm)
     # append the dataframes together (but only use first column from the first dataframe)
