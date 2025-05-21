@@ -33,7 +33,7 @@ class UnsupportedLinguaOutput(Exception):
         super().__init__(self.message)
 
 
-def load_data(file_path: Path) -> list[tuple[str, str]]:
+def load_data(file_path: Path) -> pl.DataFrame:
     """
     Load data from an Excel file and extract the specified column.
 
@@ -54,20 +54,30 @@ def load_data(file_path: Path) -> list[tuple[str, str]]:
     else:
         raise UnsupportedFileTypeError(file_path.suffix)
 
+    return df
+
+
+def df_to_tuple(df: pl.DataFrame) -> list[tuple[str, dict]]:
     text_col = df.select(pl.col("text")).to_series().to_list()
-    id_col = df.select(pl.col("id")).to_series().to_list()
 
-    # for 3 obs there is a duplciate id called: Virksomheden har valgt at rekruttere via jobcentret
-    count = 1
-    for i in range(len(id_col)):
-        if id_col[i] == "Virksomheden har valgt at rekruttere via jobcentret":
-            id_col[i] = f"jobcentret_{count}"
-            count += 1
+    df_dict = df.select(pl.all().exclude('text')).to_dicts()
 
-    texts = [(t, i) for t, i in zip(text_col, id_col)]
+    texts_tuple = [(text, context) for text, context in zip(text_col, df_dict)]
 
-    return texts
+    return texts_tuple
 
+def rename_jobcenter_obs(df: pl.DataFrame) -> pl.DataFrame:
+    # Add a unique suffix to each duplicate "jobcenter" id using cumcount
+    df = df.with_columns(
+        pl.when(pl.col("id") == "Virksomheden har valgt at rekruttere via jobcentret")
+        .then(
+            "jobcenter_" + (pl.cum_count("id").over("id") + 1).cast(pl.String)
+        )
+        .otherwise(pl.col("id"))
+        .alias("id")
+    )
+
+    return df
 
 def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
     """
@@ -86,7 +96,7 @@ def load_excel(file_path: Path, sheet_name: str = "Sheet1") -> pl.DataFrame:
     return df
 
 
-def detect_language(texts: list[tuple[str, str]]) -> dict:
+def detect_language(df: pl.DataFrame) -> pl.DataFrame:
     """
     Detect the language of the texts using Lingua.
     Args:
@@ -95,38 +105,40 @@ def detect_language(texts: list[tuple[str, str]]) -> dict:
         list: A dictionary of detected languages for each text linked to id.
     """
     detector = LanguageDetectorBuilder.from_all_languages().build()
-    languages = {}
+    languages = []
+    texts = df.select(pl.col("text")).to_series().to_list()
 
     # We could possibly speed this up by setting the languages to detect
-    outputs = detector.detect_languages_in_parallel_of([text[0] for text in texts])
-    for i, output in enumerate(outputs):
+    outputs = detector.detect_languages_in_parallel_of(texts)
+    for output in outputs:
         if output is not None:
             if hasattr(output, "iso_code_639_3"):
-                languages[texts[i][1]] = output.iso_code_639_3.name
+                languages.append(output.iso_code_639_3.name)
             else:
                 raise UnsupportedLinguaOutput(str(output))
         else:
-            languages[texts[i][1]] = "unknown"
+            languages.append("unknown")
 
-    if False:
-        # For interactive checking
-        for i, language in enumerate(languages):
-            if language == "unknown":
-                print(f"Text {i} is detected as unknown language.")
-            elif (language != "DAN") and (language != "ENG"):
-                print(f"Text {i} is detected as {language}.")
-                print(texts[i][0])
+    df = df.with_columns(pl.Series("language", languages))
+    return df
 
-    return languages
+def clean_data(df: pl.DataFrame) -> pl.DataFrame:
+    # rename job center posts
+    df = rename_jobcenter_obs(df)
+
+    # remove non-danish posts
+    df = df.filter(pl.col("language") == "DAN")
+
+    return df
 
 
-def register_extensions(extensions: tuple = ("text_id", "clean_tokens", "language")) -> None:
+def register_extensions(extensions: tuple = ("id", "language", "clean_tokens")) -> None:
     for extension in extensions:
         if not Doc.has_extension(extension):
             Doc.set_extension(extension, default=None)
 
 
-def preprocess_texts(texts: list[tuple[str, str]], languages: dict, par: DictConfig) -> DocBin:
+def preprocess_texts(df: pl.DataFrame, par: DictConfig) -> DocBin:
     """
     Preprocess a list of texts using spaCy, including tokenization, lemmatization,
     stopword removal, and lowercasing.
@@ -141,17 +153,20 @@ def preprocess_texts(texts: list[tuple[str, str]], languages: dict, par: DictCon
         negation_words = {"ikke", "nej", "ingen", "intet", "aldrig"}
         nlp.Defaults.stop_words -= negation_words
 
-    # Register the extension for text_id if not already set
+    # Register the extension for id if not already set
     register_extensions()
 
-    for doc, text_id in tqdm(
-        nlp.pipe(texts, as_tuples=True, batch_size=par.settings.batch_size, n_process=par.settings.threads),
-        total=len(texts),
+    # Extract texts and IDs from the DataFrame
+    texts_tuple = df_to_tuple(df)
+
+    for doc, context in tqdm(
+        nlp.pipe(texts_tuple, as_tuples=True, batch_size=par.settings.batch_size, n_process=par.settings.threads),
+        total=len(texts_tuple),
         desc="Preprocessing texts",
     ):
-        doc._.text_id = text_id
+        doc._.id = context['id']
+        doc._.language = context['language']
         doc._.clean_tokens = get_clean_tokens(doc)
-        doc._.language = languages[text_id]
 
         doc_bin.add(doc)
 
@@ -195,13 +210,13 @@ def _build_tdm(
 
     # Prepare documents and IDs
     texts = []
-    text_ids = []
+    ids = []
     for doc in tqdm(
         corpus_unpack(corpus),
         total=corpus.__len__(),
         desc="Building Term-Document Matrix",
     ):
-        text_ids.append(doc._.text_id)
+        ids.append(doc._.id)
         tokens = doc._.clean_tokens
         texts.append(";".join(tokens))
 
@@ -220,7 +235,7 @@ def _build_tdm(
 
     # Convert to dense and build polars DataFrame
     X_dense = X.toarray()
-    data = {"doc_id": text_ids}
+    data = {"doc_id": ids}
     for idx, term in enumerate(vocab):
         data[term] = X_dense[:, idx]
     return pl.DataFrame(data)
@@ -281,9 +296,9 @@ if __name__ == "__main__":
 
     # Process the data
     texts = load_data(file_path)[: par.settings.nobs]
-    languages = detect_language(texts)
-
-    preprocessed_corpus = preprocess_texts(texts, languages, par)
+    texts = detect_language(texts)
+    texts = clean_data(texts)
+    preprocessed_corpus = preprocess_texts(texts, par)
     tdm = build_tdm(preprocessed_corpus, par)
     export_corpus(preprocessed_corpus, corpus_file)
     print(f"Preprocessed corpus exported to {corpus_file}")
