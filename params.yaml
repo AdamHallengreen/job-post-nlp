@@ -24,217 +24,32 @@ train:
     max_iter: 200
     seed: 17
   corex:
-    n_topics: 50
+    n_topics: 20
     anchors:
-    - - løn
-      - betaling
-      - penge
-    - - lønforhøjelse
-      - stigning
-      - forhøjelse
-    - - bonus
-      - performance
-      - penge
-      - aktie
-    - - salg
-      - komision
-      - kvote
-    - - ferie
-      - sygedage
-      - orlov
-      - betalt
-      - fri
-      - fridage
-    - - forsikring
-      - sundhedsforsikring
-      - tandlæge
-      - syn
-    - - pension
-      - tilbagetrækning
-    - - tilbud
-      - fordele
-      - medarbejderfordele
-    - - frokost
-      - betalt frokost
-      - kantine
-      - mad
-      - gratis
-    - - work life
-      - balance
-      - life balance
-    - - timer
-      - fuld tid
-      - fuldtid
-      - deltid
-    - - timer
-      - vagt
-      - skema'
-      - flextid
-      - flex tid
-    - - pause
-      - hvile
-      - toilet
-      - frokost
-      - frokostpause
-    - - kontor
-      - skrivebord
-      - bygning
-      - kontorbygning
-    - - pendle
-      - pendling
-      - transport
-      - parkering
-      - bus
-      - tog
-      - køre
-    - - arbejde hjemme
-      - hjemmearbejde
+    - - fleksibel
+      - fleksibilitet
       - hjemme
-      - hjem
-      - remote
-      - hjemmefra
-      - hjemmekontor
-    - - by
-      - metro
-      - tog
-      - lokation
-    - - autonomi
-      - selv
-      - ansvar
-      - uafhængig
-    - - respekt
-      - chikane
-      - sexchikane
-      - behandle
-      - fjendtlig
-      - chikanere
-      - mobning
-      - mobbe
-    - - kommunikation
-      - problem
-      - bekymring
-      - møde
-      - snakke
-    - - hjælp
-      - hjælpe
-      - støtte
-    - - udfordring
-      - svær
-      - smerte
-      - nemt
-    - - kræve
-      - krævende
-      - krav
-      - obligatorisk
-      - valgfri
-    - - stress
-      - pres
-      - krævende
-    - - tempo
-      - hurtig
-      - fart
-    - - skade
-      - farlig
-      - sikkerhed
-      - forhold
-      - arbejdsplads
-    - - hård
-      - indsats
-      - belønning
-    - - moral
-      - atmosfære
-    - - sjov
-      - kedelig
-      - spændende
-      - repetitiv
-      - gentagelse
-    - - kultur
-      - værdier
-      - miljø
-      - mission
-      - arbejdsmiljø
-    - - diversitet
-      - mangfoldighed
-      - etnicitet
-      - etnisk
-      - multikulturel
-      - inklusiv
-      - lgbt
-      - lgbtq
-      - inklusion
-      - ligestilling
-    - - lederskab
-      - lederevne
-      - leder
-      - ledelse
-    - - politik
-      - politisk
-      - bureaukrati
-      - regler
-    - - forandring
-      - forskel
-    - - fyre
-      - fyring
-      - afsked
-      - afskedigelse
-      - fyringsrunde
-      - udskiftning
-      - udskifte
-    - - karriere
-      - vækst
-      - udvikling
-      - vokse
-    - - forfremmelse
-      - forfremme
-      - jobtitel
-      - titel
-    - - erfaring
-      - joberfaring
+    - - fleksibel
+      - fleksibilitet
+      - skiftende
+      - vagt
+    - - fleksibel
+      - fleksibilitet
+      - familie
+    - - fleksibel
+      - fleksibilitet
+    - - familie
+      - børn
+      - familievenlig
     - - udvikling
       - udvikle
-      - evne
-    - - træne
-      - træning
-    - - internship
-      - intern
-      - mentor
-      - praktik
-      - praktikforløb
-      - praktikant
-    - - hyre
-      - rekruttere
-      - interview
-      - samtale
-      - lære
-    - - kontrakt
-      - tilbud
-      - underskrive
-      - underskrift
-    - - industri
-      - marked
-      - startup
-      - nyopstartet
-      - organisation
-      - projekt
-      - produkt
-      - teknolgi
-      - strategi
-      - design
-    - - boss
-      - chef
-      - 'leder '
-      - ejer
-    - - kollega
-      - folk
-      - menneske
-      - ven
-      - familie
-      - medarbejder
-    - - team
-      - teamwork
-      - samarbejde
-    - - kunde
-      - klient
-    - []
-    - []
+      - karriere
+    - - udvikling
+      - udvikle
+      - travl
+    - - udvikling
+      - udvikle
+      - vækst
+    - - udvikling
+      - udvikle
     anchor_strength: 9

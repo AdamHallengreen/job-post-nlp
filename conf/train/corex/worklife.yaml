@@ -1,0 +1,12 @@
+n_topics: 20
+anchors:
+- [fleksibel, fleksibilitet, hjemme]
+- [fleksibel, fleksibilitet, skiftende, vagt]
+- [fleksibel, fleksibilitet, familie]
+- [fleksibel, fleksibilitet]
+- [familie, børn, familievenlig]
+- [udvikling, udvikle, karriere]
+- [udvikling, udvikle, travl]
+- [udvikling, udvikle, vækst]
+- [udvikling, udvikle]
+anchor_strength: 9
