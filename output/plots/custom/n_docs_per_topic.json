@@ -1,82 +1,202 @@
 [
     {
         "Topic": 0,
-        "Number of Job Posts": 3075
+        "Number of Job Posts": 4203
     },
     {
         "Topic": 1,
-        "Number of Job Posts": 3577
+        "Number of Job Posts": 3954
     },
     {
         "Topic": 2,
-        "Number of Job Posts": 3417
+        "Number of Job Posts": 2519
     },
     {
         "Topic": 3,
-        "Number of Job Posts": 2940
+        "Number of Job Posts": 1128
     },
     {
         "Topic": 4,
-        "Number of Job Posts": 2060
+        "Number of Job Posts": 1141
     },
     {
         "Topic": 5,
-        "Number of Job Posts": 5902
+        "Number of Job Posts": 1084
     },
     {
         "Topic": 6,
-        "Number of Job Posts": 4086
+        "Number of Job Posts": 1078
     },
     {
         "Topic": 7,
-        "Number of Job Posts": 4614
+        "Number of Job Posts": 1834
     },
     {
         "Topic": 8,
-        "Number of Job Posts": 5805
+        "Number of Job Posts": 1180
     },
     {
         "Topic": 9,
-        "Number of Job Posts": 3282
+        "Number of Job Posts": 1377
     },
     {
         "Topic": 10,
-        "Number of Job Posts": 1994
+        "Number of Job Posts": 1151
     },
     {
         "Topic": 11,
-        "Number of Job Posts": 6654
+        "Number of Job Posts": 1550
     },
     {
         "Topic": 12,
-        "Number of Job Posts": 1639
+        "Number of Job Posts": 1085
     },
     {
         "Topic": 13,
-        "Number of Job Posts": 2095
+        "Number of Job Posts": 1242
     },
     {
         "Topic": 14,
-        "Number of Job Posts": 2938
+        "Number of Job Posts": 1286
     },
     {
         "Topic": 15,
-        "Number of Job Posts": 2647
+        "Number of Job Posts": 1445
     },
     {
         "Topic": 16,
-        "Number of Job Posts": 1839
+        "Number of Job Posts": 1141
     },
     {
         "Topic": 17,
-        "Number of Job Posts": 2184
+        "Number of Job Posts": 3624
     },
     {
         "Topic": 18,
-        "Number of Job Posts": 2478
+        "Number of Job Posts": 1990
     },
     {
         "Topic": 19,
-        "Number of Job Posts": 2327
+        "Number of Job Posts": 2783
+    },
+    {
+        "Topic": 20,
+        "Number of Job Posts": 3936
+    },
+    {
+        "Topic": 21,
+        "Number of Job Posts": 2270
+    },
+    {
+        "Topic": 22,
+        "Number of Job Posts": 2916
+    },
+    {
+        "Topic": 23,
+        "Number of Job Posts": 1499
+    },
+    {
+        "Topic": 24,
+        "Number of Job Posts": 1143
+    },
+    {
+        "Topic": 25,
+        "Number of Job Posts": 3632
+    },
+    {
+        "Topic": 26,
+        "Number of Job Posts": 1394
+    },
+    {
+        "Topic": 27,
+        "Number of Job Posts": 2841
+    },
+    {
+        "Topic": 28,
+        "Number of Job Posts": 3651
+    },
+    {
+        "Topic": 29,
+        "Number of Job Posts": 4829
+    },
+    {
+        "Topic": 30,
+        "Number of Job Posts": 1582
+    },
+    {
+        "Topic": 31,
+        "Number of Job Posts": 2491
+    },
+    {
+        "Topic": 32,
+        "Number of Job Posts": 1345
+    },
+    {
+        "Topic": 33,
+        "Number of Job Posts": 2383
+    },
+    {
+        "Topic": 34,
+        "Number of Job Posts": 2586
+    },
+    {
+        "Topic": 35,
+        "Number of Job Posts": 4903
+    },
+    {
+        "Topic": 36,
+        "Number of Job Posts": 1052
+    },
+    {
+        "Topic": 37,
+        "Number of Job Posts": 6483
+    },
+    {
+        "Topic": 38,
+        "Number of Job Posts": 4614
+    },
+    {
+        "Topic": 39,
+        "Number of Job Posts": 1079
+    },
+    {
+        "Topic": 40,
+        "Number of Job Posts": 1663
+    },
+    {
+        "Topic": 41,
+        "Number of Job Posts": 3909
+    },
+    {
+        "Topic": 42,
+        "Number of Job Posts": 2701
+    },
+    {
+        "Topic": 43,
+        "Number of Job Posts": 2384
+    },
+    {
+        "Topic": 44,
+        "Number of Job Posts": 1900
+    },
+    {
+        "Topic": 45,
+        "Number of Job Posts": 3785
+    },
+    {
+        "Topic": 46,
+        "Number of Job Posts": 5423
+    },
+    {
+        "Topic": 47,
+        "Number of Job Posts": 2429
+    },
+    {
+        "Topic": 48,
+        "Number of Job Posts": 5244
+    },
+    {
+        "Topic": 49,
+        "Number of Job Posts": 1922
     }
 ]
