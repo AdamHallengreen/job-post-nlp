@@ -1,0 +1,53 @@
+n_topics: 50
+anchors:
+- ['løn', 'betaling', 'penge'] # 1
+- ['lønforhøjelse', 'stigning', 'forhøjelse'] # 2
+- ['bonus', 'performance', 'penge', 'aktie'] # 3
+- ['salg', 'komision', 'kvote'] # 4
+- ['ferie', 'sygedage', 'orlov', 'betalt', 'fri', 'fridage'] # 5
+- ['forsikring', 'sundhedsforsikring', 'tandlæge', 'syn'] # 6
+- ['pension', 'tilbagetrækning'] # 7
+- ['tilbud', 'fordele', 'medarbejderfordele'] # 8
+- ['frokost', 'betalt frokost', 'kantine', 'mad', 'gratis'] # 9
+- ['work life', 'balance', 'life balance'] # 10
+- ['timer', 'fuld tid', 'fuldtid', 'deltid'] # 11
+- ['timer', 'vagt', 'skema', 'flextid', 'flex tid'] # 12
+- ['pause', 'hvile', 'toilet', 'frokost', 'frokostpause'] # 13
+- ['kontor', 'skrivebord', 'bygning', 'kontorbygning'] # 14
+- ['pendle', 'pendling', 'transport', 'parkering', 'bus', 'tog', 'køre'] # 15
+- ['arbejde hjemme', 'hjemmearbejde', 'hjemme', 'hjem', 'remote', 'hjemmefra', 'hjemmekontor'] # 16
+- ['by', 'metro', 'tog', 'lokation'] # 17
+- ['autonomi', 'selv', 'ansvar', 'uafhængig'] # 18
+- ['respekt', 'chikane', 'sexchikane', 'behandle', 'fjendtlig', 'chikanere', 'mobning', 'mobbe'] # 19
+- ['kommunikation', 'problem', 'bekymring', 'møde', 'snakke'] # 20
+- ['hjælp', 'hjælpe', 'støtte'] # 21
+- ['udfordring', 'svær', 'smerte', 'nemt'] # 22
+- ['kræve', 'krævende', 'krav', 'obligatorisk', 'valgfri'] # 23
+- ['stress', 'pres', 'krævende',] # 24
+- ['tempo', 'hurtig', 'fart'] # 25
+- ['skade', 'farlig', 'sikkerhed', 'forhold', 'arbejdsplads',] # 26
+- ['hård', 'indsats', 'belønning'] # 27
+- ['moral', 'atmosfære'] # 28
+- ['sjov', 'kedelig', 'spændende', 'repetitiv', 'gentagelse'] # 29
+- ['kultur', 'værdier', 'miljø', 'mission', 'arbejdsmiljø'] # 30
+- ['diversitet', 'mangfoldighed', 'etnicitet', 'etnisk', 'multikulturel', 'inklusiv', 'lgbt', 'lgbtq', 'inklusion', 'ligestilling'] # 31
+- ['lederskab', 'lederevne', 'leder', 'ledelse'] # 32
+- ['politik', 'politisk', 'bureaukrati', 'regler'] # 33
+- ['forandring', 'forskel'] # 34
+- ['fyre', 'fyring', 'afsked', 'afskedigelse', 'fyringsrunde', 'udskiftning', 'udskifte'] # 35
+- ['karriere', 'vækst', 'udvikling', 'vokse'] # 36
+- ['forfremmelse', 'forfremme', 'jobtitel', 'titel'] # 37
+- ['erfaring', 'joberfaring'] # 38
+- ['udvikling', 'udvikle', 'evne'] # 39
+- ['træne', 'træning'] # 40
+- ['internship', 'intern', 'mentor', 'praktik', 'praktikforløb', 'praktikant'] # 41
+- ['hyre', 'rekruttere', 'interview', 'samtale', 'lære'] # 42
+- ['kontrakt', 'tilbud', 'underskrive', 'underskrift'] # 43
+- ['industri', 'marked', 'startup', 'nyopstartet', 'organisation', 'projekt', 'produkt', 'teknolgi', 'strategi', 'design'] # 44
+- ['boss', 'chef', 'leder ', 'ejer'] # 45
+- ['kollega', 'folk', 'menneske', 'ven', 'familie', 'medarbejder'] # 46
+- ['team', 'teamwork', 'samarbejde'] # 47
+- ['kunde', 'klient'] # 48
+- [] # 49
+- [] # 50
+anchor_strength: 9

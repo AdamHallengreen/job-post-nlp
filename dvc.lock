@@ -9,13 +9,13 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: af4825afa396bc6a4d226e9c31fd1425
-      size: 10337
+      md5: 08664235a4f9fe3bdc1b77d378d0db74
+      size: 11772
     params:
       params.yaml:
         prepare:
           settings:
-            nobs: 1000
+            nobs: -1
             batch_size: 50
             threads: 4
           preprocessing:
@@ -36,19 +36,19 @@ stages:
     outs:
     - path: data/corpus.spacy
       hash: md5
-      md5: 7432c896919b75c7f603fc63a9a12577
-      size: 4987696
+      md5: 491ccc10e5d0d28f4a5aaf0962c27913
+      size: 45812937
     - path: data/tdm.parquet
       hash: md5
-      md5: 96ae8ed0eb3654efecd81b1ff1ae2ee9
-      size: 9249505
+      md5: b072a221825b75b8ca855105480b4975
+      size: 33453892
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
     - path: data/tdm.parquet
       hash: md5
-      md5: 96ae8ed0eb3654efecd81b1ff1ae2ee9
-      size: 9249505
+      md5: b072a221825b75b8ca855105480b4975
+      size: 33453892
     - path: src/job_post_nlp/train.py
       hash: md5
       md5: 2b2deb37b0d8fec18d25c2cac05c30f9
@@ -63,19 +63,230 @@ stages:
           corex:
             n_topics: 50
             anchors:
-            anchor_strength:
+            - - løn
+              - betaling
+              - penge
+            - - lønforhøjelse
+              - stigning
+              - forhøjelse
+            - - bonus
+              - performance
+              - penge
+              - aktie
+            - - salg
+              - komision
+              - kvote
+            - - ferie
+              - sygedage
+              - orlov
+              - betalt
+              - fri
+              - fridage
+            - - forsikring
+              - sundhedsforsikring
+              - tandlæge
+              - syn
+            - - pension
+              - tilbagetrækning
+            - - tilbud
+              - fordele
+              - medarbejderfordele
+            - - frokost
+              - betalt frokost
+              - kantine
+              - mad
+              - gratis
+            - - work life
+              - balance
+              - life balance
+            - - timer
+              - fuld tid
+              - fuldtid
+              - deltid
+            - - timer
+              - vagt
+              - skema'
+              - flextid
+              - flex tid
+            - - pause
+              - hvile
+              - toilet
+              - frokost
+              - frokostpause
+            - - kontor
+              - skrivebord
+              - bygning
+              - kontorbygning
+            - - pendle
+              - pendling
+              - transport
+              - parkering
+              - bus
+              - tog
+              - køre
+            - - arbejde hjemme
+              - hjemmearbejde
+              - hjemme
+              - hjem
+              - remote
+              - hjemmefra
+              - hjemmekontor
+            - - by
+              - metro
+              - tog
+              - lokation
+            - - autonomi
+              - selv
+              - ansvar
+              - uafhængig
+            - - respekt
+              - chikane
+              - sexchikane
+              - behandle
+              - fjendtlig
+              - chikanere
+              - mobning
+              - mobbe
+            - - kommunikation
+              - problem
+              - bekymring
+              - møde
+              - snakke
+            - - hjælp
+              - hjælpe
+              - støtte
+            - - udfordring
+              - svær
+              - smerte
+              - nemt
+            - - kræve
+              - krævende
+              - krav
+              - obligatorisk
+              - valgfri
+            - - stress
+              - pres
+              - krævende
+            - - tempo
+              - hurtig
+              - fart
+            - - skade
+              - farlig
+              - sikkerhed
+              - forhold
+              - arbejdsplads
+            - - hård
+              - indsats
+              - belønning
+            - - moral
+              - atmosfære
+            - - sjov
+              - kedelig
+              - spændende
+              - repetitiv
+              - gentagelse
+            - - kultur
+              - værdier
+              - miljø
+              - mission
+              - arbejdsmiljø
+            - - diversitet
+              - mangfoldighed
+              - etnicitet
+              - etnisk
+              - multikulturel
+              - inklusiv
+              - lgbt
+              - lgbtq
+              - inklusion
+              - ligestilling
+            - - lederskab
+              - lederevne
+              - leder
+              - ledelse
+            - - politik
+              - politisk
+              - bureaukrati
+              - regler
+            - - forandring
+              - forskel
+            - - fyre
+              - fyring
+              - afsked
+              - afskedigelse
+              - fyringsrunde
+              - udskiftning
+              - udskifte
+            - - karriere
+              - vækst
+              - udvikling
+              - vokse
+            - - forfremmelse
+              - forfremme
+              - jobtitel
+              - titel
+            - - erfaring
+              - joberfaring
+            - - udvikling
+              - udvikle
+              - evne
+            - - træne
+              - træning
+            - - internship
+              - intern
+              - mentor
+              - praktik
+              - praktikforløb
+              - praktikant
+            - - hyre
+              - rekruttere
+              - interview
+              - samtale
+              - lære
+            - - kontrakt
+              - tilbud
+              - underskrive
+              - underskrift
+            - - industri
+              - marked
+              - startup
+              - nyopstartet
+              - organisation
+              - projekt
+              - produkt
+              - teknolgi
+              - strategi
+              - design
+            - - boss
+              - chef
+              - 'leder '
+              - ejer
+            - - kollega
+              - folk
+              - menneske
+              - ven
+              - familie
+              - medarbejder
+            - - team
+              - teamwork
+              - samarbejde
+            - - kunde
+              - klient
+            - []
+            - []
+            anchor_strength: 9
     outs:
     - path: models/corex_model.pkl
       hash: md5
-      md5: d0b05203f43bbf36dbf53c33d63bd837
-      size: 53408742
+      md5: dd1254e495ba7d64cb61766171ec75bd
+      size: 188647659
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: models/corex_model.pkl
       hash: md5
-      md5: d0b05203f43bbf36dbf53c33d63bd837
-      size: 53408742
+      md5: dd1254e495ba7d64cb61766171ec75bd
+      size: 188647659
     - path: src/job_post_nlp/evaluate.py
       hash: md5
       md5: ede9f150c152c70aa40de714a0b36625
