@@ -140,12 +140,18 @@ if __name__ == "__main__":
 
     # Log metrics using DVCLive
     with Live(dir=str(output_dir), cache_images=True) as live:
-        live.log_metric("Overall TC", model.tc, plot=False)  # type: ignore  # noqa: PGH003
+        # unpack model
+        TC = model.tc  # type: ignore  # noqa: PGH003
+        TCs = model.tcs  # type: ignore  # noqa: PGH003
+        n_topics = model.n_hidden  # type: ignore  # noqa: PGH003
+
+        # Log metrics
+        live.log_metric("Overall TC", TC, plot=False)
 
         # TC plot
         TC_df = pd.DataFrame({
-            "Topic": range(50),
-            "TC": model.tcs,  # type: ignore  # noqa: PGH003
+            "Topic": range(n_topics),
+            "TC": TCs,
         })
         live.log_plot(
             "TC",
@@ -160,7 +166,7 @@ if __name__ == "__main__":
 
         # Number of job posts per topic
         n_docs_per_topic = model.labels.sum(axis=0)  # type: ignore  # noqa: PGH003
-        n_docs_per_topic_df = pd.DataFrame({"Topic": range(50), "Number of Job Posts": n_docs_per_topic})
+        n_docs_per_topic_df = pd.DataFrame({"Topic": range(n_topics), "Number of Job Posts": n_docs_per_topic})
         live.log_plot(
             "n_docs_per_topic",
             n_docs_per_topic_df,
