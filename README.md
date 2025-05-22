@@ -1,13 +1,13 @@
 # job-post-nlp
 
-
 This is the code for the project "job-post-nlp", which is a Natural Language Processing (NLP) project focused on analyzing job postings. The project aims to extract insights from job descriptions, such as required skills, qualifications, and other relevant information.
 
 Authors: Asker Christensen, Adam Hallengreen
 
-- **Github repository**: <https://github.com/AdamHallengreen/job-post-nlp/>
+- **Github repository**: [https://github.com/AdamHallengreen/job-post-nlp/](https://github.com/AdamHallengreen/job-post-nlp/)
 
 ## Running the project locally
+
 To run this project locally, follow these steps:
 
 ### 1. Install UV for Python package management
@@ -35,12 +35,15 @@ For alternative installation methods, see the [UV documentation](https://astral.
 > **Note**: UV is a Python package management tool that simplifies the process of creating and managing virtual environments, installing dependencies, and running Python projects. It is designed to be fast, lightweight, and easy to use. To read more about UV, see the [UV documentation](https://astral.sh/uv/).
 
 ### 2. Download the repository
+
 Clone the repository to your local machine using git. Locate the directory where you want to clone the repository and run:
 
 ```bash
 git clone https://github.com/AdamHallengreen/job-post-nlp.git
 ```
+
 ### 3. Run the project
+
 Navigate to the cloned repository directory in your terminal. Then run the following command to run the entire pipeline:
 
 ```bash
@@ -51,10 +54,38 @@ This command will setup a virtual environment, install the required dependencies
 
 > **Note**: DVC (Data Version Control) is a tool that helps manage machine learning projects by tracking data, code, and experiments. It allows you to define pipelines, version datasets, and share results with collaborators. The `dvc.yaml` file defines the stages of the pipeline, including data preprocessing, model training, and evaluation. Read more about DVC in the [DVC documentation](https://dvc.org/doc).
 
+An alternative way to run the project is using:
+
+```
+uv run dvc exp run
+```
+
+Which allows us to set custom parameters (located in the conf-folder) and run as an experiement
+
+```
+uv run dvc exp run -S"train/corex=sockin"
+```
+
+We can also queue mutiple experiments (here both sockin and anchors):
+
+```
+uv run dvc exp run --queue -S "prepare/settings=small" -S "train/corex=sockin,anchors"
+```
+
+To begin computing, run the command:
+
+```
+dvc queue start
+```
+
 ### 4. Inspect the results
+
 After running the pipeline, you can inspect the results in the output directory. A report is also generated to summarize the key results.
 
+In VScode, a better overview can be gained from using the DVC extension.
+
 ## Development setup
+
 To set up the development environment for this project, follow these steps:
 
 ### 1. Create a virtual environment
@@ -64,11 +95,13 @@ Install UV for Python package management if you haven't already, as described in
 ```bash
 uv sync
 ```
+
 This command will create a virtual environment and install all the required dependencies specified in the `pyproject.toml` file. If you already ran `uv run dvc repro` a virtual environment has already been created.
 
 > **Note**: If you are using VS Code, you can select the virtual environment as your interpreter by pressing `Ctrl + Shift + P` (or `Cmd + Shift + P` on macOS) and typing "Python: Select Interpreter". Then choose the interpreter that corresponds to the virtual environment created by UV.
 
 ### 2. Install pre-commit hooks
+
 To ensure code quality and consistency, this project uses pre-commit hooks. To install them, run the following command:
 
 ```bash
@@ -103,6 +136,7 @@ Pre-commit hooks will automatically run when you commit your changes. If any of 
 When you pass the pre-commit hooks, you will see a message indicating that the commit was successful.
 
 ### 4. Push your changes
+
 Once you have commited your code and passed the pre-commit hooks, you can push your changes to the remote repository. The remote main branch is protected, so you will need to create a development branch and open a pull request to merge your changes.
 
 If you have been working on the main branch so far, save your work to a development branch first, and then push to the remote. Use your preferred Git management tool or the command line. Using the command line, this can be done with the following commands:
@@ -113,6 +147,7 @@ git push origin my-feature-branch
 ```
 
 ### 5. Merge into the main branch
+
 To merge your changes into the main branch, you will need to create a pull request. Open [the remote repository on Github](https://github.com/AdamHallengreen/job-post-nlp) and create a pull request from your feature branch to the main branch. Navigate to the "Pull requests" tab and click on the "New pull request" button. Select your feature branch as the source branch and the main branch as the target branch.
 
 When you create the pull request, GitHub will automatically run the CI/CD pipeline defined in the `.github/workflows/main.yml` file. This pipeline will run the pre-commit hooks, tests, type checks (using [mypy](https://mypy.readthedocs.io/en/stable/)), dependency checks (using [deptry](https://deptry.com/)), and create a report of the results.
@@ -123,10 +158,7 @@ When you create the pull request, GitHub will automatically run the CI/CD pipeli
 
 If any of these checks fail, you will need to address the issues before merging your changes.
 
-
-
 You are now ready to contribute to the project!
-
 
 ---
 
