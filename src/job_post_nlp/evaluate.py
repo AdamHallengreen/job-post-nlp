@@ -10,8 +10,11 @@ from dvclive import Live
 from matplotlib.figure import Figure
 from spacy.tokens import DocBin
 
-from job_post_nlp.prepare import corpus_unpack, register_extensions
-from job_post_nlp.utils.find_project_root import find_project_root
+from job_post_nlp.utils.interactive import try_inter
+
+try_inter()
+from job_post_nlp.prepare import corpus_unpack, register_extensions  # noqa: E402
+from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 
 class InvalidInputFileError(Exception):

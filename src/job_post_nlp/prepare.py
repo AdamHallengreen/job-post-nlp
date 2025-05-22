@@ -10,7 +10,10 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
 
-from job_post_nlp.utils.find_project_root import find_project_root
+from job_post_nlp.utils.interactive import try_inter
+
+try_inter()
+from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 
 class FileNotFoundErrorMessage:
