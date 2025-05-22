@@ -17,9 +17,6 @@ from job_post_nlp.prepare import corpus_unpack, register_extensions  # noqa: E40
 from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 
-
-
-
 class InvalidInputFileError(Exception):
     def __init__(self) -> None:
         super().__init__("Input file must contain a list of lists.")
