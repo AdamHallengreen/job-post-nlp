@@ -2,13 +2,15 @@ import pathlib
 from pathlib import Path
 from typing import Any
 
+import interactive
 import polars as pl
 import scipy.sparse as ss  # type: ignore  # noqa: PGH003
 from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
 from omegaconf import DictConfig, ListConfig, OmegaConf
 from spacy.tokens import DocBin
 
-from job_post_nlp.utils.find_project_root import find_project_root
+interactive.try_inter()
+from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 
 def load_corpus(file_path: Path) -> DocBin:

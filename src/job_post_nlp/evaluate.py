@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import interactive
 import matplotlib.pyplot as plt
 import pandas as pd
 import polars as pl
@@ -10,8 +11,10 @@ from dvclive import Live
 from matplotlib.figure import Figure
 from spacy.tokens import DocBin
 
-from job_post_nlp.prepare import corpus_unpack, register_extensions
-from job_post_nlp.utils.find_project_root import find_project_root
+interactive.try_inter()
+
+from job_post_nlp.prepare import corpus_unpack, register_extensions  # noqa: E402
+from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 
 class InvalidInputFileError(Exception):

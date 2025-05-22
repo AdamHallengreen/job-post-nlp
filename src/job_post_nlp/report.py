@@ -1,17 +1,20 @@
 from pathlib import Path
 
+import interactive
 from dvclive import Live
 
-from job_post_nlp.evaluate import (
+interactive.try_inter()
+
+from job_post_nlp.evaluate import (  # noqa: E402
     get_top_words,
     load_model,
     most_common_languages,
     plot_num_job_posts_per_topic,
     plot_TC,
 )
-from job_post_nlp.prepare import load_excel
-from job_post_nlp.train import load_corpus
-from job_post_nlp.utils.find_project_root import find_project_root
+from job_post_nlp.prepare import load_excel  # noqa: E402
+from job_post_nlp.train import load_corpus  # noqa: E402
+from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 if __name__ == "__main__":
     # Define file paths
