@@ -8,7 +8,7 @@ from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
 from omegaconf import DictConfig, ListConfig, OmegaConf
 from spacy.tokens import DocBin
 
-from job_post_nlp.interactive import try_inter
+from job_post_nlp.utils.interactive import try_inter
 
 try_inter()
 from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402

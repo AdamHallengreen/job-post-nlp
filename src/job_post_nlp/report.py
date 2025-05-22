@@ -2,7 +2,7 @@ from pathlib import Path
 
 from dvclive import Live
 
-from job_post_nlp.interactive import try_inter
+from job_post_nlp.utils.interactive import try_inter
 
 try_inter()
 from job_post_nlp.evaluate import (  # noqa: E402
