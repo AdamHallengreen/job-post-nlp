@@ -1,10 +1,10 @@
 from pathlib import Path
 
-import interactive
 from dvclive import Live
 
-interactive.try_inter()
+from job_post_nlp.interactive import try_inter
 
+try_inter()
 from job_post_nlp.evaluate import (  # noqa: E402
     get_top_words,
     load_model,

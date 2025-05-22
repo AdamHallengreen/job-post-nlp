@@ -2,7 +2,6 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import Optional
 
-import interactive
 import polars as pl
 import spacy
 from lingua import LanguageDetectorBuilder
@@ -11,7 +10,9 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
 
-interactive.try_inter()
+from job_post_nlp.interactive import try_inter
+
+try_inter()
 from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 
