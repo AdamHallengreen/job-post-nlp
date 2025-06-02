@@ -168,10 +168,10 @@ On the star server uv doesn't work. But instead you can (from a computer where i
 uv export --no-emit-workspace --no-dev --no-annotate --no-header --no-hashes --output-file requirements.txt
 ```
 
-Which can then be used to replicate the enviroment using conda using: 
+Which can then be used install the packages in a given environment using pip:
 
 ```
-conda create --name jobpostnlp --file requirements.txt
+pip install -r requirements.txt
 ```
 
 ---
