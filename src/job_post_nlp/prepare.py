@@ -4,6 +4,7 @@ from typing import Optional
 
 import polars as pl
 import spacy
+import os
 from lingua import LanguageDetectorBuilder
 from omegaconf import DictConfig, OmegaConf
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
@@ -36,12 +37,13 @@ class UnsupportedLinguaOutput(Exception):
         super().__init__(self.message)
 
 
-def load_data(file_path: Path) -> pl.DataFrame:
+def load_data(file_path: Path, par: DictConfig) -> pl.DataFrame:
     """
     Load data from an Excel file.
 
     Args:
         file_path (Path): Path to the Excel file.
+        par (DictConfig): Configuration parameters.
 
     Returns:
         pl.DataFrame: DataFrame containing the loaded data.
@@ -50,6 +52,10 @@ def load_data(file_path: Path) -> pl.DataFrame:
         FileNotFoundError: If the file does not exist.
         UnsupportedFileTypeError: If the file is not an Excel file.
     """
+    # Check if using STAR data 
+    if par.star.usestar:
+        return load_star_data()
+
     # check if the file exists
     if not file_path.exists():
         raise FileNotFoundError(FileNotFoundErrorMessage(file_path))
@@ -58,9 +64,17 @@ def load_data(file_path: Path) -> pl.DataFrame:
         df = load_excel(file_path)
     else:
         raise UnsupportedFileTypeError(file_path.suffix)
+    return 
 
-    return df
+def load_star_data() -> pl.DataFrame:
+    '''
+    Loads the jobpost data from star data on the server
+    '''
+    # get username
+    username = os.popen('whoami').read().strip()
 
+    df = pl.read_parquet(f'/home/{username}@PROD.SITAD.DK/code/jobads/src/dgp/textdata/output/jobads_clean.parquet')
+    return df.select(pl.col('ann_id').alias('id'),pl.col('annonce_tekst').alias('text'))
 
 def df_to_tuple(df: pl.DataFrame) -> list[tuple[str, dict]]:
     """
@@ -355,7 +369,7 @@ if __name__ == "__main__":
     par = OmegaConf.load(params_path).prepare
 
     # Process the data
-    texts = load_data(file_path)[: par.settings.nobs]
+    texts = load_data(file_path,par)[: par.settings.nobs]
     texts = detect_language(texts)
     texts = clean_data(texts)
     preprocessed_corpus = preprocess_texts(texts, par)
