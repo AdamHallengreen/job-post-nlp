@@ -160,6 +160,20 @@ If any of these checks fail, you will need to address the issues before merging 
 
 You are now ready to contribute to the project!
 
+## Notes about working on the star server
+
+On the star server uv doesn't work. But instead you can (from a computer where it does work) create an requirement.txt file using:
+
+```
+uv export --format requirements-txt > requirements.txt
+```
+
+Which can then be used to replicate the enviroment using conda using: 
+
+```
+conda create --name jobpotnlp --file requirements.txt
+```
+
 ---
 
 Repository initiated with [fpgmaas/cookiecutter-uv](https://github.com/fpgmaas/cookiecutter-uv).
