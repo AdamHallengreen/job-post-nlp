@@ -165,13 +165,13 @@ You are now ready to contribute to the project!
 On the star server uv doesn't work. But instead you can (from a computer where it does work) create an requirement.txt file using:
 
 ```
-uv export --format requirements-txt > requirements.txt
+uv export --no-emit-workspace --no-dev --no-annotate --no-header --no-hashes --output-file requirements.txt
 ```
 
 Which can then be used to replicate the enviroment using conda using: 
 
 ```
-conda create --name jobpotnlp --file requirements.txt
+conda create --name jobpostnlp --file requirements.txt
 ```
 
 ---
