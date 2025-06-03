@@ -1,6 +1,6 @@
 prepare:
   settings:
-    nobs: -1
+    nobs: 1000
     batch_size: 50
     threads: 4
   preprocessing:
