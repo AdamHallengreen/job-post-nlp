@@ -74,8 +74,11 @@ def load_star_data() -> pl.DataFrame:
     # get username
     username = os.popen("whoami").read().strip()  # noqa: S607 S605
 
-    df = pl.read_parquet(f"/home/{username}@PROD.SITAD.DK/code/jobads/src/dgp/textdata/output/jobads_clean.parquet")
-    return df.select(pl.col("ann_id").alias("id"), pl.col("annonce_tekst").alias("text"))
+    df = pl.read_parquet(f"/home/{username}@PROD.SITAD.DK/code/jobads/src/dgp/textdata/output/jobads_clean.parquet"
+                         ).select(pl.col("ann_id").alias("id"), pl.col("annonce_tekst").alias("text")
+                        ).filter(pl.col('text').is_not_null() # a few obs have missing text but non-missing heading and rubrik
+                                 )
+    return df
 
 
 def df_to_tuple(df: pl.DataFrame) -> list[tuple[str, dict]]:
