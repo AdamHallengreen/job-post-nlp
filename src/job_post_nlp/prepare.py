@@ -64,14 +64,14 @@ def load_data(file_path: Path, par: DictConfig) -> pl.DataFrame:
         df = load_excel(file_path)
     else:
         raise UnsupportedFileTypeError(file_path.suffix)
-    return 
+    return df
 
 def load_star_data() -> pl.DataFrame:
     '''
     Loads the jobpost data from star data on the server
     '''
     # get username
-    username = os.popen('whoami').read().strip()
+    username = os.popen('whoami').read().strip()  # noqa: S607 S605
 
     df = pl.read_parquet(f'/home/{username}@PROD.SITAD.DK/code/jobads/src/dgp/textdata/output/jobads_clean.parquet')
     return df.select(pl.col('ann_id').alias('id'),pl.col('annonce_tekst').alias('text'))

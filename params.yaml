@@ -9,6 +9,8 @@ prepare:
     - tok2vec
     - lemmatizer
     keep_negations: true
+  star:
+    usestar: 1
   tdm:
     tdm_cell: binary
     ngram_n: 2
