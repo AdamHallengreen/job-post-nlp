@@ -180,7 +180,7 @@ pip install -r requirements.txt
 You also need to tell the environment that job-post-nlp is a package, by running:
 
 ```
-python -m pip install -e .   
+python -m pip install -e .
 ```
 
 I also had some issues where I had to force a resinstall of spacy-loggers
