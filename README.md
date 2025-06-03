@@ -162,14 +162,14 @@ You are now ready to contribute to the project!
 
 ## Notes about working on the star server
 
-On the star server uv doesn't work. But instead you can (from a computer where it does work) create an requirement.txt file using:
+On the star server uv doesn't work. But instead, you can (from a computer where it does work) create a requirement.txt file using:
 
 ```
 uv export --no-emit-workspace --no-dev --no-annotate --no-header --no-hashes --output-file requirements.txt
 ```
 
-Which can then be used install the packages in a given environment using pip. However, some packages that are installed from the web like: `da-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl`
-And they need to be removed maually. This specific packages can be loaded form conda using `conda install spacy-model-da_core_web_sm`.
+Which can then be used to install the packages in a given environment using pip. However, some packages that are installed from the web, like: `da-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl`
+And they need to be removed manually. This specific package can be loaded from conda using `conda install spacy-model-da_core_web_sm`.
 
 Then use the following pip command to install the rest:
 
@@ -183,7 +183,7 @@ You also need to tell the environment that job-post-nlp is a package, by running
 python -m pip install -e .
 ```
 
-I also had some issues where I had to force a resinstall of spacy-loggers
+I also had some issues where I had to force a reinstall of spacy-loggers
 
 ---
 
