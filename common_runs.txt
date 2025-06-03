@@ -1,0 +1,5 @@
+common runs to do (so we don't have to keep writting them, could also write a .bat):
+
+dvc exp run --queue -S "prepare/settings=full" -S "prepare/star=star" -S "train/corex=sockin,anchors,worklife"
+
+dvc queue start
