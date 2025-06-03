@@ -1,6 +1,6 @@
 prepare:
   settings:
-    nobs: 1000
+    nobs: -1
     batch_size: 50
     threads: 4
   preprocessing:
@@ -10,7 +10,7 @@ prepare:
     - lemmatizer
     keep_negations: true
   star:
-    usestar: 0
+    usestar: 1
   tdm:
     tdm_cell: binary
     ngram_n: 2
