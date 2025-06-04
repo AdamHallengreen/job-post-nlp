@@ -10,6 +10,8 @@ from omegaconf import DictConfig, OmegaConf
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
+import pandas as pd
+from scipy import sparse
 
 from job_post_nlp.utils.interactive import try_inter
 
@@ -294,13 +296,21 @@ def _build_tdm(
     vocab = vectorizer.get_feature_names_out().tolist()
 
     # Convert to dense and build polars DataFrame
-    X_dense = X.toarray()
-    # In STAR data this is  (1876989, 923567)
+    if False:
+        X_dense = X.toarray()
+        # In STAR data this is  (1876989, 923567)
 
-    data = {"doc_id": ids}
-    for idx, term in enumerate(vocab):
-        data[term] = X_dense[:, idx]
-    return pl.DataFrame(data)
+        data = {"doc_id": ids}
+        for idx, term in enumerate(vocab):
+            data[term] = X_dense[:, idx]
+        return pl.DataFrame(data)
+
+    df_sparse = pd.DataFrame.sparse.from_spmatrix(
+        X,
+        index=pd.Index(ids,   name="doc_id"),
+        columns=pd.Index(vectorizer.get_feature_names_out(), name="term")
+        )
+    return df_sparse
 
 
 def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
@@ -335,9 +345,14 @@ def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
         # concat the dataframes
         dfs.append(tdm)
     # append the dataframes together (but only use first column from the first dataframe)
-    tdm = dfs[0]
-    for i in range(1, len(dfs)):
-        tdm = tdm.hstack(dfs[i].select(pl.exclude("doc_id")))
+    if False:
+        tdm = dfs[0]
+        for i in range(1, len(dfs)):
+            tdm = tdm.hstack(dfs[i].select(pl.exclude("doc_id")))
+
+    tdm = pd.concat(dfs, axis=1, join="outer", copy=False)   # keep sparse dtypes
+    tdm = tdm.reset_index()
+
     return tdm
 
 

@@ -2,10 +2,16 @@ common runs to do (so we don't have to keep writting them, could also write a .b
 
 dvc exp run --queue -S "prepare/settings=full" -S "prepare/star=star" -S "train/corex=sockin,anchors,worklife"
 
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=sockin,anchors,worklife"
+
+
 dvc exp run -S "prepare/settings=full" -S "prepare/star=star" -S "train/corex=sockin"
+
+dvc exp run -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=sockin"
 
 dvc queue start
 
 
 # If a queued experiemnt have gotten tag e761571, you can view it's terminal output with 
-dvc queue logs e761571
+dvc queue logs e761571 --follow 
+# follow means it will update as new output comes, use Crtl+c to stop the log.
