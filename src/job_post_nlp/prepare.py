@@ -275,7 +275,7 @@ def _build_tdm(
     tdm_cell: str = "binary",
     ngram: int = 1,
     min_df: Optional[int | float] = None,
-) -> tuple[Union[CountVectorizer, TfidfVectorizer], list[str]]:
+) -> "tuple[Union[CountVectorizer, TfidfVectorizer], list[str]]":
     """
     Build a Term-Document Matrix (TDM) using sklearn and return a sparse matrix.
 
