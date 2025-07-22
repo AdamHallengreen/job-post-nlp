@@ -18,7 +18,7 @@ dvc queue start -j4
 
 dvc queue logs <name>
 
-dvc queue logs e7180cf --follow 
+dvc queue logs e7180cf --follow
 
 dvc queue stop --kill
 
@@ -26,25 +26,25 @@ dvc queue stop --kill
 
 You can use the following commands in your SSH terminal to monitor memory and CPU usage:
 
-- `top`  
+- `top`
   Shows real-time CPU and memory usage for all processes.
 
-- `htop`  
+- `htop`
   An enhanced version of `top` (if installed). Use arrow keys to navigate.
 
-- `free -h`  
+- `free -h`
   Displays total, used, and free memory.
 
-- `vmstat 1`  
+- `vmstat 1`
   Shows system performance statistics, updated every second.
 
-- `ps aux --sort=-%mem | head`  
+- `ps aux --sort=-%mem | head`
   Lists top processes by memory usage.
 
-- `ps aux --sort=-%cpu | head`  
+- `ps aux --sort=-%cpu | head`
   Lists top processes by CPU usage.
 
 You can run these commands directly in your SSH terminal.
 
 
-Press q to stop 
+Press q to stop
