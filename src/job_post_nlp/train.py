@@ -1,13 +1,13 @@
+import json
 import pathlib
 from pathlib import Path
 from typing import Any
-import json
 
 import scipy.sparse as ss  # type: ignore  # noqa: PGH003
+import spacy
 from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
 from omegaconf import DictConfig, ListConfig, OmegaConf
 from spacy.tokens import DocBin
-import spacy
 
 from job_post_nlp.utils.interactive import try_inter
 
@@ -88,7 +88,7 @@ def convert_anchors(anchors: list | ListConfig) -> list:
     return converted_anchors
 
 
-def train_corex(tdm:ss.csr_matrix , tdm_info:dict, par: DictConfig) -> object:
+def train_corex(tdm: ss.csr_matrix, tdm_info: dict, par: DictConfig) -> object:
     """
     Train a Corex topic model using a sparse matrix, vocabulary, and document ids.
     Args:
@@ -107,7 +107,9 @@ def train_corex(tdm:ss.csr_matrix , tdm_info:dict, par: DictConfig) -> object:
         seed=par.settings.seed,
     )
     anchors = convert_anchors(par.corex.anchors) if par.corex.anchors is not None else None
-    model.fit(tdm, words=tdm_info['vocab'], docs=tdm_info['ids'], anchors=anchors, anchor_strength=par.corex.anchor_strength)
+    model.fit(
+        tdm, words=tdm_info["vocab"], docs=tdm_info["ids"], anchors=anchors, anchor_strength=par.corex.anchor_strength
+    )
     return model
 
 
@@ -129,14 +131,13 @@ if __name__ == "__main__":
     # Load parameters
     par = OmegaConf.load(params_path).train
 
-
-    print('Loading tdm and tdm_info')
+    print("Loading tdm and tdm_info")
     # load tdm, vocab, and ids
-    tdm, tdm_info = load_tdm(tdm_file,tdm_info_file)
+    tdm, tdm_info = load_tdm(tdm_file, tdm_info_file)
 
-    print('Training Corex model')
+    print("Training Corex model")
     # Process
     model = train_corex(tdm, tdm_info, par)
 
-    print('Exporting Corex model')
+    print("Exporting Corex model")
     export_model(model, models_dir / "corex_model.pkl")

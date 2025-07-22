@@ -185,6 +185,14 @@ python -m pip install -e .
 
 I also had some issues where I had to force a reinstall of spacy-loggers
 
+Since uv doesn't work I've also install precommit:
+ `pip install pre-commit`
+ and linked the requirements file:
+ `echo 'pre-commit' >> requirements.txt`
+You can the pre-commit and get ruff suggestions using:
+`pre-commit run --all-files`
+
+
 ---
 
 Repository initiated with [fpgmaas/cookiecutter-uv](https://github.com/fpgmaas/cookiecutter-uv).

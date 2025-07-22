@@ -272,7 +272,7 @@ def get_clean_tokens(doc: Doc) -> list[str]:
 
 def _build_tdm(
     texts: list, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
-) -> tuple[ CountVectorizer | TfidfVectorizer, list[str]]:
+) -> tuple[CountVectorizer | TfidfVectorizer, list[str]]:
     """
     Build a Term-Document Matrix (TDM) using sklearn and return a sparse matrix.
 
@@ -288,11 +288,11 @@ def _build_tdm(
         vocab: list of terms
     """
     # Build the Term-Document
-    tdm_args = {'token_pattern': "[^;]+", 'ngram_range': (ngram, ngram), 'min_df': min_df}
+    tdm_args = {"token_pattern": "[^;]+", "ngram_range": (ngram, ngram), "min_df": min_df}
 
     if tdm_cell == "binary":
         # token_pattern is a regex for tokenization, not a password
-        vectorizer = CountVectorizer(**tdm_args,binary=True)
+        vectorizer = CountVectorizer(**tdm_args, binary=True)
     elif tdm_cell == "tf":
         vectorizer = CountVectorizer(**tdm_args)
     elif tdm_cell == "tfidf":
@@ -335,7 +335,7 @@ def build_tdm(corpus: DocBin, par: DictConfig) -> tuple:
     vocab = []
     for i, n in enumerate(range(1, par.tdm.ngram_n + 1)):
         # Build the Term-Document Matrix
-        tdm,_vocab = _build_tdm(texts, tdm_cell=par.tdm.tdm_cell, ngram=n, min_df=par.tdm.min_df[i])
+        tdm, _vocab = _build_tdm(texts, tdm_cell=par.tdm.tdm_cell, ngram=n, min_df=par.tdm.min_df[i])
         # Append the sparse matrix and vocabulary
         tdm_list.append(tdm)
         vocab += _vocab
@@ -383,7 +383,7 @@ def export_corpus_split(corpus: DocBin, output_dir: Path, par: DictConfig) -> No
         chunk_bin = DocBin(store_user_data=True)
         for doc in docs[i * par.settings.chunk_size : (i + 1) * par.settings.chunk_size]:
             chunk_bin.add(doc)
-        chunk_file = output_dir / f"corpus_{i+1}.spacy"
+        chunk_file = output_dir / f"corpus_{i + 1}.spacy"
         chunk_bin.to_disk(chunk_file)
 
 
@@ -397,7 +397,7 @@ def export_tdm_sparse(tdm, output_file: Path) -> None:
     sp.save_npz(str(output_file), tdm)
 
 
-def export_tdm_info(vocab: list[str],ids:list[str], output_file: Path) -> None:
+def export_tdm_info(vocab: list[str], ids: list[str], output_file: Path) -> None:
     """
     Export the vocabulary list to a JSON file.
     Args:
@@ -406,7 +406,7 @@ def export_tdm_info(vocab: list[str],ids:list[str], output_file: Path) -> None:
         output_file (Path): Path to the output file.
     """
     with open(output_file, "w", encoding="utf-8") as f:
-        json.dump({'vocab':vocab,'ids':ids}, f)
+        json.dump({"vocab": vocab, "ids": ids}, f)
 
 
 if __name__ == "__main__":
@@ -430,10 +430,10 @@ if __name__ == "__main__":
     texts = clean_data(texts)
     preprocessed_corpus = preprocess_texts(texts, par)
     tdm, vocab, ids = build_tdm(preprocessed_corpus, par)
-    export_corpus_split(preprocessed_corpus, corpus_dir,par)
+    export_corpus_split(preprocessed_corpus, corpus_dir, par)
     print(f"Preprocessed corpus exported to {corpus_dir}")
 
     export_tdm_sparse(tdm, tdm_file)
-    export_tdm_info(vocab,ids, tdm_info_file)
+    export_tdm_info(vocab, ids, tdm_info_file)
     print(f"Term-Document Matrix exported to {tdm_file}")
     print(f"TDM info exported to {tdm_info_file}")
