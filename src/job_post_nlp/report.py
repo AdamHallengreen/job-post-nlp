@@ -46,7 +46,7 @@ if __name__ == "__main__":
     with open(report_path, "a", encoding="utf-8") as report_file:
         report_file.write("# Topic words\n")
         top_words = get_top_words(model, 10)
-        text = "\n".join([f"Topic {i+1}: {', '.join(words)}\n" for i, words in top_words.items()])
+        text = "\n".join([f"Topic {i + 1}: {', '.join(words)}\n" for i, words in top_words.items()])
         report_file.write(text)
         report_file.write("\n")
 
