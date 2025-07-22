@@ -3,7 +3,7 @@ import math
 import os
 from collections.abc import Generator
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Any
 
 import polars as pl
 import scipy.sparse as ss
@@ -275,7 +275,7 @@ def _build_tdm(
     tdm_cell: str = "binary",
     ngram: int = 1,
     min_df: Optional[int | float] = None,
-) -> "tuple[Union[CountVectorizer, TfidfVectorizer], list[str]]":
+) -> "tuple[Any, list[str]]":
     """
     Build a Term-Document Matrix (TDM) using sklearn and return a sparse matrix.
 
