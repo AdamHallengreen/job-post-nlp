@@ -49,7 +49,7 @@ def load_corpus_split(corpus_dir: Path) -> DocBin:
     return combined_corpus
 
 
-def load_tdm(tdm_file: Path, tdm_info_file: Path) -> tuple[ss.csr_matrix, dict]:
+def load_tdm(tdm_file: Path, tdm_info_file: Path) -> tuple[ss.csr_matrix, dict]:  # type: ignore[no-any-unimported]
     """
     Load a Term Document Matrix (TDM) from a .npz file as a sparse matrix,
     and load vocab and ids from JSON files.
@@ -88,7 +88,7 @@ def convert_anchors(anchors: list | ListConfig) -> list:
     return converted_anchors
 
 
-def train_corex(tdm: ss.csr_matrix, tdm_info: dict, par: DictConfig) -> object:
+def train_corex(tdm: ss.csr_matrix, tdm_info: dict, par: DictConfig) -> object:  # type: ignore[no-any-unimported]
     """
     Train a Corex topic model using a sparse matrix, vocabulary, and document ids.
     Args:
