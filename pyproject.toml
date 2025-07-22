@@ -81,6 +81,10 @@ module = "scipy.*"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
+module = "scipy.sparse.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
 module = "corextopic.*"
 ignore_missing_imports = true
 

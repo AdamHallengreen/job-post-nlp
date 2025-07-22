@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import polars as pl
 import yaml
-from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
+from corextopic import corextopic as ct
 from dvclive import Live
 from matplotlib.figure import Figure
 from spacy.tokens import DocBin

@@ -192,7 +192,6 @@ Since uv doesn't work I've also install precommit:
 You can the pre-commit and get ruff suggestions using:
 `pre-commit run --all-files`
 
-
 ---
 
 Repository initiated with [fpgmaas/cookiecutter-uv](https://github.com/fpgmaas/cookiecutter-uv).
