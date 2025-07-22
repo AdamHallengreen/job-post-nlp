@@ -190,7 +190,7 @@ Since uv doesn't work I've also install precommit:
  and linked the requirements file:
  `echo 'pre-commit' >> requirements.txt`
 You can the pre-commit and get ruff suggestions using:
-`pre-commit run --all-files`
+`pre-commit run -a`
 
 ---
 
