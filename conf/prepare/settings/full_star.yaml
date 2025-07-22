@@ -1,4 +1,4 @@
 nobs: -1
-batch_size: 50
-threads: 4
+batch_size: 100
+threads: 8
 chunk_size: 10000

@@ -1,0 +1,4 @@
+nobs: 100000
+batch_size: 100
+threads: 8
+chunk_size: 10000
