@@ -272,7 +272,7 @@ def get_clean_tokens(doc: Doc) -> list[str]:
 
 def _build_tdm(
     texts: list, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
-) -> tuple[CountVectorizer | TfidfVectorizer, list[str]]: # type: ignore[no-any-unimported]
+) -> tuple[CountVectorizer | TfidfVectorizer, list[str]]:  # type: ignore[no-any-unimported]
     """
     Build a Term-Document Matrix (TDM) using sklearn and return a sparse matrix.
 
@@ -387,7 +387,7 @@ def export_corpus_split(corpus: DocBin, output_dir: Path, par: DictConfig) -> No
         chunk_bin.to_disk(chunk_file)
 
 
-def export_tdm_sparse(tdm :ss.csr_matrix , output_file: Path) -> None:  # type: ignore[no-any-unimported]
+def export_tdm_sparse(tdm: ss.csr_matrix, output_file: Path) -> None:  # type: ignore[no-any-unimported]
     """
     Export the sparse Term-Document Matrix (TDM) to a .npz file.
     Args:
