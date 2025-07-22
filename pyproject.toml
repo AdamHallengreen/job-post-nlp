@@ -74,7 +74,13 @@ plugins = []
 
 [[tool.mypy.overrides]]
 module = "sklearn.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
 module = "scipy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
 module = "corextopic.*"
 ignore_missing_imports = true
 
