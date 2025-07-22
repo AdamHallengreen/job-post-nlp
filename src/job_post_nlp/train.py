@@ -1,11 +1,13 @@
 import json
 import pathlib
+import time
 from pathlib import Path
 from typing import Any
 
 import scipy.sparse as ss
 import spacy
 from corextopic import corextopic as ct
+from dvclive import Live
 from omegaconf import DictConfig, ListConfig, OmegaConf
 from spacy.tokens import DocBin
 
@@ -122,6 +124,7 @@ if __name__ == "__main__":
     project_root = Path(find_project_root(__file__))
     data_dir = project_root / "data"
     models_dir = project_root / "models"
+    output_dir = project_root / "output"
     params_path = project_root / "params.yaml"
     corpus_dir = data_dir / "corpus_split"  # Updated to use split corpus directory
     output_file = data_dir / "most_common_words.json"
@@ -130,6 +133,8 @@ if __name__ == "__main__":
 
     # Load parameters
     par = OmegaConf.load(params_path).train
+
+    start = time.time()
 
     print("Loading tdm and tdm_info")
     # load tdm, vocab, and ids
@@ -141,3 +146,11 @@ if __name__ == "__main__":
 
     print("Exporting Corex model")
     export_model(model, models_dir / "corex_model.pkl")
+
+    stop = time.time()
+    hours = (stop - start) / 3600
+    print(f"Finished train.py in {hours:.2f} hours")
+    # Log metrics using DVCLive
+    with Live(dir=str(output_dir), cache_images=True, resume=True) as live:
+        # Log metrics
+        live.log_metric("train.py", f"{hours:.2f} hours", plot=False)

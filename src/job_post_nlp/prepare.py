@@ -1,6 +1,7 @@
 import json
 import math
 import os
+import time
 from collections.abc import Generator
 from pathlib import Path
 from typing import Any, Optional
@@ -8,6 +9,7 @@ from typing import Any, Optional
 import polars as pl
 import scipy.sparse as ss
 import spacy
+from dvclive import Live
 from lingua import LanguageDetectorBuilder
 from omegaconf import DictConfig, OmegaConf
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
@@ -417,6 +419,7 @@ if __name__ == "__main__":
     project_root = Path(find_project_root(__file__))
     params_path = project_root / "params.yaml"
     data_dir = project_root / "data"
+    output_dir = project_root / "output"
 
     file_path = data_dir / "Jobnet.xlsx"
     corpus_file = data_dir / "corpus.spacy"
@@ -427,6 +430,8 @@ if __name__ == "__main__":
     # Load parameters
     par = OmegaConf.load(params_path).prepare
 
+    start = time.time()
+    print("Starting prepare.py")
     # Process the data
     texts = load_data(file_path, par)[: par.settings.nobs]
     texts = detect_language(texts)
@@ -440,3 +445,11 @@ if __name__ == "__main__":
     export_tdm_info(vocab, ids, tdm_info_file)
     print(f"Term-Document Matrix exported to {tdm_file}")
     print(f"TDM info exported to {tdm_info_file}")
+
+    stop = time.time()
+    hours = (stop - start) / 3600
+    print(f"Finished prepare.py in {hours:.2f} hours")
+    # Log metrics using DVCLive
+    with Live(dir=str(output_dir), cache_images=True) as live:
+        # Log metrics
+        live.log_metric("prepare.py", f"{hours:.2f} hours", plot=False)
