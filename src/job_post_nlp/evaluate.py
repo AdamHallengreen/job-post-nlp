@@ -141,13 +141,14 @@ def create_top_words_fig(top_words: dict) -> Figure:
     Returns:
         None
     """
-    text = "# Top Words per Topic\n\n"
+    text = "# Top Words per Topic\n"
     for topic_n, words_list in top_words.items():
         words_str = ", ".join(words_list)
-        text += f"## Topic {topic_n}\n\n{words_str}\n"
+        text += f"# Topic {topic_n+1}: {words_str}\n"
 
     fig = plt.figure(figsize=(8, 10))
-    plt.text(0.01, 0.99, text, family="monospace", va="top", ha="left", wrap=True)
+    plt.text(0.01, 0.99, text,fontsize=12,
+             family="monospace", va="top", ha="left", wrap=True)
     plt.axis("off")
 
     return fig
