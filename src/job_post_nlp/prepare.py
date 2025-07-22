@@ -270,8 +270,8 @@ def get_clean_tokens(doc: Doc) -> list[str]:
     return [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
 
 
-def _build_tdm(
-    texts: list, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
+def _build_tdm(   # type: ignore[no-any-unimported]
+    texts: list, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None   # type: ignore[no-any-unimported]
 ) -> tuple[CountVectorizer | TfidfVectorizer, list[str]]:  # type: ignore[no-any-unimported]
     """
     Build a Term-Document Matrix (TDM) using sklearn and return a sparse matrix.
