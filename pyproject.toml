@@ -74,6 +74,8 @@ plugins = []
 
 [[tool.mypy.overrides]]
 module = "sklearn.*"
+module = "scipy.*"
+module = "corextopic.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
