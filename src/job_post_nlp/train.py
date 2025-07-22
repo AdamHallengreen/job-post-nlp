@@ -3,9 +3,9 @@ import pathlib
 from pathlib import Path
 from typing import Any
 
-import scipy.sparse as ss  # type: ignore  # noqa: PGH003
+import scipy.sparse as ss
 import spacy
-from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
+from corextopic import corextopic as ct
 from omegaconf import DictConfig, ListConfig, OmegaConf
 from spacy.tokens import DocBin
 
