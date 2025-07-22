@@ -3,7 +3,7 @@ import math
 import os
 from collections.abc import Generator
 from pathlib import Path
-from typing import Optional, Any
+from typing import Any, Optional
 
 import polars as pl
 import scipy.sparse as ss
