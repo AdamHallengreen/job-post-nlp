@@ -1,4 +1,5 @@
 /most_common_words.json
+/corpus.spacy
 /tdm.parquet
 /corpus_split
 /tdm.npz

@@ -1,10 +1,15 @@
+import json
+import math
 import os
+import time
 from collections.abc import Generator
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import polars as pl
+import scipy.sparse as ss
 import spacy
+from dvclive import Live
 from lingua import LanguageDetectorBuilder
 from omegaconf import DictConfig, OmegaConf
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
@@ -268,53 +273,55 @@ def get_clean_tokens(doc: Doc) -> list[str]:
 
 
 def _build_tdm(
-    texts: list, ids: list, tdm_cell: str = "binary", ngram: int = 1, min_df: Optional[int | float] = None
-) -> pl.DataFrame:
+    texts: list,
+    tdm_cell: str = "binary",
+    ngram: int = 1,
+    min_df: Optional[int | float] = None,
+) -> "tuple[Any, list[str]]":
     """
-    Build a Term-Document Matrix (TDM) using sklearn and return a dense polars DataFrame.
+    Build a Term-Document Matrix (TDM) using sklearn and return a sparse matrix.
 
     Args:
         texts (list): List of tokenized texts (as strings).
         ids (list): List of document IDs.
         tdm_cell (str): Type of cell value ('binary', 'tf', or 'tfidf').
-        ngram (int): N-gram size.
+        ngram_range (tuple): Ngram range, e.g. (1, 2) for unigrams and bigrams.
         min_df (int | float, optional): Minimum document frequency for terms.
 
     Returns:
-        pl.DataFrame: Term-Document Matrix with document IDs and term columns.
+        tdm: sparse matrix
+        vocab: list of terms
     """
     # Build the Term-Document
+    tdm_args = {"token_pattern": "[^;]+", "ngram_range": (ngram, ngram), "min_df": min_df}
+
     if tdm_cell == "binary":
-        vectorizer = CountVectorizer(token_pattern="[^;]+", binary=True, ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
+        # token_pattern is a regex for tokenization, not a password
+        vectorizer = CountVectorizer(**tdm_args, binary=True)
     elif tdm_cell == "tf":
-        vectorizer = CountVectorizer(token_pattern="[^;]+", ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
+        vectorizer = CountVectorizer(**tdm_args)
     elif tdm_cell == "tfidf":
-        vectorizer = TfidfVectorizer(token_pattern="[^;]+", ngram_range=(ngram, ngram), min_df=min_df)  # noqa: S106
+        vectorizer = TfidfVectorizer(**tdm_args)
     else:
-        raise ValueError()  # f"Unsupported TDM cell type: {par.tdm.tdm_cell}"
+        raise ValueError()
 
-    X = vectorizer.fit_transform(texts)
+    tdm = vectorizer.fit_transform(texts)
     vocab = vectorizer.get_feature_names_out().tolist()
-
-    # Convert to dense and build polars DataFrame
-    X_dense = X.toarray()
-    data = {"doc_id": ids}
-    for idx, term in enumerate(vocab):
-        data[term] = X_dense[:, idx]
-    return pl.DataFrame(data)
+    return tdm, vocab
 
 
-def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
+def build_tdm(corpus: DocBin, par: DictConfig) -> tuple:
     """
-    Build a Term-Document Matrix (TDM) from a spaCy DocBin corpus.
-    It combines n-grams and handles multiple TDMs.
+    Build a Term-Document Matrix (TDM) from a spaCy DocBin corpus using a single vectorizer for all ngrams.
 
     Args:
         corpus (DocBin): Preprocessed spaCy DocBin.
         par (DictConfig): Configuration parameters.
 
     Returns:
-        pl.DataFrame: Term-Document Matrix.
+        X: sparse matrix
+        vocab: list of terms
+        ids: list of document IDs
     """
     # Prepare documents and IDs
     texts = []
@@ -328,18 +335,20 @@ def build_tdm(corpus: DocBin, par: DictConfig) -> pl.DataFrame:
         tokens = doc._.clean_tokens
         texts.append(";".join(tokens))
 
-    # Create and combine n-gram tdms
-    dfs = []
+    # Use a single vectorizer for all ngrams
+    tdm_list = []
+    vocab = []
     for i, n in enumerate(range(1, par.tdm.ngram_n + 1)):
         # Build the Term-Document Matrix
-        tdm = _build_tdm(texts, ids, tdm_cell=par.tdm.tdm_cell, ngram=n, min_df=par.tdm.min_df[i])
-        # concat the dataframes
-        dfs.append(tdm)
-    # append the dataframes together (but only use first column from the first dataframe)
-    tdm = dfs[0]
-    for i in range(1, len(dfs)):
-        tdm = tdm.hstack(dfs[i].select(pl.exclude("doc_id")))
-    return tdm
+        tdm, _vocab = _build_tdm(texts, tdm_cell=par.tdm.tdm_cell, ngram=n, min_df=par.tdm.min_df[i])
+        # Append the sparse matrix and vocabulary
+        tdm_list.append(tdm)
+        vocab += _vocab
+
+    # stack the sparse matrices together
+    tdm = ss.hstack(tdm_list, format="csr")
+
+    return tdm, vocab, ids
 
 
 def export_tdm(tdm: pl.DataFrame, output_file: Path) -> None:
@@ -364,25 +373,83 @@ def export_corpus(corpus: DocBin, output_file: Path) -> None:
     corpus.to_disk(output_file)
 
 
+def export_corpus_split(corpus: DocBin, output_dir: Path, par: DictConfig) -> None:
+    """
+    Split a large DocBin into smaller chunks and save each as a separate .spacy file in a directory.
+    Args:
+        corpus (DocBin): The preprocessed corpus.
+        output_dir (Path): Directory to save .spacy files.
+        chunk_size (int): Number of docs per file.
+    """
+    output_dir.mkdir(parents=True, exist_ok=True)
+    docs = list(corpus.get_docs(spacy.blank("da").vocab))
+    n_chunks = math.ceil(len(docs) / par.settings.chunk_size)
+    for i in range(n_chunks):
+        chunk_bin = DocBin(store_user_data=True)
+        for doc in docs[i * par.settings.chunk_size : (i + 1) * par.settings.chunk_size]:
+            chunk_bin.add(doc)
+        chunk_file = output_dir / f"corpus_{i + 1}.spacy"
+        chunk_bin.to_disk(chunk_file)
+
+
+def export_tdm_sparse(tdm: ss.csr_matrix, output_file: Path) -> None:  # type: ignore[no-any-unimported]
+    """
+    Export the sparse Term-Document Matrix (TDM) to a .npz file.
+    Args:
+        tdm (csr_matrix): Sparse matrix representing the Term-Document Matrix.
+        output_file (Path): Path to the output file.
+    """
+    ss.save_npz(str(output_file), tdm)
+
+
+def export_tdm_info(vocab: list[str], ids: list[str], output_file: Path) -> None:
+    """
+    Export the vocabulary list to a JSON file.
+    Args:
+        vocab (list[str]): List of terms in the vocabulary.
+        ids (list[str]): List of document IDs.
+        output_file (Path): Path to the output file.
+    """
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump({"vocab": vocab, "ids": ids}, f)
+
+
 if __name__ == "__main__":
     # Define file paths
     project_root = Path(find_project_root(__file__))
     params_path = project_root / "params.yaml"
     data_dir = project_root / "data"
+    output_dir = project_root / "output"
+
     file_path = data_dir / "Jobnet.xlsx"
     corpus_file = data_dir / "corpus.spacy"
-    tdm_file = data_dir / "tdm.parquet"
+    corpus_dir = data_dir / "corpus_split"
+    tdm_file = data_dir / "tdm.npz"
+    tdm_info_file = data_dir / "tdm_info.json"
 
     # Load parameters
     par = OmegaConf.load(params_path).prepare
 
+    start = time.time()
+    print("Starting prepare.py")
     # Process the data
     texts = load_data(file_path, par)[: par.settings.nobs]
     texts = detect_language(texts)
     texts = clean_data(texts)
     preprocessed_corpus = preprocess_texts(texts, par)
-    tdm = build_tdm(preprocessed_corpus, par)
-    export_corpus(preprocessed_corpus, corpus_file)
-    print(f"Preprocessed corpus exported to {corpus_file}")
-    export_tdm(tdm, tdm_file)
+    tdm, vocab, ids = build_tdm(preprocessed_corpus, par)
+    export_corpus_split(preprocessed_corpus, corpus_dir, par)
+    print(f"Preprocessed corpus exported to {corpus_dir}")
+
+    export_tdm_sparse(tdm, tdm_file)
+    export_tdm_info(vocab, ids, tdm_info_file)
     print(f"Term-Document Matrix exported to {tdm_file}")
+    print(f"TDM info exported to {tdm_info_file}")
+
+    stop = time.time()
+    hours = (stop - start) / 3600
+    print(f"Finished prepare.py in {hours:.2f} hours")
+    # Log metrics using DVCLive
+    with Live(dir=str(output_dir), cache_images=True) as live:
+        # Log metrics
+        live.log_metric("prepare.py", f"{hours:.2f} hours", plot=False)

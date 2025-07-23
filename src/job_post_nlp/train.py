@@ -1,10 +1,13 @@
+import json
 import pathlib
+import time
 from pathlib import Path
 from typing import Any
 
-import polars as pl
-import scipy.sparse as ss  # type: ignore  # noqa: PGH003
-from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
+import scipy.sparse as ss
+import spacy
+from corextopic import corextopic as ct
+from dvclive import Live
 from omegaconf import DictConfig, ListConfig, OmegaConf
 from spacy.tokens import DocBin
 
@@ -26,17 +29,45 @@ def load_corpus(file_path: Path) -> DocBin:
     return doc_bin
 
 
-def load_tdm(file_path: Path) -> pl.DataFrame:
+def load_corpus_split(corpus_dir: Path) -> DocBin:
     """
-    Load a Term Document Matrix (TDM) from a CSV file.
+    Load and combine split corpus files from a directory into a single DocBin.
     Args:
-        file_path (Path): Path to the TDM CSV file.
+        corpus_dir (Path): Directory containing .spacy files.
     Returns:
-        pl.DataFrame: The loaded TDM.
+        DocBin: Combined corpus.
     """
-    if not file_path.exists():
+    combined_corpus = DocBin(store_user_data=True)
+    nlp = spacy.blank("da")
+
+    # Get all .spacy files and sort them by name to maintain order
+    spacy_files = sorted(corpus_dir.glob("*.spacy"))
+
+    for spacy_file in spacy_files:
+        chunk_corpus = DocBin().from_disk(spacy_file)
+        for doc in chunk_corpus.get_docs(nlp.vocab):
+            combined_corpus.add(doc)
+
+    return combined_corpus
+
+
+def load_tdm(tdm_file: Path, tdm_info_file: Path) -> tuple[ss.csr_matrix, dict]:  # type: ignore[no-any-unimported]
+    """
+    Load a Term Document Matrix (TDM) from a .npz file as a sparse matrix,
+    and load vocab and ids from JSON files.
+    Args:
+        tdm_file (Path): Path to the TDM .npz file.
+        tdm_info_file (Path): Path to the tdm_info JSON file.
+    Returns:
+        tuple: (csr_matrix, tdm_info dict of vocab and ids)
+    """
+    if (not tdm_file.exists()) or (not tdm_info_file.exists()):
         raise FileNotFoundError()
-    return pl.read_parquet(file_path)
+    with open(tdm_info_file, encoding="utf-8") as f:
+        tdm_info = json.load(f)
+
+    tdm = ss.load_npz(str(tdm_file))
+    return tdm, tdm_info
 
 
 class UnsupportedAnchorTypeError(Exception):
@@ -59,13 +90,18 @@ def convert_anchors(anchors: list | ListConfig) -> list:
     return converted_anchors
 
 
-def train_corex(tdm: pl.DataFrame, par: DictConfig) -> object:
-    words = tdm.columns[1:]
-    docs = tdm.select(pl.col("doc_id")).to_series().to_list()
-    X = tdm.select(pl.exclude("doc_id")).to_numpy()
-    X = ss.csr_matrix(X)
-
-    # check_anchors_in_vocab(words, par)
+def train_corex(tdm: ss.csr_matrix, tdm_info: dict, par: DictConfig) -> object:  # type: ignore[no-any-unimported]
+    """
+    Train a Corex topic model using a sparse matrix, vocabulary, and document ids.
+    Args:
+        tdm: sparse matrix (csr_matrix)
+        tdm_info: dict containing 'vocab' and 'ids'
+            - vocab: list of terms
+            - ids: list of document IDs
+        par: DictConfig with model parameters
+    Returns:
+        Corex model object
+    """
     model = ct.Corex(
         n_hidden=par.corex.n_topics,
         max_iter=par.settings.max_iter,
@@ -73,7 +109,9 @@ def train_corex(tdm: pl.DataFrame, par: DictConfig) -> object:
         seed=par.settings.seed,
     )
     anchors = convert_anchors(par.corex.anchors) if par.corex.anchors is not None else None
-    model.fit(X, words=words, docs=docs, anchors=anchors, anchor_strength=par.corex.anchor_strength)
+    model.fit(
+        tdm, words=tdm_info["vocab"], docs=tdm_info["ids"], anchors=anchors, anchor_strength=par.corex.anchor_strength
+    )
     return model
 
 
@@ -86,15 +124,33 @@ if __name__ == "__main__":
     project_root = Path(find_project_root(__file__))
     data_dir = project_root / "data"
     models_dir = project_root / "models"
+    output_dir = project_root / "output"
     params_path = project_root / "params.yaml"
-    corpus_file = data_dir / "corpus.spacy"  # Use corpus file
+    corpus_dir = data_dir / "corpus_split"  # Updated to use split corpus directory
     output_file = data_dir / "most_common_words.json"
-    tdm_file = data_dir / "tdm.parquet"
+    tdm_file = data_dir / "tdm.npz"
+    tdm_info_file = data_dir / "tdm_info.json"
 
     # Load parameters
     par = OmegaConf.load(params_path).train
 
+    start = time.time()
+
+    print("Loading tdm and tdm_info")
+    # load tdm, vocab, and ids
+    tdm, tdm_info = load_tdm(tdm_file, tdm_info_file)
+
+    print("Training Corex model")
     # Process
-    tdm = load_tdm(tdm_file)
-    model = train_corex(tdm, par)
+    model = train_corex(tdm, tdm_info, par)
+
+    print("Exporting Corex model")
     export_model(model, models_dir / "corex_model.pkl")
+
+    stop = time.time()
+    hours = (stop - start) / 3600
+    print(f"Finished train.py in {hours:.2f} hours")
+    # Log metrics using DVCLive
+    with Live(dir=str(output_dir), cache_images=True, resume=True) as live:
+        # Log metrics
+        live.log_metric("train.py", f"{hours:.2f} hours", plot=False)

@@ -13,7 +13,7 @@ from job_post_nlp.evaluate import (  # noqa: E402
     plot_TC,
 )
 from job_post_nlp.prepare import load_excel  # noqa: E402
-from job_post_nlp.train import load_corpus  # noqa: E402
+from job_post_nlp.train import load_corpus_split  # noqa: E402
 from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
 if __name__ == "__main__":
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     # Load the most common words
     model = load_model(models_dir / "corex_model.pkl")
     texts = load_excel(data_dir / "Jobnet.xlsx", sheet_name="Sheet1")
-    corpus = load_corpus(data_dir / "corpus.spacy")  # Use corpus file
+    corpus = load_corpus_split(data_dir / "corpus_split")  # Use split corpus directory
 
     # Log metrics using DVCLive
     with Live(dir=str(output_dir), cache_images=True, report="md", save_dvc_exp=False) as live:
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     with open(report_path, "a", encoding="utf-8") as report_file:
         report_file.write("# Topic words\n")
         top_words = get_top_words(model, 10)
-        text = "\n".join([f"Topic {i}: {', '.join(words)}\n" for i, words in top_words.items()])
+        text = "\n".join([f"Topic {i + 1}: {', '.join(words)}\n" for i, words in top_words.items()])
         report_file.write(text)
         report_file.write("\n")
 

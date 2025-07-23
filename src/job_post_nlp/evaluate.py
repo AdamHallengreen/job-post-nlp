@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import polars as pl
 import yaml
-from corextopic import corextopic as ct  # type: ignore  # noqa: PGH003
+from corextopic import corextopic as ct
 from dvclive import Live
 from matplotlib.figure import Figure
 from spacy.tokens import DocBin
@@ -130,19 +130,43 @@ def most_common_languages(corpus: DocBin) -> str:
     return languages_str
 
 
+def create_top_words_fig(top_words: dict) -> Figure:
+    """
+    Create a picture of  string with the top words for each topic.
+
+    Args:
+        top_words (dict): Dictionary with topic numbers as keys and lists of top words as values.
+        png_path (Path): Path to save the generated image.
+
+    Returns:
+        None
+    """
+    text = "# Top Words per Topic\n"
+    for topic_n, words_list in top_words.items():
+        words_str = ", ".join(words_list)
+        text += f"# Topic {topic_n + 1}: {words_str}\n"
+
+    fig = plt.figure(figsize=(8, 10))
+    plt.text(0.01, 0.99, text, fontsize=12, family="monospace", va="top", ha="left", wrap=True)
+    plt.axis("off")
+
+    return fig
+
+
 if __name__ == "__main__":
     # Define file paths
     project_root = Path(find_project_root(__file__))
     models_dir = project_root / "models"
     output_dir = project_root / "output"
     metrics = project_root / "metrics.yaml"
+    top_words_picture = output_dir / "top_words.png"
 
     # Process
     model = load_model(models_dir / "corex_model.pkl")
     save_top_words(model, output_dir / "top_words.yaml")
 
     # Log metrics using DVCLive
-    with Live(dir=str(output_dir), cache_images=True) as live:
+    with Live(dir=str(output_dir), cache_images=True, resume=True) as live:
         # unpack model
         TC = model.tc  # type: ignore  # noqa: PGH003
         TCs = model.tcs  # type: ignore  # noqa: PGH003
@@ -180,3 +204,8 @@ if __name__ == "__main__":
         )
         fig = plot_num_job_posts_per_topic(model)
         live.log_image("num_job_posts_per_topic.png", fig)
+
+        # Save top words as a figure
+        top_words = get_top_words(model)
+        fig = create_top_words_fig(top_words)
+        live.log_image("top_words.png", fig)

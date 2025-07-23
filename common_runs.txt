@@ -1,5 +1,48 @@
-common runs to do (so we don't have to keep writting them, could also write a .bat):
+# star start (set directory and environment)
+cd code/job-post-nlp
+conda activate jobpostnlp
 
-dvc exp run --queue -S "prepare/settings=full" -S "prepare/star=star" -S "train/corex=sockin,anchors,worklife"
+# common runs to do (so we don't have to keep writting them, could also write a .bat):
 
-dvc queue start
+
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=sockin,anchors,worklife"
+
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=sockin"
+
+dvc exp run --queue -S "prepare/settings=small" -S "prepare/star=star" -S "train/corex=worklife"
+
+dvc queue start -j6
+
+
+dvc queue logs <name>
+
+dvc queue logs d94e04d --follow
+
+dvc queue stop --kill
+
+
+
+You can use the following commands in your SSH terminal to monitor memory and CPU usage:
+
+- `top`
+  Shows real-time CPU and memory usage for all processes.
+
+- `htop`
+  An enhanced version of `top` (if installed). Use arrow keys to navigate.
+
+- `free -h`
+  Displays total, used, and free memory.
+
+- `vmstat 1`
+  Shows system performance statistics, updated every second.
+
+- `ps aux --sort=-%mem | head`
+  Lists top processes by memory usage.
+
+- `ps aux --sort=-%cpu | head`
+  Lists top processes by CPU usage.
+
+You can run these commands directly in your SSH terminal.
+
+
+Press q to stop

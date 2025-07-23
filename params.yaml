@@ -3,6 +3,7 @@ prepare:
     nobs: -1
     batch_size: 50
     threads: 4
+    chunk_size: 10000
   preprocessing:
     model: da_core_news_sm
     pipeline:
