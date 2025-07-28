@@ -1,6 +1,6 @@
 defaults:
   - prepare/settings: small
-  - prepare/preprocessing: simple
+  - prepare/preprocessing: lgmodel
   - prepare/star: local
   - prepare/tdm: n2_binary
   - train/settings: base
