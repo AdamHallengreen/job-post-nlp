@@ -17,7 +17,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    # "da-core-news-sm",
+    "da-core-news-sm",
     "da-core-news-lg",
     "dvc>=3.59.1",
     "dvclive>=3.48.2",
