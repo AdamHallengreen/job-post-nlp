@@ -145,6 +145,4 @@ preview = true
 
 [tool.uv.sources]
 da-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl" }
-
-[tool.uv.sources]
-da-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_lg-3.8.0/da_core_news_lg-3.8.0-py3-none-any.whl" }
+da-core-news-lg = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_lg-3.8.0/da_core_news_lg-3.8.0-py3-none-any.whl" }
