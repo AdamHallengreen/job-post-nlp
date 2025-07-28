@@ -1,5 +1,3 @@
-import spacy
-
 # This is just a hack to make uv understand that the dependency is not redundant
-nlp = spacy.load("da_core_news_lg")
-nlp = spacy.load("da_core_news_sm")
+import da_core_news_lg  # noqa: F401
+import da_core_news_sm  # noqa: F401
