@@ -1,0 +1,21 @@
+n_topics: 30
+anchors:
+- [fleksibel, familievenlig, flextid, hjemmearbejde]
+- [fleksibel, fleksibilitet]
+- [fleksibel, fleksibilitet]
+- [fuldtid, deltid, arbejdstid]
+- [skift, turnus, natarbejde, dagvagt]
+- [løn, overenskomst, pension, tillæg]
+- [vikariat, fastansættelse, tidsbegrænset, projektansættelse]
+- [barsel, forældreorlov, omsorgsdage, fraværspolitik]
+- [arbejdsmiljø, trivsel, samarbejde, socialt]
+- [frugtordning, kantine, frokostordning, personalegoder]
+- [oplæring, uddannelse, kurser, mentor]
+- [smillende, udadvendt, imødekommende, venlig]
+- [erfaring, kompetencer, certifikat, specialisering]
+- [kundeservice, support, telefon, salg]
+- [leder, teamleder, personaleansvar, budgetansvar]
+- [dansk, engelsk, skriftligt, flydende]
+- [rejseaktivitet, kørekort, udstationering, firmabil]
+- [bæredygtighed, csr, klima, grøn]
+anchor_strength: 9

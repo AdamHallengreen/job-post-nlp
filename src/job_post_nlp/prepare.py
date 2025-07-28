@@ -384,7 +384,10 @@ def export_corpus_split(corpus: DocBin, output_dir: Path, par: DictConfig) -> No
     output_dir.mkdir(parents=True, exist_ok=True)
     docs = list(corpus.get_docs(spacy.blank("da").vocab))
     n_chunks = math.ceil(len(docs) / par.settings.chunk_size)
-    for i in range(n_chunks):
+    for i in tqdm(
+        range(n_chunks),
+        desc="Exporting corpus chunks",
+    ):
         chunk_bin = DocBin(store_user_data=True)
         for doc in docs[i * par.settings.chunk_size : (i + 1) * par.settings.chunk_size]:
             chunk_bin.add(doc)
@@ -414,6 +417,31 @@ def export_tdm_info(vocab: list[str], ids: list[str], output_file: Path) -> None
         json.dump({"vocab": vocab, "ids": ids}, f)
 
 
+def export_texts(texts: pl.DataFrame, output_file: Path) -> None:
+    """
+    Export the texts to a JSON file.
+    Args:
+        texts (pl.DataFrame): DataFrame containing the texts.
+        output_file (Path): Path to the output file.
+    """
+    texts.write_parquet(output_file)
+
+
+def load_texts(file_path: Path) -> pl.DataFrame:
+    """
+    Load texts from a Parquet file.
+
+    Args:
+        file_path (Path): Path to the Parquet file.
+
+    Returns:
+        pl.DataFrame: DataFrame containing the texts.
+    """
+    if not file_path.exists():
+        raise FileNotFoundError(FileNotFoundErrorMessage(file_path))
+    return pl.read_parquet(file_path)
+
+
 if __name__ == "__main__":
     # Define file paths
     project_root = Path(find_project_root(__file__))
@@ -436,8 +464,17 @@ if __name__ == "__main__":
     texts = load_data(file_path, par)[: par.settings.nobs]
     texts = detect_language(texts)
     texts = clean_data(texts)
+    print(f"Loaded {len(texts)} texts from {file_path}")
+
     preprocessed_corpus = preprocess_texts(texts, par)
+    print("Preprocessed documents")
+
     tdm, vocab, ids = build_tdm(preprocessed_corpus, par)
+    print(f"Built TDM with {tdm.shape[0]} documents and {tdm.shape[1]} terms")
+
+    export_texts(texts, data_dir / "texts.parquet")
+    print(f"Texts exported to {data_dir / 'texts.parquet'}")
+
     export_corpus_split(preprocessed_corpus, corpus_dir, par)
     print(f"Preprocessed corpus exported to {corpus_dir}")
 

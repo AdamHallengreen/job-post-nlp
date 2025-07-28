@@ -1,0 +1,6 @@
+n_topics: 10
+anchors:
+- [fleksibel, fleksibilitet,frihed]
+- [fleksibel, fleksibilitet,vagt,vagtplan]
+- [fleksibel, fleksibilitet]
+anchor_strength: 9
