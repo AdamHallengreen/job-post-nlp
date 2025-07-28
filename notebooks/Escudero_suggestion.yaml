@@ -1,0 +1,19 @@
+anchors:
+- ['fleksibel', 'fleksibilitet', 'hjemme']
+- ['karriere', 'udvikling', 'ambition']
+- ['bonus', 'provision', 'incitamenter', 'præstationsløn', 'salgsbonus', 'mål', 'OTE', 'produktivitet'] # Bonuses & commissions
+- ['overtid', 'vagt', 'natarbejde', 'weekendarbejde', 'standby', 'rulleskift', 'timer', 'overtidsbetaling'] # Hourly work & overtime
+- ['orlov', 'ferie', 'feriefridage', 'helligdage', 'sygeorlov', 'barselsorlov', 'betalte helligdage', 'ferie med løn'] # Paid time-off
+- ['sundhedsforsikring', 'helbredsforsikring', 'sygeforsikring', 'sundhedsordning', 'hospitalplan', 'privathospital'] # Health insurance
+- ['pension', 'pensionsordning', 'arbejdsmarkedspension', 'pensionsbidrag', 'pensionsaftale'] # Retirement contributions
+- ['madtillæg', 'kantineordning', 'frokostordning', 'madkupon', 'personalekøb', 'boligtilskud'] # Food / service subsidies & discounts
+- ['kantine', 'fitnessrum', 'gratis parkering', 'kaffebar', 'ergonomisk arbejdsplads', 'kontorfaciliteter'] # Office space & amenities
+- ['hjemmearbejde', 'hybridarbejde', 'pendling', 'på stedet', 'kørepenge', 'transport', 'relocation-hjælp'] # Location & commuting
+- ['bærbar', 'mobiltelefon', 'dataabonnement', 'værktøj', 'uniform', 'værnemidler', 'internettilskud', 'hjemmekontorudstyr'] # Work-equipment & allowances
+- ['flextid', 'fleksible arbejdstider', 'hjemmearbejde', 'telependling', 'komprimeret uge', 'deltid', 'jobdeling'] # Work-schedule flexibility
+- ['sikkerhed', 'værnemidler', 'sikkert arbejdsmiljø', 'fare', 'risikovurdering', 'compliance', 'sikkerhedstræning'] # Workplace safety
+- ['fastansættelse', 'fuldtid', 'stabilitet', 'langtidskontrakt', 'jobsikkerhed', 'anciennitet', 'tidsubegrænset'] # Job security
+- ['kultur', 'værdier', 'inklusion', 'diversitet', 'bæredygtighed', 'samfundsindsats', 'CSR'] # Work environment & social impact
+- ['tunge løft', 'stående arbejde', 'fysisk', 'højt tempo', 'manuelarbejde', 'anstrengende', 'arbejdsmængde'] # Physical effort & pace
+- ['teamarbejde', 'team', 'samarbejde', 'kolleger', 'tværfaglig', 'støttende team', 'partner'] # Working in teams
+- ['uddannelse', 'læring', 'udvikling', 'karrierevækst', 'opkvalificering', 'mentoring', 'kurser', 'CPD'] # Human-capital development

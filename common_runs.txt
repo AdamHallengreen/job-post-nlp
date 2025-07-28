@@ -11,16 +11,33 @@ dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "t
 
 dvc exp run --queue -S "prepare/settings=small" -S "prepare/star=star" -S "train/corex=worklife"
 
-dvc queue start -j6
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific" -S "train.corex.n_topics=5,10,15,20,30,50,100"
+
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific,flex3_plus,foreslag,brancher" -S "train.corex.n_topics=20,25,30,40,50"
+
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=plain" -S "train.corex.n_topics=50"
+
+
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3_specific" -S "train.corex.n_topics=15"
+
+
+
+
+dvc exp run --queue -S "prepare/preprocessing=lgmodel,simple" -S "prepare/settings=large_star" -S "prepare/star=star" -S "train/corex=flex3_specific" -S "train.corex.n_topics=20"
+
+
+
+
+dvc queue start -j7
 
 
 dvc queue logs <name>
 
-dvc queue logs d94e04d --follow
+dvc queue logs b2239c3 --follow
 
 dvc queue stop --kill
 
-
+dvc queue status
 
 You can use the following commands in your SSH terminal to monitor memory and CPU usage:
 
@@ -46,3 +63,11 @@ You can run these commands directly in your SSH terminal.
 
 
 Press q to stop
+
+
+
+
+
+# cleaning up git, if you have made changes in main:
+make new branch with your changes:
+git checkout -b new-branch-name
