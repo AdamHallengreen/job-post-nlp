@@ -20,7 +20,7 @@ stages:
             threads: 4
             star: 0
           preprocessing:
-            model: da_core_news_sm
+            model: da_core_news_lg
             pipeline:
             - tok2vec
             - lemmatizer
