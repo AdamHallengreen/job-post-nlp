@@ -1,5 +1,5 @@
 anchors:
-- ['fleksibel', 'fleksibilitet', 'hjemme'] 
+- ['fleksibel', 'fleksibilitet', 'hjemme']
 - ['karriere', 'udvikling', 'ambition']
 - ['bonus', 'provision', 'incitamenter', 'præstationsløn', 'salgsbonus', 'mål', 'OTE', 'produktivitet'] # Bonuses & commissions
 - ['overtid', 'vagt', 'natarbejde', 'weekendarbejde', 'standby', 'rulleskift', 'timer', 'overtidsbetaling'] # Hourly work & overtime
