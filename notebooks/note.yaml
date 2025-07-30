@@ -18,16 +18,14 @@ anchors:
 
 # dynamic work place 
 - [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram]
-
+- [faglig, faglighed, sparring]
 
 # Topic catchers:
-- [stillingen,samtaler, snarest muligt,hurtist mulig,ansøgning,ringe,ansøgning mail,ansøgning,sende,cv,sende ansøgning,ansøgning cv,send,send ansøgning,din cv,ansøgning sende,modtage ansøgning]
+- [stillingen,samtaler, snarest muligt, mulig,ansøgning,ringe,ansøgning mail,ansøgning,sende,cv,sende ansøgning,ansøgning cv,send,send ansøgning,ansøgning sende,modtage ansøgning]
 - [køn, etnisk, religion, religion etnisk, uanset alder, alder køn, etnisk tilhørsforhold, tilhørsforhold]
 - [mandag,tirsdag,onsdag,torsdag,fredag,lørdag,søndag]
-
+- [finansministeri, overenskomst, 'overenskomst finansministeri', gældende]
 - [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel. 
-
-
 
 # Amenities:
 
@@ -56,7 +54,10 @@ anchors:
 - [produktion, fabrik, montage, operatør]
 - [uddannelse, lærer, undervisning, pædagog]
 - [hospitality, restaurant, kok, tjener]
-- [offentlig, kommune, forvaltning, myndighed]
+- [offentlig, kommune, rådhus, forvaltning, myndighed,fuldmægtig, ministerium, departement, styrelse]
+- [kirke, sogn, menighedsråd]
+- [militær , forsvar, soldat, officer,forsvarsministeri]
+
 # Jobfunktioner/stillinger
 - [projektleder, projektstyring, planlægning, koordinere]
 - [konsulent, rådgiver, analyse, implementering]
@@ -68,3 +69,4 @@ anchors:
 - [maskinoperatør, produktion, vedligehold, skiftehold]
 - [økonom, budget, controlling, afstemning]
 - [jurist, kontrakt, lovgivning, compliance]
+- [pædagog, børnehave skole, undervisning ]
