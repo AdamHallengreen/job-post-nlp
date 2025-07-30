@@ -1,6 +1,7 @@
 n_topics: 50
 anchors:
 - ['fleksibel','fleksibilitet','fleksibel arbejdstid','fleksibel arbejdstid','flekstid','flekstidsordning','flextid','flextidsordning','familievenlig','familievenlige','familieliv']
+- ['fixtid','fikstid'] # Mostly these actually specify an interval (like 9-14) which is the the fixed part of the workday.
 - ['weekend','helligdage','overtid', 'helligdagsvagt', 'weekendarbejde', 'natarbejde', 'nattevagt','nattevagte', 'standby', 'overtidsbetaling','vagtskema', 'vagtplan', 'vagter', 'vagtordning'] # Hourly work & overtime
 - ['hjemmearbejde','hjemmearbejdsplads','hjemmearbejdsdag','hjemmefra'] # Remote work & home office
 - ['ambitiøs','ambition','udvikling','karriere','udviklingsmuligheder','udviklingsplaner','udviklingsforløb','udviklingsprogrammer'] 
@@ -44,5 +45,5 @@ anchors:
 - [økonom, budget, controlling, afstemning]
 - [jurist, kontrakt, lovgivning, compliance]
 
-name: flex3
+name: flex2
 anchor_strength: 9

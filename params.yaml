@@ -1,8 +1,8 @@
 prepare:
   settings:
     nobs: -1
-    batch_size: 50
-    threads: 4
+    batch_size: 100
+    threads: 8
     chunk_size: 10000
   preprocessing:
     model: da_core_news_lg
@@ -11,7 +11,7 @@ prepare:
     - lemmatizer
     keep_negations: true
   star:
-    usestar: 0
+    usestar: 1
   tdm:
     tdm_cell: binary
     ngram_n: 2
@@ -29,215 +29,203 @@ train:
   corex:
     n_topics: 50
     anchors:
-    - - løn
-      - betaling
-      - penge
-    - - lønforhøjelse
-      - stigning
-      - forhøjelse
-    - - bonus
-      - performance
-      - penge
-      - aktie
-    - - salg
-      - komision
-      - kvote
-    - - ferie
-      - sygedage
-      - orlov
-      - betalt
-      - fri
-      - fridage
-    - - forsikring
-      - sundhedsforsikring
-      - tandlæge
-      - syn
-    - - pension
-      - tilbagetrækning
-    - - tilbud
-      - fordele
-      - medarbejderfordele
-    - - frokost
-      - betalt frokost
-      - kantine
-      - mad
-      - gratis
-    - - work life
-      - balance
-      - life balance
-    - - timer
-      - fuld tid
-      - fuldtid
-      - deltid
-    - - timer
-      - vagt
-      - skema
+    - - fleksibel
+      - fleksibilitet
+      - fleksibel arbejdstid
+      - fleksibel arbejdstid
+      - flekstid
+      - flekstidsordning
       - flextid
-      - flex tid
-    - - pause
-      - hvile
-      - toilet
-      - frokost
-      - frokostpause
-    - - kontor
-      - skrivebord
-      - bygning
-      - kontorbygning
-    - - pendle
-      - pendling
-      - transport
-      - parkering
-      - bus
-      - tog
-      - køre
-    - - arbejde hjemme
-      - hjemmearbejde
-      - hjemme
-      - hjem
-      - remote
+      - flextidsordning
+    - - familievenlig
+      - familievenlige
+      - familieliv
+    - - fixtid
+      - fikstid
+    - - vagtskema
+      - vagtplan
+      - vagter
+      - vagtordning
+    - - weekend
+      - helligdage
+      - overtid
+      - helligdagsvagt
+      - weekendarbejde
+      - natarbejde
+      - nattevagt
+      - nattevagte
+      - standby
+      - overtidsbetaling
+    - - hjemmearbejde
+      - hjemmearbejdsplads
+      - hjemmearbejdsdag
       - hjemmefra
-      - hjemmekontor
-    - - by
-      - metro
-      - tog
-      - lokation
-    - - autonomi
-      - selv
-      - ansvar
-      - uafhængig
-    - - respekt
-      - chikane
-      - sexchikane
-      - behandle
-      - fjendtlig
-      - chikanere
-      - mobning
-      - mobbe
-    - - kommunikation
-      - problem
-      - bekymring
-      - møde
-      - snakke
-    - - hjælp
-      - hjælpe
-      - støtte
-    - - udfordring
-      - svær
-      - smerte
-      - nemt
-    - - kræve
-      - krævende
-      - krav
-      - obligatorisk
-      - valgfri
-    - - stress
-      - pres
-      - krævende
-    - - tempo
-      - hurtig
-      - fart
-    - - skade
-      - farlig
-      - sikkerhed
-      - forhold
-      - arbejdsplads
-    - - hård
-      - indsats
-      - belønning
-    - - moral
-      - atmosfære
-    - - sjov
-      - kedelig
-      - spændende
-      - repetitiv
-      - gentagelse
+    - - ambitiøs
+      - ambition
+      - udvikling
+      - karriere
+      - udviklingsmuligheder
+      - udviklingsplaner
+      - udviklingsforløb
+      - udviklingsprogrammer
+    - - orlov
+      - ferie
+      - feriefridage
+      - sygeorlov
+      - barselsorlov
+    - - bonus
+      - provision
+      - incitamenter
+      - præstationsløn
+      - salgsbonus
+      - mål
+      - produktivitet
+    - - sundhedsforsikring
+      - helbredsforsikring
+      - sygeforsikring
+      - sundhedsordning
+      - privathospital
+    - - pension
+      - pensionsordning
+      - arbejdsmarkedspension
+      - pensionsbidrag
+      - pensionsaftale
+    - - kantineordning
+      - frokostordning
+      - personalekøb
+    - - kantine
+      - fitnessrum
+      - kaffebar
+      - ergonomisk
+      - kontorfaciliteter
+    - - bærbar
+      - mobiltelefon
+      - dataabonnement
+      - værktøj
+      - værnemidler
+    - - sikkerhed
+      - værnemidler
+      - fare
+      - compliance
+      - sikkerhedstræning
+    - - fastansættelse
+      - fuldtid
+      - stabilitet
+      - langtidskontrakt
+      - jobsikkerhed
+      - anciennitet
+      - tidsubegrænset
+    - - tidsbegrænset
+      - projektansættelse
+      - midlertidig
+      - midlertidigansættelse
+      - prøvetidsansættelse
+      - vikariat
+      - kontraktansættelse
+      - praktik
     - - kultur
       - værdier
-      - miljø
-      - mission
-      - arbejdsmiljø
-    - - diversitet
-      - mangfoldighed
-      - etnicitet
-      - etnisk
-      - multikulturel
-      - inklusiv
-      - lgbt
-      - lgbtq
       - inklusion
-      - ligestilling
-    - - lederskab
-      - lederevne
-      - leder
-      - ledelse
-    - - politik
-      - politisk
-      - bureaukrati
-      - regler
-    - - forandring
-      - forskel
-    - - fyre
-      - fyring
-      - afsked
-      - afskedigelse
-      - fyringsrunde
-      - udskiftning
-      - udskifte
-    - - karriere
-      - vækst
-      - udvikling
-      - vokse
-    - - forfremmelse
-      - forfremme
-      - jobtitel
-      - titel
-    - - erfaring
-      - joberfaring
-    - - udvikling
-      - udvikle
-      - evne
-    - - træne
-      - træning
-    - - internship
-      - intern
-      - mentor
-      - praktik
-      - praktikforløb
-      - praktikant
-    - - hyre
-      - rekruttere
-      - interview
-      - samtale
-      - lære
-    - - kontrakt
-      - tilbud
-      - underskrive
-      - underskrift
-    - - industri
-      - marked
-      - startup
-      - nyopstartet
-      - organisation
-      - projekt
-      - produkt
-      - teknolgi
-      - strategi
-      - design
-    - - boss
-      - chef
-      - leder
-      - ejer
-    - - kollega
-      - folk
-      - menneske
-      - ven
-      - familie
-      - medarbejder
-    - - team
-      - teamwork
+      - diversitet
+      - bæredygtighed
+      - samfundsindsats
+    - - tungt
+      - fysisk
+      - fysiskarbejde
+      - manuelt
+      - anstrengende
+    - - teamarbejde
+      - team
       - samarbejde
-    - - kunde
-      - klient
-    - []
-    - []
-    anchor_strength: 9
+      - kolleger
+      - tværfaglig
+      - hold
+    - - uddannelse
+      - læring
+      - udvikling
+      - karrierevækst
+      - opkvalificering
+      - mentoring
+      - kurser
+    - - sundhed
+      - pleje
+      - sygehus
+      - klinik
+    - - byggeri
+      - håndværker
+      - tømrer
+      - murer
+    - - detailhandel
+      - butik
+      - ekspedient
+      - kasse
+    - - logistik
+      - lager
+      - chauffør
+      - truck
+    - - it
+      - softwareudvikler
+      - programmering
+      - udvikler
+    - - finans
+      - regnskab
+      - bogholder
+      - controller
+    - - produktion
+      - fabrik
+      - montage
+      - operatør
+    - - uddannelse
+      - lærer
+      - undervisning
+      - pædagog
+    - - hospitality
+      - restaurant
+      - kok
+      - tjener
+    - - offentlig
+      - kommune
+      - forvaltning
+      - myndighed
+    - - projektleder
+      - projektstyring
+      - planlægning
+      - koordinere
+    - - konsulent
+      - rådgiver
+      - analyse
+      - implementering
+    - - sosuassistent
+      - social sundhedsassistent
+      - pleje
+      - borgerkontakt
+    - - sygeplejerske
+      - patient
+      - klinisk
+      - journal
+    - - ingeniør
+      - konstruktion
+      - design
+      - beregning
+    - - elektriker
+      - installation
+      - fejlfinding
+      - serviceopgaver
+    - - kundeservicemedarbejder
+      - support
+      - telefon
+      - kundehenvendelser
+    - - maskinoperatør
+      - produktion
+      - vedligehold
+      - skiftehold
+    - - økonom
+      - budget
+      - controlling
+      - afstemning
+    - - jurist
+      - kontrakt
+      - lovgivning
+      - compliance
+    name: flex1
+    anchor_strength: 12

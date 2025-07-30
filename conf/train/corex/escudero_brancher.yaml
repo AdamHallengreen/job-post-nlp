@@ -1,13 +1,12 @@
-n_topics: 50
 anchors:
-- ['fleksibel','fleksibilitet','fleksibel arbejdstid','fleksibel arbejdstid','flekstid','flekstidsordning','flextid','flextidsordning','familievenlig','familievenlige','familieliv']
-- ['weekend','helligdage','overtid', 'helligdagsvagt', 'weekendarbejde', 'natarbejde', 'nattevagt','nattevagte', 'standby', 'overtidsbetaling','vagtskema', 'vagtplan', 'vagter', 'vagtordning'] # Hourly work & overtime
-- ['hjemmearbejde','hjemmearbejdsplads','hjemmearbejdsdag','hjemmefra'] # Remote work & home office
-- ['ambitiøs','ambition','udvikling','karriere','udviklingsmuligheder','udviklingsplaner','udviklingsforløb','udviklingsprogrammer'] 
-
-- ['orlov', 'ferie', 'feriefridage', 'sygeorlov', 'barselsorlov'] # Paid time-off
-
+- ['fleksibel','fleksibilitet','fleksibel arbejdstid','flextid','flekstid', 'hjemmearbejde','hjemmefra']
+- ['vagtskema', 'vagtplan', 'vagter', 'vagtordning'] # Shift work & scheduling
+- ['overtid', 'helligdagsvagt', 'weekendarbejde', 'natarbejde', 'natarbejde', 'weekendarbejde', 'standby', 'overtidsbetaling'] # Hourly work & overtime
+- ['fleksibel','fleksibilitet']
+- ['deltid'] # Work-schedule flexibility
+- ['karriere', 'udvikling', 'ambition']
 - ['bonus', 'provision', 'incitamenter', 'præstationsløn', 'salgsbonus', 'mål', 'produktivitet'] # Bonuses & commissions
+- ['orlov', 'ferie', 'feriefridage', 'sygeorlov', 'barselsorlov'] # Paid time-off
 - ['sundhedsforsikring', 'helbredsforsikring', 'sygeforsikring', 'sundhedsordning', 'privathospital'] # Health insurance
 - ['pension', 'pensionsordning', 'arbejdsmarkedspension', 'pensionsbidrag', 'pensionsaftale'] # Retirement contributions
 - ['kantineordning', 'frokostordning', 'personalekøb'] # Food / service subsidies & discounts
@@ -43,6 +42,3 @@ anchors:
 - [maskinoperatør, produktion, vedligehold, skiftehold]
 - [økonom, budget, controlling, afstemning]
 - [jurist, kontrakt, lovgivning, compliance]
-
-name: flex3
-anchor_strength: 9

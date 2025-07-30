@@ -3,6 +3,7 @@ from pathlib import Path
 
 import polars as pl
 import scipy.sparse as ss
+import numpy as np
 import yaml
 
 from job_post_nlp.evaluate import load_model
@@ -152,6 +153,35 @@ def print_random(data: dict, n: int = 5) -> None:
 
     for ident in random_ids:
         print(f"\nVacancy ID: {ident}")
+        print_words_and_text(ident, data)
+
+def print_doc_containing_word(word: str, data: dict,docs=5) -> None:
+    """
+    Print documents containing a specific word.
+    Args:
+        word (str): The word to search for in the documents.
+        data (dict): Dictionary containing 'tdm', 'tdm_info', and 'texts'.
+        docs (int): Number of documents to print that contain the word.
+    """
+    tdm = data["tdm"]
+    tdm_info = data["tdm_info"]
+
+    if word not in tdm_info["vocab"]:
+        print(f"Word '{word}' not found in vocabulary.")
+        return
+
+    idx = tdm_info["vocab"].index(word)
+    doc_indices =tdm[:, idx].nonzero()[0]
+
+    if len(doc_indices) == 0:
+        print(f"No documents found containing the word '{word}'.")
+        return
+
+    np.random.shuffle( doc_indices)  # Shuffle the indices to get random documents
+    print(f"Documents containing the word '{word}':")
+    for i, doc_idx in enumerate(doc_indices[:docs]):
+        ident = tdm_info["ids"][doc_idx]
+        print(f"\nDocument {i + 1} (ID: {ident}):")
         print_words_and_text(ident, data)
 
 

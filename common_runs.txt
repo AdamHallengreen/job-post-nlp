@@ -5,6 +5,9 @@ conda activate jobpostnlp
 # common runs to do (so we don't have to keep writting them, could also write a .bat):
 
 
+dvc exp run --queue -S "prepare/preprocessing=lgmodel,simple" -S "prepare/settings=large_star" -S "prepare/star=star" -S "train/corex=flex3_specific" -S "train.corex.n_topics=20"
+
+
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=sockin,anchors,worklife"
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=sockin"
@@ -13,7 +16,7 @@ dvc exp run --queue -S "prepare/settings=small" -S "prepare/star=star" -S "train
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific" -S "train.corex.n_topics=5,10,15,20,30,50,100"
 
-dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific,flex3_plus,foreslag,brancher" -S "train.corex.n_topics=20,25,30,40,50"
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific,flex3_plus,foreslag,brancher" -S "train.corex.n_topics=30,40,50"
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=plain" -S "train.corex.n_topics=50"
 
@@ -22,18 +25,22 @@ dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "t
 
 
 
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3_specific" -S "train.corex.n_topics=5"
 
-dvc exp run --queue -S "prepare/preprocessing=lgmodel,simple" -S "prepare/settings=large_star" -S "prepare/star=star" -S "train/corex=flex3_specific" -S "train.corex.n_topics=20"
 
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific,flex3_plus,foreslag,brancher,escudero_brancher,escudero" -S "train.corex.n_topics=30,40,50"
 
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex1,flex2,flex3" -S "train.corex.anchor_strength=2,4,6,9,12" -S "train.corex.n_topics=50"
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex1" -S "train.corex.anchor_strength=2,4,6,9,12" -S "train.corex.n_topics=50"
+
+dvc exp run --queue -S "prepare/tdm=n3_binary_keepall" -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=plain" -S "train.corex.n_topics=3"
 
 
 dvc queue start -j7
 
 
-dvc queue logs <name>
 
-dvc queue logs b2239c3 --follow
+dvc queue logs 0845550 --follow
 
 dvc queue stop --kill
 
