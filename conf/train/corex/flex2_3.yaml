@@ -1,0 +1,82 @@
+n_topics: 50
+anchors:
+# Family friendliness
+- [fleksibel,fleksibilitet,fleksibel arbejdstid,fleksibel arbejdstid,flekstid,flekstidsordning,flextid,flextidsordning,fixtid,fikstid,'tilbyde fleksibel','tilbyde fleksibel arbejdstid','fleksibel planlægning','fleksibel skema','fleksibel arbejdstid',]
+## WFH
+- [hjemmearbejde,hjemmearbejdsdag,hjemmefra,hjemmekontor,arbejde hjemme,arbejde hjemmefra]
+
+- ['fleksibel forhold',fleksibel forhold arbejdstid] # du er fleksibel i forhold til f.eks. deadlines (employer flexiblity)
+
+- ['fleksibel ansvarsbevidst','ansvarsbevidst','omstillingsparat','fleksibel positiv','fleksibel stabil','serviceminded fleksibel','omstillingsparat fleksibel'] # person description
+
+
+# Inflexbility
+# fast vagtplan doesnt appear often enough 
+
+
+# flexbil for the firm
+- [vagtskema,vagtplan,spidsbelastning]
+- [natarbejde,weekend,weekendarbejde,helligdage,nattevagt,nattevagte,nattevagterne,aften]
+
+# - [vagtplan] # Often appears in leadership positions (making the vagtplan) and sometimes as "stor inflydelse på vagtplanen"
+
+# dynamic work place 
+- [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram]
+- [faglig, faglighed, sparring]
+
+# Topic catchers:
+- [ansøgning,ringe,ansøgning mail,ansøgning,sende,cv,sende ansøgning,ansøgning cv,send,send ansøgning,ansøgning sende,modtage ansøgning]
+- [snarest muligt, mulig,hurtigst,hurtigst muligt,løbende]
+- [køn, etnisk, religion, religion etnisk, uanset alder, alder køn, etnisk tilhørsforhold, tilhørsforhold]
+- [mandag,tirsdag,onsdag,torsdag,fredag,lørdag,søndag]
+- [finansministeri, overenskomst, 'overenskomst finansministeri', gældende]
+- [omfatte særlig vilkår,mangfoldig arbejdsplads,gerne afspejle omkringligge,afspejle omkringligge samfund]
+#- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel. 
+
+# Amenities:
+
+- [orlov, ferie, feriefridage, sygeorlov, barselsorlov] # Paid time-off
+- [bonus, provision, incitamenter, præstationsløn, salgsbonus, mål, produktivitet] # Bonuses & commissions
+- [sundhedsforsikring, helbredsforsikring, sygeforsikring, sundhedsordning, privathospital] # Health insurance
+- [pension, pensionsordning, arbejdsmarkedspension, pensionsbidrag, pensionsaftale] # Retirement contributions
+- [kantine,kantineordning, frokostordning, personalekøb] # Food / service subsidies & discounts
+- [fitnessrum, kaffebar, ergonomisk, kontorfaciliteter] # Office space & amenities
+- [bærbar, mobiltelefon, dataabonnement, værktøj, værnemidler,] # Work-equipment & allowances
+- [sikkerhed, værnemidler, fare,compliance, sikkerhedstræning] # Workplace safety
+- [fastansættelse, fuldtid, stabilitet, langtidskontrakt, jobsikkerhed, anciennitet, tidsubegrænset] # Job security
+- [tidsbegrænset, projektansættelse, midlertidig,midlertidigansættelse,prøvetidsansættelse,vikariat, kontraktansættelse, praktik] # Temporary employment
+- [kultur, værdier, inklusion, diversitet, bæredygtighed, samfundsindsats] # Work environment & social impact
+- [tungt, fysisk,fysiskarbejde,manuelt, anstrengende] # Physical effort & pace
+- [teamarbejde, team, samarbejde, kolleger, tværfaglig, hold] # Working in teams
+- [uddannelse, læring, udvikling, karrierevækst, opkvalificering, mentoring, kurser,] # Human-capital development
+
+# Brancher
+- [sundhed, pleje, sygehus, klinik]
+- [byggeri, håndværker, tømrer, murer]
+- [detailhandel, butik, ekspedient, kasse]
+- [logistik, lager, chauffør, truck]
+- [it, softwareudvikler, programmering, udvikler]
+- [finans, regnskab, bogholder, controller]
+- [produktion, fabrik, montage, operatør]
+- [uddannelse, lærer, undervisning, pædagog]
+- [restaurant, køkken, gæst, servering]
+- [offentlig, kommune, rådhus, forvaltning, myndighed,fuldmægtig, ministerium, departement, styrelse]
+- [kirke, sogn, menighedsråd]
+- [militær , forsvar, soldat, officer,forsvarsministeri]
+
+# Jobfunktioner/stillinger
+- [projektleder, projektstyring, planlægning, koordinere]
+- [konsulent, rådgiver, analyse, implementering]
+- [sosuassistent, social sundhedsassistent, pleje, borgerkontakt]
+- [sygeplejerske, patient, klinisk, journal]
+- [ingeniør, konstruktion, design, beregning]
+- [elektriker, installation, fejlfinding, serviceopgaver]
+- [kundeservicemedarbejder, support, telefon, kundehenvendelser]
+- [maskinoperatør, produktion, vedligehold, skiftehold]
+- [økonom, budget, controlling, afstemning]
+- [jurist, kontrakt, lovgivning, compliance]
+- [pædagog, børnehave, skole, undervisning ]
+- [handicaphjælper,hjælper]
+
+name: flex2_3
+anchor_strength: 6

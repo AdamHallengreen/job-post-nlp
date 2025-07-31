@@ -1,9 +1,9 @@
 import random
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import scipy.sparse as ss
-import numpy as np
 import yaml
 
 from job_post_nlp.evaluate import load_model
@@ -178,7 +178,7 @@ def print_doc_containing_word(word: str, data: dict,docs=5) -> None:
         return
 
     np.random.shuffle( doc_indices)  # Shuffle the indices to get random documents
-    print(f"Documents containing the word '{word}':")
+    print(f"{len(doc_indices)} documents contains the word '{word}':")
     for i, doc_idx in enumerate(doc_indices[:docs]):
         ident = tdm_info["ids"][doc_idx]
         print(f"\nDocument {i + 1} (ID: {ident}):")
@@ -215,7 +215,7 @@ def check_anchors(anchors, data):
             print(f"'{word}' occurs {count} times in the TDM.")
 
 
-def find_similar_words(word, data):
+def find_similar_words(word : str, data : dict,max_words : int= 250):
     """
     Find words similar to a given word based on the TDM.
     For now it just checks if the word is contained in other words in the vocabulary.
@@ -239,6 +239,41 @@ def find_similar_words(word, data):
         if word in vocab_word:
             similar_words.append((vocab_word, counts[idx].item()))
     similar_words.sort(key=lambda x: x[1], reverse=True)
+    if len(similar_words) > max_words:
+        print(f"Found {len(similar_words)} similar words, showing top {max_words}.")
+        similar_words = similar_words[:max_words]
+
     print(f"Similar words to '{word}':")
     for similar_word, count in similar_words:
         print(f"'{similar_word}' occurs {count} times in the TDM.")
+
+
+
+def gram_statistics(data,ngrams=3,min_occurrences = (2, 3, 4, 5),min_doc_occurrences = (0.0005, 0.001, 0.005, 0.01)):
+    '''
+    Make statistics about the ngrams in the tdm_info.
+    for each ngram how how many tokens there are with a least 1,2,3,4,5 occurrences.
+    Also show how many there that occur in at least 0.05%, 0.1%, 0.5% and 1% of the documents.
+    '''
+    tdm_info = data["tdm_info"]
+    tdm = data["tdm"]
+    vocab = tdm_info["vocab"]
+    counts = tdm.sum(axis=0).A1  # Get sum of each column
+    total_docs = tdm.shape[0]
+    total_tokens = tdm.shape[1]
+
+    print(f"Total documents: {total_docs}, Total tokens: {total_tokens}")
+    n_gram_id = np.array([len(word.split()) for word in vocab])
+    vocab = np.array(vocab)
+    for n in range(1, ngrams + 1):
+        print(f"\nStatistics for {n}-grams:")
+        id_vec = np.where(n_gram_id == n)
+        ngram_vocab = vocab[id_vec]
+        ngram_counts = counts[id_vec]
+
+        print(f"Total unique {n}-grams: {len(ngram_vocab)}")
+        for occ in min_occurrences:
+            print(f"Total unique ngrams with at least {occ} occurrences: {np.sum(ngram_counts >= occ)}")
+        for doc_occ in min_doc_occurrences:
+            min_docs = int(total_docs * doc_occ)
+            print(f"Total unique ngrams with at least {min_docs} documents ({doc_occ*100}%): {np.sum(ngram_counts >= min_docs)}")
