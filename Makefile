@@ -11,7 +11,7 @@ check: ## Run code quality tools.
 	@echo "🚀 Linting code: Running pre-commit"
 	@uv run pre-commit run -a
 	@echo "🚀 Checking for obsolete dependencies: Running deptry"
-	@uv run deptry src --per-rule-ignores "DEP002=dvc|da-core-news-sm|polars-lts-cpu|hydra-core"
+	@uv run deptry src --per-rule-ignores "DEP002=dvc|da-core-news-sm|da_core_news_lg|polars-lts-cpu|hydra-core"
 
 .PHONY: test
 test: ## Test the code with pytest
