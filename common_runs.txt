@@ -16,12 +16,11 @@ dvc exp run --queue -S "prepare/settings=small" -S "prepare/star=star" -S "train
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific" -S "train.corex.n_topics=5,10,15,20,30,50,100"
 
-dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific,flex3_plus,foreslag,brancher" -S "train.corex.n_topics=30,40,50"
-
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=plain" -S "train.corex.n_topics=50"
 
 
-dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3_specific" -S "train.corex.n_topics=15"
+dvc exp run --queue -S "prepare/tdm=n3_binary_keepall" -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=plain" -S "train.corex.n_topics=3"
+
 
 
 
@@ -30,17 +29,12 @@ dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "t
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific,flex3_plus,foreslag,brancher,escudero_brancher,escudero" -S "train.corex.n_topics=30,40,50"
 
-dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex1,flex2,flex3"
-
-
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex1" -S "train.corex.anchor_strength=2,4,6,9,12" -S "train.corex.n_topics=50"
 
-dvc exp run --queue -S "prepare/tdm=n3_binary_keepall" -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=plain" -S "train.corex.n_topics=3"
+dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex1_2,flex2_2,flex3_2"
 
 
 dvc queue start -j7
-
-
 
 dvc queue logs 0845550 --follow
 

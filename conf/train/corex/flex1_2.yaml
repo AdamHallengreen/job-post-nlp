@@ -2,10 +2,9 @@ n_topics: 50
 anchors:
 # Family friendliness
 - [fleksibel,fleksibilitet,fleksibel arbejdstid,fleksibel arbejdstid,flekstid,flekstidsordning,flextid,flextidsordning,fixtid,fikstid]
-- [familievenlig,familievenlige,familieliv]
-
+- [balance, familie,familieliv]
 ## WFH
-- [hjemmearbejde,hjemmearbejdsplads,hjemmearbejdsdag,hjemmefra]
+- [hjemmearbejde,hjemmearbejdsdag,hjemmefra,hjemmekontor]
 
 # Inflexbility
 # fast vagtplan doesnt appear often enough 
@@ -22,11 +21,13 @@ anchors:
 - [faglig, faglighed, sparring]
 
 # Topic catchers:
-- [stillingen,samtaler, snarest muligt, mulig,ansøgning,ringe,ansøgning mail,ansøgning,sende,cv,sende ansøgning,ansøgning cv,send,send ansøgning,ansøgning sende,modtage ansøgning]
+- [ansøgning,ringe,ansøgning mail,ansøgning,sende,cv,sende ansøgning,ansøgning cv,send,send ansøgning,ansøgning sende,modtage ansøgning]
+- [snarest muligt, mulig,hurtigst,hurtigst muligt,løbende]
 - [køn, etnisk, religion, religion etnisk, uanset alder, alder køn, etnisk tilhørsforhold, tilhørsforhold]
 - [mandag,tirsdag,onsdag,torsdag,fredag,lørdag,søndag]
 - [finansministeri, overenskomst, 'overenskomst finansministeri', gældende]
-- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel. 
+
+#- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel. 
 
 # Amenities:
 
@@ -54,7 +55,7 @@ anchors:
 - [finans, regnskab, bogholder, controller]
 - [produktion, fabrik, montage, operatør]
 - [uddannelse, lærer, undervisning, pædagog]
-- [hospitality, restaurant, kok, tjener]
+- [restaurant, køkken, gæst, servering]
 - [offentlig, kommune, rådhus, forvaltning, myndighed,fuldmægtig, ministerium, departement, styrelse]
 - [kirke, sogn, menighedsråd]
 - [militær , forsvar, soldat, officer,forsvarsministeri]
@@ -71,6 +72,7 @@ anchors:
 - [økonom, budget, controlling, afstemning]
 - [jurist, kontrakt, lovgivning, compliance]
 - [pædagog, børnehave, skole, undervisning ]
+- [handicaphjælper,hjælper]
 
 name: flex1_2
 anchor_strength: 6
