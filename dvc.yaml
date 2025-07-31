@@ -10,7 +10,6 @@ stages:
     - data/corpus_split
     - data/tdm.npz
     - data/tdm_info.json
-    - corpus.spacy
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
