@@ -11,10 +11,10 @@ prepare:
     - lemmatizer
     keep_negations: true
   star:
-    usestar: 1
+    usestar: 2
   tdm:
     tdm_cell: binary
-    ngram_n: 3
+    ngram_n: 1
     min_df:
     - 3
     - 1000
