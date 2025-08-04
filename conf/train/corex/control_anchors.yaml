@@ -1,7 +1,7 @@
 n_topics: 30
 anchors:
 
-# dynamic work place 
+# dynamic work place
 - [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram]
 - [faglig, faglighed, sparring]
 
@@ -11,11 +11,11 @@ anchors:
 - [opfordre,personlig baggrund,køn, etnisk, religion, religion etnisk, uanset alder, alder køn, etnisk tilhørsforhold, tilhørsforhold]
 - [mandag,tirsdag,onsdag,torsdag,fredag,lørdag,søndag]
 - [finansministeri, overenskomst, 'overenskomst finansministeri', gældende]
-# person description 
+# person description
 - ['fleksibel ansvarsbevidst','ansvarsbevidst','omstillingsparat','fleksibel positiv','fleksibel stabil','serviceminded fleksibel','omstillingsparat fleksibel',stsabil fleksibel]
 
 
-#- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel. 
+#- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel.
 
 # Amenities:
 

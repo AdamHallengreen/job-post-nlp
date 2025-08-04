@@ -11,7 +11,7 @@ anchors:
 
 
 # Inflexbility
-# fast vagtplan doesnt appear often enough 
+# fast vagtplan doesnt appear often enough
 
 
 # flexbil for the firm
@@ -20,7 +20,7 @@ anchors:
 
 # - [vagtplan] # Often appears in leadership positions (making the vagtplan) and sometimes as "stor inflydelse på vagtplanen"
 
-# dynamic work place 
+# dynamic work place
 - [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram]
 - [faglig, faglighed, sparring]
 
@@ -31,7 +31,7 @@ anchors:
 - [mandag,tirsdag,onsdag,torsdag,fredag,lørdag,søndag]
 - [finansministeri, overenskomst, 'overenskomst finansministeri', gældende]
 - [omfatte særlig vilkår,mangfoldig arbejdsplads,gerne afspejle omkringligge,afspejle omkringligge samfund]
-#- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel. 
+#- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel.
 
 # Amenities:
 

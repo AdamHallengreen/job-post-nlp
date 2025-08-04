@@ -7,7 +7,7 @@ anchors:
 - [hjemmearbejde,hjemmearbejdsplads,hjemmearbejdsdag,hjemmefra]
 
 # Inflexbility
-# fast vagtplan doesnt appear often enough 
+# fast vagtplan doesnt appear often enough
 
 # flexbil for the firm
 - [vagtskema,vagtplan]
@@ -15,7 +15,7 @@ anchors:
 
 # - [vagtplan] # Often appears in leadership positions (making the vagtplan) and sometimes as "stor inflydelse på vagtplanen"
 
-# dynamic work place 
+# dynamic work place
 - [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram, faglig, faglighed, sparring]
 
 # Topic catchers:
