@@ -589,6 +589,14 @@ wheels = [
 ]
 
 [[package]]
+name = "da-core-news-lg"
+version = "3.8.0"
+source = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_lg-3.8.0/da_core_news_lg-3.8.0-py3-none-any.whl" }
+wheels = [
+    { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_lg-3.8.0/da_core_news_lg-3.8.0-py3-none-any.whl", hash = "sha256:a3a7184f775c6b5da6fcfebad4fe6819c588b8a405936d023c56f554a5811ec7" },
+]
+
+[[package]]
 name = "da-core-news-sm"
 version = "3.8.0"
 source = { url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl" }
@@ -1272,6 +1280,7 @@ version = "0.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "corextopic" },
+    { name = "da-core-news-lg" },
     { name = "da-core-news-sm" },
     { name = "dvc" },
     { name = "dvclive" },
@@ -1309,6 +1318,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "corextopic", specifier = ">=1.1" },
+    { name = "da-core-news-lg", url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_lg-3.8.0/da_core_news_lg-3.8.0-py3-none-any.whl" },
     { name = "da-core-news-sm", url = "https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl" },
     { name = "dvc", specifier = ">=3.59.1" },
     { name = "dvclive", specifier = ">=3.48.2" },
