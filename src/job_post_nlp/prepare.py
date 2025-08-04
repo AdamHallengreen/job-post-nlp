@@ -58,7 +58,7 @@ def load_data(file_path: Path, par: DictConfig) -> pl.DataFrame:
         UnsupportedFileTypeError: If the file is not an Excel file.
     """
     # Check if using STAR data
-    if par.star.usestar>0:
+    if par.star.usestar > 0:
         return load_star_data(par.star.usestar)
 
     # check if the file exists
@@ -82,22 +82,21 @@ def load_star_data(usestar) -> pl.DataFrame:
     folder_path = Path(f"/home/{username}@PROD.SITAD.DK/code/jobads/src/dgp/textdata/output")
 
     if usestar == 1:
-        dataname = 'jobads_clean.parquet'
-        id_var = 'ann_id'
-        text_var = 'annonce_tekst'
+        dataname = "jobads_clean.parquet"
+        id_var = "ann_id"
+        text_var = "annonce_tekst"
     elif usestar == 2:
-        dataname = 'jobads_sections_clean.parquet'
-        id_var = 'section_id'
-        text_var = 'section_text'
-
+        dataname = "jobads_sections_clean.parquet"
+        id_var = "section_id"
+        text_var = "section_text"
 
     df = (
-            pl.read_parquet(folder_path /dataname)
-            .select(pl.col(id_var).alias("id"), pl.col(text_var).alias("text"))
-            .filter(
-                pl.col("text").is_not_null()  # a few obs have missing text but non-missing heading and rubrik
-            )
+        pl.read_parquet(folder_path / dataname)
+        .select(pl.col(id_var).alias("id"), pl.col(text_var).alias("text"))
+        .filter(
+            pl.col("text").is_not_null()  # a few obs have missing text but non-missing heading and rubrik
         )
+    )
     return df
 
 
