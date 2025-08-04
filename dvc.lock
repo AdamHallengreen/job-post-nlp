@@ -9,16 +9,16 @@ stages:
       size: 13307578
     - path: src/job_post_nlp/prepare.py
       hash: md5
-      md5: 9ad6c2124ab1d7f4b1b5b179c50005e4
-      size: 12044
+      md5: 309ce2f9fe1a3541f4b324f8dbdccd96
+      size: 15317
     params:
       params.yaml:
         prepare:
           settings:
-            nobs: 1000
-            batch_size: 50
-            threads: 4
-            star: 0
+            nobs: -1
+            batch_size: 100
+            threads: 8
+            chunk_size: 10000
           preprocessing:
             model: da_core_news_lg
             pipeline:
@@ -31,31 +31,40 @@ stages:
             tdm_cell: binary
             ngram_n: 2
             min_df:
-            - 1
+            - 2
             - 0.01
             - 0.01
             - 0.01
             - 0.01
     outs:
-    - path: data/corpus.spacy
+    - path: data/corpus_split
       hash: md5
-      md5: 75dc080ae2a09dcf234088c575f63916
-      size: 2472332
-    - path: data/tdm.parquet
+      md5: 1255096471bc0e7ccd8f8fee91287046.dir
+      size: 6717031808
+      nfiles: 188
+    - path: data/tdm.npz
       hash: md5
-      md5: 98c015113e5d070a3566fc9d492839e5
-      size: 6466906
+      md5: 71e5acce4dea8ab2795c4f1ac9d1514a
+      size: 500933236
+    - path: data/tdm_info.json
+      hash: md5
+      md5: 1f42099fc63f62342056d31c02e6bade
+      size: 31090524
   train:
     cmd: python src/job_post_nlp/train.py
     deps:
-    - path: data/tdm.parquet
+    - path: data/tdm.npz
       hash: md5
-      md5: 98c015113e5d070a3566fc9d492839e5
-      size: 6466906
+      md5: 71e5acce4dea8ab2795c4f1ac9d1514a
+      size: 500933236
+    - path: data/tdm_info.json
+      hash: md5
+      md5: 1f42099fc63f62342056d31c02e6bade
+      size: 31090524
     - path: src/job_post_nlp/train.py
       hash: md5
-      md5: 8685914c30f6db161c16fa6faa1d8a1e
-      size: 3194
+      md5: 0bd1593eb01001eaa8bf8963ecd4121f
+      size: 5066
     params:
       params.yaml:
         train:
@@ -66,20 +75,219 @@ stages:
           corex:
             n_topics: 50
             anchors:
-            anchor_strength:
+            - - fleksibel
+              - fleksibilitet
+              - fleksibel arbejdstid
+              - fleksibel arbejdstid
+              - flekstid
+              - flekstidsordning
+              - flextid
+              - flextidsordning
+            - - familievenlig
+              - familievenlige
+              - familieliv
+            - - fixtid
+              - fikstid
+            - - vagtskema
+              - vagtplan
+              - vagter
+              - vagtordning
+            - - weekend
+              - helligdage
+              - overtid
+              - helligdagsvagt
+              - weekendarbejde
+              - natarbejde
+              - nattevagt
+              - nattevagte
+              - standby
+              - overtidsbetaling
+            - - hjemmearbejde
+              - hjemmearbejdsplads
+              - hjemmearbejdsdag
+              - hjemmefra
+            - - ambitiøs
+              - ambition
+              - udvikling
+              - karriere
+              - udviklingsmuligheder
+              - udviklingsplaner
+              - udviklingsforløb
+              - udviklingsprogrammer
+            - - orlov
+              - ferie
+              - feriefridage
+              - sygeorlov
+              - barselsorlov
+            - - bonus
+              - provision
+              - incitamenter
+              - præstationsløn
+              - salgsbonus
+              - mål
+              - produktivitet
+            - - sundhedsforsikring
+              - helbredsforsikring
+              - sygeforsikring
+              - sundhedsordning
+              - privathospital
+            - - pension
+              - pensionsordning
+              - arbejdsmarkedspension
+              - pensionsbidrag
+              - pensionsaftale
+            - - kantineordning
+              - frokostordning
+              - personalekøb
+            - - kantine
+              - fitnessrum
+              - kaffebar
+              - ergonomisk
+              - kontorfaciliteter
+            - - bærbar
+              - mobiltelefon
+              - dataabonnement
+              - værktøj
+              - værnemidler
+            - - sikkerhed
+              - værnemidler
+              - fare
+              - compliance
+              - sikkerhedstræning
+            - - fastansættelse
+              - fuldtid
+              - stabilitet
+              - langtidskontrakt
+              - jobsikkerhed
+              - anciennitet
+              - tidsubegrænset
+            - - tidsbegrænset
+              - projektansættelse
+              - midlertidig
+              - midlertidigansættelse
+              - prøvetidsansættelse
+              - vikariat
+              - kontraktansættelse
+              - praktik
+            - - kultur
+              - værdier
+              - inklusion
+              - diversitet
+              - bæredygtighed
+              - samfundsindsats
+            - - tungt
+              - fysisk
+              - fysiskarbejde
+              - manuelt
+              - anstrengende
+            - - teamarbejde
+              - team
+              - samarbejde
+              - kolleger
+              - tværfaglig
+              - hold
+            - - uddannelse
+              - læring
+              - udvikling
+              - karrierevækst
+              - opkvalificering
+              - mentoring
+              - kurser
+            - - sundhed
+              - pleje
+              - sygehus
+              - klinik
+            - - byggeri
+              - håndværker
+              - tømrer
+              - murer
+            - - detailhandel
+              - butik
+              - ekspedient
+              - kasse
+            - - logistik
+              - lager
+              - chauffør
+              - truck
+            - - it
+              - softwareudvikler
+              - programmering
+              - udvikler
+            - - finans
+              - regnskab
+              - bogholder
+              - controller
+            - - produktion
+              - fabrik
+              - montage
+              - operatør
+            - - uddannelse
+              - lærer
+              - undervisning
+              - pædagog
+            - - hospitality
+              - restaurant
+              - kok
+              - tjener
+            - - offentlig
+              - kommune
+              - forvaltning
+              - myndighed
+            - - projektleder
+              - projektstyring
+              - planlægning
+              - koordinere
+            - - konsulent
+              - rådgiver
+              - analyse
+              - implementering
+            - - sosuassistent
+              - social sundhedsassistent
+              - pleje
+              - borgerkontakt
+            - - sygeplejerske
+              - patient
+              - klinisk
+              - journal
+            - - ingeniør
+              - konstruktion
+              - design
+              - beregning
+            - - elektriker
+              - installation
+              - fejlfinding
+              - serviceopgaver
+            - - kundeservicemedarbejder
+              - support
+              - telefon
+              - kundehenvendelser
+            - - maskinoperatør
+              - produktion
+              - vedligehold
+              - skiftehold
+            - - økonom
+              - budget
+              - controlling
+              - afstemning
+            - - jurist
+              - kontrakt
+              - lovgivning
+              - compliance
+            name: flex1
+            anchor_strength: 12
     outs:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 69a091f26ce7d2d29487a26e178d5987
-      size: 38253546
+      md5: 35aa34c46994fef9b54ae8d88a193d5c
+      size: 3702573205
   evaluate:
     cmd: python src/job_post_nlp/evaluate.py
     deps:
     - path: models/corex_model.pkl
       hash: md5
-      md5: 69a091f26ce7d2d29487a26e178d5987
-      size: 38253546
+      md5: 35aa34c46994fef9b54ae8d88a193d5c
+      size: 3702573205
     - path: src/job_post_nlp/evaluate.py
       hash: md5
-      md5: 7b62ebcb0e1a2a57d4c60d110b0e932b
-      size: 6119
+      md5: 395ab4d760fc64591244cf94c8dd1a24
+      size: 7012

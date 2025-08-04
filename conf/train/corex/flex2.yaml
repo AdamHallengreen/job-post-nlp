@@ -10,19 +10,21 @@ anchors:
 # fast vagtplan doesnt appear often enough
 
 # flexbil for the firm
-- [vagtskema,vagtplan]
-- [natarbejde,weekend,weekendarbejde,helligdage,nattevagt,nattevagte,nattevagterne,aften,spidsbelastning]
+- [vagtskema,vagtplan,spidsbelastning]
+- [natarbejde,weekend,weekendarbejde,helligdage,nattevagt,nattevagte,nattevagterne,aften]
 
 # - [vagtplan] # Often appears in leadership positions (making the vagtplan) and sometimes as "stor inflydelse på vagtplanen"
 
 # dynamic work place
-- [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram, faglig, faglighed, sparring]
+- [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram]
+- [faglig, faglighed, sparring]
 
 # Topic catchers:
 - [stillingen,samtaler, snarest muligt, mulig,ansøgning,ringe,ansøgning mail,ansøgning,sende,cv,sende ansøgning,ansøgning cv,send,send ansøgning,ansøgning sende,modtage ansøgning]
 - [køn, etnisk, religion, religion etnisk, uanset alder, alder køn, etnisk tilhørsforhold, tilhørsforhold]
 - [mandag,tirsdag,onsdag,torsdag,fredag,lørdag,søndag]
 - [finansministeri, overenskomst, 'overenskomst finansministeri', gældende]
+- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel.
 
 # Amenities:
 
@@ -68,5 +70,5 @@ anchors:
 - [jurist, kontrakt, lovgivning, compliance]
 - [pædagog, børnehave, skole, undervisning ]
 
-name: flex3
+name: flex2
 anchor_strength: 6

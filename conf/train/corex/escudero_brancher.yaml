@@ -19,3 +19,26 @@ anchors:
 - ['tungt', 'fysisk','fysiskarbejde','manuelt', 'anstrengende'] # Physical effort & pace
 - ['teamarbejde', 'team', 'samarbejde', 'kolleger', 'tværfaglig', 'hold'] # Working in teams
 - ['uddannelse', 'læring', 'udvikling', 'karrierevækst', 'opkvalificering', 'mentoring', 'kurser',] # Human-capital development
+
+# Brancher
+- [sundhed, pleje, sygehus, klinik]
+- [byggeri, håndværker, tømrer, murer]
+- [detailhandel, butik, ekspedient, kasse]
+- [logistik, lager, chauffør, truck]
+- [it, softwareudvikler, programmering, udvikler]
+- [finans, regnskab, bogholder, controller]
+- [produktion, fabrik, montage, operatør]
+- [uddannelse, lærer, undervisning, pædagog]
+- [hospitality, restaurant, kok, tjener]
+- [offentlig, kommune, forvaltning, myndighed]
+# Jobfunktioner/stillinger
+- [projektleder, projektstyring, planlægning, koordinere]
+- [konsulent, rådgiver, analyse, implementering]
+- [sosuassistent, social sundhedsassistent, pleje, borgerkontakt]
+- [sygeplejerske, patient, klinisk, journal]
+- [ingeniør, konstruktion, design, beregning]
+- [elektriker, installation, fejlfinding, serviceopgaver]
+- [kundeservicemedarbejder, support, telefon, kundehenvendelser]
+- [maskinoperatør, produktion, vedligehold, skiftehold]
+- [økonom, budget, controlling, afstemning]
+- [jurist, kontrakt, lovgivning, compliance]

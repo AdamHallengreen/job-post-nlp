@@ -1,7 +1,7 @@
-n_topics: 50
 anchors:
 # Family friendliness
-- [fleksibel,fleksibilitet,fleksibel arbejdstid,fleksibel arbejdstid,flekstid,flekstidsordning,flextid,flextidsordning,fixtid,fikstid,familievenlig,familievenlige,familieliv]
+- [fleksibel,fleksibilitet,fleksibel arbejdstid,fleksibel arbejdstid,flekstid,flekstidsordning,flextid,flextidsordning,fixtid,fikstid]
+- [familievenlig,familievenlige,familieliv]
 
 ## WFH
 - [hjemmearbejde,hjemmearbejdsplads,hjemmearbejdsdag,hjemmefra]
@@ -9,21 +9,24 @@ anchors:
 # Inflexbility
 # fast vagtplan doesnt appear often enough
 
-# flexbil for the firm
-- [vagtskema,vagtplan]
-- [natarbejde,weekend,weekendarbejde,helligdage,nattevagt,nattevagte,nattevagterne,aften,spidsbelastning]
 
-# - [vagtplan] # Often appears in leadership positions (making the vagtplan) and sometimes as "stor inflydelse på vagtplanen"
+# flexbil for the firm
+- [vagtskema,vagtplan,spidsbelastning]
+- [natarbejde,weekend,weekendarbejde,helligdage,nattevagt,nattevagte,nattevagterne,aften]
+
+- [vagtplan] # Often appears in leadership positions (making the vagtplan) and sometimes as "stor inflydelse på vagtplanen"
 
 # dynamic work place
-- [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram, faglig, faglighed, sparring]
+- [ambitiøs,ambition,udvikling,karriere,udviklingsmuligheder,udviklingsplaner,udviklingsforløb,udviklingsprogram]
+- [faglig, faglighed, sparring]
 
 # Topic catchers:
 - [stillingen,samtaler, snarest muligt, mulig,ansøgning,ringe,ansøgning mail,ansøgning,sende,cv,sende ansøgning,ansøgning cv,send,send ansøgning,ansøgning sende,modtage ansøgning]
 - [køn, etnisk, religion, religion etnisk, uanset alder, alder køn, etnisk tilhørsforhold, tilhørsforhold]
 - [mandag,tirsdag,onsdag,torsdag,fredag,lørdag,søndag]
 - [finansministeri, overenskomst, 'overenskomst finansministeri', gældende]
-
+#- [rengøringsvogn] # this seems to come from a repeated posting that also includes fleksibel.
+-  [omfatte særlig vilkår,mangfoldig arbejdsplads,gerne afspejle omkringligge,afspejle omkringligge samfund]
 # Amenities:
 
 - [orlov, ferie, feriefridage, sygeorlov, barselsorlov] # Paid time-off
@@ -66,7 +69,4 @@ anchors:
 - [maskinoperatør, produktion, vedligehold, skiftehold]
 - [økonom, budget, controlling, afstemning]
 - [jurist, kontrakt, lovgivning, compliance]
-- [pædagog, børnehave, skole, undervisning ]
-
-name: flex3
-anchor_strength: 6
+- [pædagog, børnehave skole, undervisning ]

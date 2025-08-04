@@ -58,8 +58,8 @@ def load_data(file_path: Path, par: DictConfig) -> pl.DataFrame:
         UnsupportedFileTypeError: If the file is not an Excel file.
     """
     # Check if using STAR data
-    if par.star.usestar:
-        return load_star_data()
+    if par.star.usestar > 0:
+        return load_star_data(par.star.usestar)
 
     # check if the file exists
     if not file_path.exists():
@@ -72,16 +72,27 @@ def load_data(file_path: Path, par: DictConfig) -> pl.DataFrame:
     return df
 
 
-def load_star_data() -> pl.DataFrame:
+def load_star_data(usestar) -> pl.DataFrame:
     """
     Loads the jobpost data from star data on the server
     """
     # get username
     username = os.popen("whoami").read().strip()  # noqa: S607 S605
 
+    folder_path = Path(f"/home/{username}@PROD.SITAD.DK/code/jobads/src/dgp/textdata/output")
+
+    if usestar == 1:
+        dataname = "jobads_clean.parquet"
+        id_var = "ann_id"
+        text_var = "annonce_tekst"
+    elif usestar == 2:
+        dataname = "jobads_sections_clean.parquet"
+        id_var = "section_id"
+        text_var = "section_text"
+
     df = (
-        pl.read_parquet(f"/home/{username}@PROD.SITAD.DK/code/jobads/src/dgp/textdata/output/jobads_clean.parquet")
-        .select(pl.col("ann_id").alias("id"), pl.col("annonce_tekst").alias("text"))
+        pl.read_parquet(folder_path / dataname)
+        .select(pl.col(id_var).alias("id"), pl.col(text_var).alias("text"))
         .filter(
             pl.col("text").is_not_null()  # a few obs have missing text but non-missing heading and rubrik
         )

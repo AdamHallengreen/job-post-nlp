@@ -1,0 +1,8 @@
+tdm_cell: binary
+ngram_n: 3
+min_df:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1

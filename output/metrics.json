@@ -1,6 +1,6 @@
 {
-    "prepare.py": "0.00 hours",
-    "train.py": "0.03 hours",
+    "prepare.py": "4.26 hours",
+    "train.py": "2.49 hours",
     "step": 0,
-    "Overall TC": 252.10537565114151
+    "Overall TC": 163.36478968602174
 }

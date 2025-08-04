@@ -1,0 +1,13 @@
+n_topics: 6
+anchors:
+# Family friendliness
+- [fleksibel,fleksibilitet,fleksibel arbejdstid,fleksibel arbejdstid,flekstid,flekstidsordning,flextid,flextidsordning,fixtid,fikstid,'tilbyde fleksibel','tilbyde fleksibel arbejdstid','fleksibel planlægning','fleksibel skema','fleksibel arbejdstid']
+
+- ['fleksibel forhold',fleksibel forhold arbejdstid] # du er fleksibel i forhold til f.eks. deadlines (employer flexiblity)
+
+- ['fleksibel ansvarsbevidst','fleksibel positiv','fleksibel stabil','serviceminded fleksibel','omstillingsparat fleksibel'] # person description
+
+- [natarbejde,weekend,weekendarbejde,helligdage,nattevagt,nattevagte,nattevagterne,aften]
+
+name: flex_short
+anchor_strength: 6
