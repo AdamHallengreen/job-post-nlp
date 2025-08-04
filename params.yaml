@@ -11,7 +11,7 @@ prepare:
     - lemmatizer
     keep_negations: true
   star:
-    usestar: 2
+    usestar: 0
   tdm:
     tdm_cell: binary
     ngram_n: 1
