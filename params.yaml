@@ -14,13 +14,13 @@ prepare:
     usestar: 1
   tdm:
     tdm_cell: binary
-    ngram_n: 2
+    ngram_n: 3
     min_df:
-    - 2
-    - 0.01
-    - 0.01
-    - 0.01
-    - 0.01
+    - 3
+    - 1000
+    - 1000
+    - 1000
+    - 1000
 train:
   settings:
     verbose: false
@@ -37,29 +37,26 @@ train:
       - flekstidsordning
       - flextid
       - flextidsordning
-    - - familievenlig
-      - familievenlige
-      - familieliv
-    - - fixtid
+      - fixtid
       - fikstid
-    - - vagtskema
-      - vagtplan
-      - vagter
-      - vagtordning
-    - - weekend
-      - helligdage
-      - overtid
-      - helligdagsvagt
-      - weekendarbejde
-      - natarbejde
-      - nattevagt
-      - nattevagte
-      - standby
-      - overtidsbetaling
+    - - balance
+      - familie
+      - familieliv
     - - hjemmearbejde
-      - hjemmearbejdsplads
       - hjemmearbejdsdag
       - hjemmefra
+      - hjemmekontor
+    - - vagtskema
+      - vagtplan
+      - spidsbelastning
+    - - natarbejde
+      - weekend
+      - weekendarbejde
+      - helligdage
+      - nattevagt
+      - nattevagte
+      - nattevagterne
+      - aften
     - - ambitiøs
       - ambition
       - udvikling
@@ -67,7 +64,46 @@ train:
       - udviklingsmuligheder
       - udviklingsplaner
       - udviklingsforløb
-      - udviklingsprogrammer
+      - udviklingsprogram
+    - - faglig
+      - faglighed
+      - sparring
+    - - ansøgning
+      - ringe
+      - ansøgning mail
+      - ansøgning
+      - sende
+      - cv
+      - sende ansøgning
+      - ansøgning cv
+      - send
+      - send ansøgning
+      - ansøgning sende
+      - modtage ansøgning
+    - - snarest muligt
+      - mulig
+      - hurtigst
+      - hurtigst muligt
+      - løbende
+    - - køn
+      - etnisk
+      - religion
+      - religion etnisk
+      - uanset alder
+      - alder køn
+      - etnisk tilhørsforhold
+      - tilhørsforhold
+    - - mandag
+      - tirsdag
+      - onsdag
+      - torsdag
+      - fredag
+      - lørdag
+      - søndag
+    - - finansministeri
+      - overenskomst
+      - overenskomst finansministeri
+      - gældende
     - - orlov
       - ferie
       - feriefridage
@@ -90,11 +126,11 @@ train:
       - arbejdsmarkedspension
       - pensionsbidrag
       - pensionsaftale
-    - - kantineordning
+    - - kantine
+      - kantineordning
       - frokostordning
       - personalekøb
-    - - kantine
-      - fitnessrum
+    - - fitnessrum
       - kaffebar
       - ergonomisk
       - kontorfaciliteter
@@ -179,14 +215,27 @@ train:
       - lærer
       - undervisning
       - pædagog
-    - - hospitality
-      - restaurant
-      - kok
-      - tjener
+    - - restaurant
+      - køkken
+      - gæst
+      - servering
     - - offentlig
       - kommune
+      - rådhus
       - forvaltning
       - myndighed
+      - fuldmægtig
+      - ministerium
+      - departement
+      - styrelse
+    - - kirke
+      - sogn
+      - menighedsråd
+    - - militær
+      - forsvar
+      - soldat
+      - officer
+      - forsvarsministeri
     - - projektleder
       - projektstyring
       - planlægning
@@ -227,5 +276,11 @@ train:
       - kontrakt
       - lovgivning
       - compliance
-    name: flex1
-    anchor_strength: 12
+    - - pædagog
+      - børnehave
+      - skole
+      - undervisning
+    - - handicaphjælper
+      - hjælper
+    name: flex1_2
+    anchor_strength: 6

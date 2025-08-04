@@ -33,7 +33,7 @@ dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "t
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex1_2,flex2_2,flex3_2"
 
-dvc exp run --queue -S "prepare/tdm=n3_binary" -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex_short"
+dvc exp run --queue -S "prepare/tdm=n3_binary" -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex1_2,flex2_2,flex3_2" -S "train.corex.n_topics=50,70"
 
 
 dvc queue start -j7
