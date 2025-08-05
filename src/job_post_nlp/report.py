@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     # Load the most common words
     model = load_model(models_dir / "corex_model.pkl")
-    texts = load_excel(data_dir / "Jobnet.xlsx", sheet_name="Sheet1")
+
     corpus = load_corpus_split(data_dir / "corpus_split")  # Use split corpus directory
 
     # Log metrics using DVCLive
