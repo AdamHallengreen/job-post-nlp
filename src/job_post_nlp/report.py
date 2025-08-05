@@ -12,7 +12,6 @@ from job_post_nlp.evaluate import (  # noqa: E402
     plot_num_job_posts_per_topic,
     plot_TC,
 )
-from job_post_nlp.prepare import load_excel  # noqa: E402
 from job_post_nlp.train import load_corpus_split  # noqa: E402
 from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 

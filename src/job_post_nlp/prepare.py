@@ -467,7 +467,6 @@ if __name__ == "__main__":
     tdm_info_file = data_dir / "tdm_info.json"
     texts_file = data_dir / "texts.parquet"
 
-
     # Load parameters
     par = OmegaConf.load(params_path).prepare
 
