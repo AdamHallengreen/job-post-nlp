@@ -12,7 +12,6 @@ from job_post_nlp.evaluate import (  # noqa: E402
     plot_num_job_posts_per_topic,
     plot_TC,
 )
-from job_post_nlp.prepare import load_excel  # noqa: E402
 from job_post_nlp.train import load_corpus_split  # noqa: E402
 from job_post_nlp.utils.find_project_root import find_project_root  # noqa: E402
 
@@ -27,7 +26,7 @@ if __name__ == "__main__":
 
     # Load the most common words
     model = load_model(models_dir / "corex_model.pkl")
-    texts = load_excel(data_dir / "Jobnet.xlsx", sheet_name="Sheet1")
+
     corpus = load_corpus_split(data_dir / "corpus_split")  # Use split corpus directory
 
     # Log metrics using DVCLive

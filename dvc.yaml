@@ -10,6 +10,7 @@ stages:
     - data/corpus_split
     - data/tdm.npz
     - data/tdm_info.json
+    - data/texts.parquet
   train:
     cmd: python src/job_post_nlp/train.py
     deps:

@@ -465,6 +465,7 @@ if __name__ == "__main__":
     corpus_dir = data_dir / "corpus_split"
     tdm_file = data_dir / "tdm.npz"
     tdm_info_file = data_dir / "tdm_info.json"
+    texts_file = data_dir / "texts.parquet"
 
     # Load parameters
     par = OmegaConf.load(params_path).prepare
@@ -483,8 +484,8 @@ if __name__ == "__main__":
     tdm, vocab, ids = build_tdm(preprocessed_corpus, par)
     print(f"Built TDM with {tdm.shape[0]} documents and {tdm.shape[1]} terms")
 
-    export_texts(texts, data_dir / "texts.parquet")
-    print(f"Texts exported to {data_dir / 'texts.parquet'}")
+    export_texts(texts, texts_file)
+    print(f"Texts exported to {texts_file}")
 
     export_corpus_split(preprocessed_corpus, corpus_dir, par)
     print(f"Preprocessed corpus exported to {corpus_dir}")
