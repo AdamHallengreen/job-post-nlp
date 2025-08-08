@@ -13,8 +13,8 @@ def _list_experiment_refs() -> list[dict[str, str]]:
     Return a list of dicts with keys: ref, label, sha.
     Uses pure Git to enumerate DVC experiment refs.
     """
-    out = subprocess.check_output(
-        ["git", "for-each-ref", "refs/exps", "--format=%(refname:short) %(objectname)"],
+    out = subprocess.check_output(  # noqa: S603
+        ["git", "for-each-ref", "refs/exps", "--format=%(refname:short) %(objectname)"],  # noqa: S607
         text=True,
     )
     exps = []
@@ -117,3 +117,12 @@ def print_experiment_yaml(exp_query: str, artifact: str = ARTIFACT):
         print(yaml.safe_dump(data, sort_keys=False, allow_unicode=True))
     except Exception as err:
         print(f"[ERROR] Could not load {artifact}: {err}")
+
+
+def print_experiments(exp_queries: list[str], artifact: str = ARTIFACT):
+    """
+    Print the YAML artifacts for multiple experiments.
+    """
+    for query in exp_queries:
+        print_experiment_yaml(query, artifact)
+        print()  # blank line after each
