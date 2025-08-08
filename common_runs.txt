@@ -12,7 +12,9 @@ dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "t
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=sockin"
 
-dvc exp run --queue -S "prepare/settings=small" -S "prepare/star=star" -S "train/corex=worklife"
+dvc exp run --queue -S "prepare/settings=small" -S "train/corex=worklife,plain"
+dvc queue start -j2
+
 
 dvc exp run --queue -S "prepare/settings=full_star" -S "prepare/star=star" -S "train/corex=flex3,flex3_specific" -S "train.corex.n_topics=5,10,15,20,30,50,100"
 
@@ -70,8 +72,9 @@ You can run these commands directly in your SSH terminal.
 Press q to stop
 
 
+# Precommit:
 
-
+pre-commit run -a
 
 # cleaning up git, if you have made changes in main:
 make new branch with your changes:
